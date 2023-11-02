@@ -2,7 +2,8 @@
 
 Database design principles is a course that teaches the basics of how to create, manage, and use database systems. Databases are systems that store and organize data in a structured way, allowing users to query, manipulate, and analyze the data efficiently. Database design is the process of defining the structure, relationships, and constraints of the data in a database.
 
-The learning objectives of an introductory course for database design and concept are:
+## Objectives
+The learning objectives of this course are:
 
 * To understand the concepts and principles that underlie how databases work, such as data models, schemas, keys, normalization, and transactions.
 
@@ -29,15 +30,22 @@ The learning objectives of an introductory course for database design and concep
 
 ## Grading policy 
 
-* Homework – individual works (**4-5** points)
+* Homework –- individual works (**4-5** points)
     * Writing assignments (WAs)
     * Programming assignments (PAs)
-* Project – works in groups of three students (**4** points)
+* Project –- works in groups of three students (**4** points)
 * Class activities (**1** point)
-* Midterm exam – paper based/ practical exam (**4-5** points)
-* Final exam – paper based (**6** points)
+* Midterm exam –- paper based/ practical exam (**4-5** points)
+* Final exam –- paper based (**6** points)
 * Additional activities -- works in groups of three students (**[−1, 3]** points)
     * Research work with in-class presentations 
         * We have time for three in class presentation
     * Homework design
     * Course material design
+
+# Instructor
+**[Morteza Zakeri](https://services.acm.org/public/vcard/vcard.cfm?handle=mzakeri-nasrabadi)**, Ph.D.
+
+ACM Professional Member 
+
+
