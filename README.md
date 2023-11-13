@@ -30,6 +30,7 @@ pip freeze > requirements.txt
 ```
 
 ---
+---
 
 ## Install Django
 ```bash
