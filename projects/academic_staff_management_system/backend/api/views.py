@@ -99,7 +99,7 @@ class ResearcherViewSet(viewsets.ModelViewSet):
 
 class ResearchViewSet(viewsets.ModelViewSet):
     queryset = models.Research.objects.all()
-    serializer_class = serializers.ResearchSerializer
+    serializer_class = serializers.ResearcherSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = filters.ResearchFilter
 
