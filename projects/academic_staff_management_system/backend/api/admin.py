@@ -6,12 +6,6 @@ from django.contrib.auth.admin import UserAdmin
 from . import models
 
 
-class UserCreateForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = "__all__"
-
-
 class UserAdmin(UserAdmin):
     add_fieldsets = (
         (
