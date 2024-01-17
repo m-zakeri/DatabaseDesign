@@ -28,7 +28,22 @@ INSTALLED_APPS = [
 
     # MY Package
     'django_cleanup.apps.CleanupConfig',
-    'widget_tweaks'
+    'widget_tweaks',
+
+
+    # MY APP
+    'apps.account.apps.AccountAppConfig',
+    'apps.blog.apps.BlogAppConfig',
+    'apps.cart.apps.CartAppConfig',
+    'apps.course.apps.CourseAppConfig',
+    'apps.customer.apps.CustomerConfig',
+    'apps.home.apps.HomeConfig',
+    'apps.income.apps.IncomeConfig',
+    'apps.teacher.apps.TeacherConfig',
+    'apps.ticket.apps.TicketConfig',
+    'apps.transaction.apps.TransactionConfig',
+    'apps.notification.apps.NotificationConfig'
+
 ]
 
 MIDDLEWARE = [
