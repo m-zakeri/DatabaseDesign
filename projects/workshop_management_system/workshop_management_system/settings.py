@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
     'social_django',
+    'django_password_validators',
+    'django_password_validators.password_history',
 
     # MY APP
     'apps.account.apps.AccountAppConfig',
@@ -96,12 +98,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator',
+        'OPTIONS': {
+            'min_length_digit': 0,
+            'min_length_alpha': 6,
+            'min_length_special': 1,
+            'min_length_lower': 5,
+            'min_length_upper': 1,
+            'special_characters': ".~!@#$%^&*()_+{}\":;'[]"
+        }
     },
 
 ]
@@ -139,8 +153,6 @@ AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend",
                            'django.contrib.auth.backends.ModelBackend',
                            ]
 
-
-
 ## Login Google
 LOGIN_URL = '/auth/login/google-oauth2/'
 LOGIN_REDIRECT_URL = '/'
@@ -149,3 +161,10 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_SECRET')
 
+## Send Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')

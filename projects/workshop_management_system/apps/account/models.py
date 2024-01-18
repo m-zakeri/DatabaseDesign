@@ -144,3 +144,17 @@ class Card(models.Model):
     class Meta:
         verbose_name = _('Card')
         verbose_name_plural = _('Cards')
+
+
+class NewUser(models.Model):
+    token = models.CharField(max_length=300)
+    randcode = models.CharField(max_length=5)
+    username = models.CharField(max_length=50)
+    email = models.EmailField()
+    password = models.CharField(max_length=20)
+    confirm_password = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+

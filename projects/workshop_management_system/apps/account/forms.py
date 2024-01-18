@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
+from django.contrib.auth.password_validation import validate_password
 from .models import *
 
 
@@ -64,3 +64,28 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password')
         if not authenticate(username=username, password=password):
             raise ValidationError('The username or password is incorrect')
+
+
+class RegisterForm(forms.Form):
+    username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'username'}))
+    email = forms.EmailField(widget=forms.EmailInput({'placeholder': 'email'}))
+    password = forms.CharField(max_length=20, validators=[validate_password],
+                               widget=forms.PasswordInput({'placeholder': 'password'}))
+    confirm_password = forms.CharField(max_length=20, validators=[validate_password],
+                                       widget=forms.PasswordInput({'placeholder': 'confirm password'}))
+
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            raise ValidationError('Your password and confirmation password do not match.')
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if len(username) > 50:
+            raise ValidationError('The maximum length of the username is 50 characters')
+        return username
+
+
+class VerifyEmailForm(forms.Form):
+    randcode = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Please enter the code'}))
