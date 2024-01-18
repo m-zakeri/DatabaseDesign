@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     # MY Package
     'django_cleanup.apps.CleanupConfig',
     'widget_tweaks',
-
+    'social_django',
 
     # MY APP
     'apps.account.apps.AccountAppConfig',
@@ -103,6 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+
 ]
 
 # Internationalization
@@ -126,10 +127,25 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'media/'
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "account.User"
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend",
+                           "apps.account.Authentication.EmailAuthentication",
+                           'social_core.backends.google.GoogleOAuth2',
+                           'django.contrib.auth.backends.ModelBackend',
+                           ]
+
+
+
+## Login Google
+LOGIN_URL = '/auth/login/google-oauth2/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_SECRET')
+

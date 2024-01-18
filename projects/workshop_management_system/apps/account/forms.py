@@ -1,5 +1,5 @@
 from django import forms
-
+from django.contrib.auth import authenticate
 
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
@@ -41,4 +41,26 @@ class UserChangeForm(forms.ModelForm):
         fields = '__all__'
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder': 'username or email'}))
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if '@' in username and username[-10:] != '@gmail.com':
+            raise ValidationError('Please enter the correct email')
+        if '@' not in username and len(username) > 50:
+            raise ValidationError('The maximum length of the username is 50 characters')
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if len(password) < 8:
+            raise ValidationError('Your password must be at least 8 characters long')
+        return password
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        if not authenticate(username=username, password=password):
+            raise ValidationError('The username or password is incorrect')
