@@ -64,3 +64,4 @@ class CardAdmin(admin.ModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(NewUser)
+admin.site.register(EmailChangePassword)

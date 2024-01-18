@@ -89,3 +89,20 @@ class RegisterForm(forms.Form):
 
 class VerifyEmailForm(forms.Form):
     randcode = forms.CharField(max_length=5, widget=forms.TextInput(attrs={'placeholder': 'Please enter the code'}))
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'email'}))
+
+
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(max_length=20, validators=[validate_password],
+                               widget=forms.PasswordInput({'placeholder': 'password'}))
+    confirm_password = forms.CharField(max_length=20, validators=[validate_password],
+                                       widget=forms.PasswordInput({'placeholder': 'confirm password'}))
+
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            return VerifyEmailForm('Your password and confirmation password do not match.')
