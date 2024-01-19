@@ -88,7 +88,7 @@ class Course(models.Model):
     label = models.ManyToManyField(CourseLabel, related_name='course', verbose_name=_('Label'))
     category = models.ManyToManyField(CourseCategory, related_name='course', verbose_name=_('Category'))
     teacher = models.ManyToManyField(Teacher, related_name='course', verbose_name=_('Teacher'))
-    customer = models.ManyToManyField(Customer, related_name='course', verbose_name=_('Costumer'))
+    customer = models.ManyToManyField(Customer, null=True,blank=True,related_name='course', verbose_name=_('Costumer'))
 
     number_customer = models.PositiveIntegerField(default=0, verbose_name=_('Costumer Number'))
     number_video = models.PositiveIntegerField(default=0, verbose_name=_('Number Of Video'))

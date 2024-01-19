@@ -79,12 +79,12 @@ class VerifyEmail(View):
                 token = self.request.session['token']
 
                 new_user = models.NewUser.objects.get(token=token)
-                user, is_valid = models.User.objects.get_or_create(username=new_user.username, email=new_user.email)
+                user, is_admin = models.User.objects.get_or_create(username=new_user.username, email=new_user.email)
                 user.set_password(new_user.password)
                 user.save()
                 new_user.delete()
                 self.request.session['token'] = None
-                login(request, user)
+                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                 return redirect('/')
             except models.NewUser.DoesNotExist:
                 form.add_error('randcode', 'code is wrong.')

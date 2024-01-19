@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer', verbose_name=_('User'))
+    is_valid = models.BooleanField(default=True, verbose_name=_('Is valid'))
 
     def __str__(self):
         return self.user.email

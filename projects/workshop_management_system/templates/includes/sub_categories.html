@@ -1,0 +1,16 @@
+<!-- dropdown submenu open right -->
+<ul class="dropdown-menu dropdown-menu-start" data-bs-popper="none">
+    {% for category in category.subs.all %}
+        <li class="dropdown-submenu dropend">
+            <a class="dropdown-item {% if category.subs.all %}dropdown-toggle{% endif %}"
+               href="#">{{ category.name }}</a>
+            {% if category.subs.all %}
+                {% include 'includes/sub_categories.html' %}
+            {% endif %}
+
+        </li>
+    {% endfor %}
+
+
+</ul>
+
