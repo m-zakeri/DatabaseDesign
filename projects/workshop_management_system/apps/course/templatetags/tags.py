@@ -1,4 +1,5 @@
 from django import template
+from apps.course import models
 
 register = template.Library()
 
@@ -12,3 +13,12 @@ def time_course(time):
     if hours != 0:
         return f'{hours}ساعت ' + f'{minutes}دیقه '
     return f'{minutes}دیقه '
+
+
+@register.simple_tag
+def is_like_course(course_id, user_id):
+    try:
+        models.CourseLikes.objects.get(course_id=course_id, user_id=user_id)
+        return True
+    except:
+        return False

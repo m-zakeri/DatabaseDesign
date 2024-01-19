@@ -400,10 +400,25 @@
                                         <!-- Card body -->
                                         <div class="card-body pb-0">
                                             <!-- Badge and favorite -->
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-2 align-items-center">
                                                 <a href="#"
                                                    class="badge bg-purple bg-opacity-10 text-purple">{{ course.level }}</a>
-                                                <a href="#" class="h6 mb-0"><i class="far fa-heart"></i></a>
+                                                {% if request.user.is_authenticated %}
+                                                    {% is_like_course course.id request.user.id as is_like %}
+                                                    {% if is_like %}
+                                                        <button onclick="LikeCourse('{{ course.id }}','{{ course.name }}')"
+                                                                class="text-danger"
+                                                                style="background-color: inherit;border: none"><i
+                                                                class="fa fa-heart" id="{{ course.name }}"></i></button>
+                                                    {% else %}
+                                                        <button onclick="LikeCourse('{{ course.id }}','{{ course.name }}')"
+                                                                class="text-danger"
+                                                                style="background-color: inherit;border: none"><i
+                                                                class="far fa-heart" id="{{ course.name }}"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                {% endif %}
+
                                             </div>
                                             <!-- Title -->
                                             <h5 class="card-title fw-normal"><a href="#">آموزش {{ course.name }}</a>
@@ -848,6 +863,27 @@
 
     </main>
     <!-- **************** MAIN CONTENT END **************** -->
+{% endblock %}
+
+
+
+{% block js %}
+    <script>
+        function LikeCourse(id, name) {
+
+            var like = document.getElementById(name)
+            $.get(`/course/like/${id}/`).then(response => {
+                if (response['response'] === 'like') {
+
+                    like.className = 'fa fa-heart';
+
+                }
+                if (response['response'] === 'dislike') {
+                    like.className = 'far fa-heart';
+                }
+            })
+        }
+    </script>
 {% endblock %}
 
 

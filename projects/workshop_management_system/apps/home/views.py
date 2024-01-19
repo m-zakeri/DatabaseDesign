@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from apps.course.models import Course, Festival,CourseCertificate
+from apps.course.models import Course, Festival, CourseCertificate
 from apps.customer.models import Customer
 from apps.teacher.models import Teacher
 
@@ -16,6 +16,5 @@ class HomeView(TemplateView):
         context['number_course'] = Course.objects.filter(is_publish=True).count()
         context['number_teacher'] = Teacher.objects.filter(is_valid=True).count()
         context['number_certificate'] = CourseCertificate.objects.all().count()
-
 
         return context
