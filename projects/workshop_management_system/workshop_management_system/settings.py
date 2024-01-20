@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'apps.teacher.apps.TeacherConfig',
     'apps.ticket.apps.TicketConfig',
     'apps.transaction.apps.TransactionConfig',
-    'apps.notification.apps.NotificationConfig'
+    'apps.notification.apps.NotificationConfig',
+    'apps.contact.apps.ContactConfig'
 
 ]
 
@@ -156,7 +157,6 @@ AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend",
                            ]
 
 ## Login Google
-LOGIN_URL = '/auth/login/google-oauth2/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'

@@ -6,9 +6,12 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views import View
+
+
 from . import forms
 from django.contrib.auth import login, authenticate, logout
 from . import models
+
 
 
 class LoginView(View):
@@ -142,3 +145,5 @@ class ChangePasswordView(View):
                 return redirect('/')
 
         return render(request, 'account/change_password.html', context={'form': form})
+
+

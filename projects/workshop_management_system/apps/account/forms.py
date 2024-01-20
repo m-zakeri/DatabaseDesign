@@ -106,3 +106,5 @@ class ChangePasswordForm(forms.Form):
         confirm_password = self.cleaned_data.get('confirm_password')
         if password != confirm_password:
             return VerifyEmailForm('Your password and confirmation password do not match.')
+
+

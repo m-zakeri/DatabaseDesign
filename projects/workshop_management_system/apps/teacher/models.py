@@ -12,7 +12,7 @@ class Teacher(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', verbose_name=_('User'))
     description = models.TextField(verbose_name=_('Description'))
-    score = models.FloatField(default=0,verbose_name=_('Score'))
+    score = models.FloatField(default=0, verbose_name=_('Score'))
     gender = models.CharField(max_length=50, choices=gender_teacher, default='man', verbose_name=_('Gender'))
     is_valid = models.BooleanField(default=False, verbose_name=_('Is Valid'))
     crated_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))

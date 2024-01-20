@@ -27,7 +27,7 @@
             <!-- Nav item 1 Demos -->
             <li class="nav-item dropdown">
                 <a class="nav-link  {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
-                   href="{% url 'home_app:home' %}" id="demoMenu" data-bs-toggle="dropdown"
+                   href="{% url 'home_app:home' %}" id="demoMenu" 
                    aria-haspopup="true" aria-expanded="false">صفحه اصلی</a>
 
             </li>
@@ -47,8 +47,9 @@
             </li>
 
             <!-- Nav item 4 Megamenu-->
+
             <li class="nav-item dropdown dropdown-fullwidth">
-                <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                <a class="nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}" href="{% url 'contact_app:about_us' %}"  aria-haspopup="true"
                    aria-expanded="false">درباره ما</a>
 
             </li>
@@ -61,8 +62,8 @@
             </li>
             <!-- Nav item 6 link-->
             <li class="nav-item dropdown dropdown-fullwidth">
-                <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">پرسش و پاسخ</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact_app:contact' %}"  aria-haspopup="true"
+                   aria-expanded="false">تماس با ما</a>
 
             </li>
         </ul>

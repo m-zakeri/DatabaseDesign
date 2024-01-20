@@ -429,17 +429,25 @@
                                             <!-- Rating star -->
                                             <ul class="list-inline mb-0">
                                                 {% for i in '12345'|make_list %}
-                                                    {% if i < course.total_points %}
+
+                                                    {% if i|add:0 <= course.total_points|add:0 %}
                                                         <li class="list-inline-item me-0 small"><i
                                                                 class="fas fa-star text-warning"></i></li>
                                                     {% else %}
-                                                        <li class="list-inline-item me-0 small"><i
-                                                                class="far fa-star text-warning"></i></li>
+                                                        {% if i|add:0 == course.total_points|add:0.5 %}
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star-half-alt text-warning"></i></li>
+                                                        {% else %}
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        {% endif %}
+
+
+
+
                                                     {% endif %}
-
-
-
                                                 {% endfor %}
+
 
                                                 <li class="list-inline-item ms-2 h6 fw-light mb-0">{{ course.total_points }}</li>
                                             </ul>
