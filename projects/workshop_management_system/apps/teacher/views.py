@@ -6,5 +6,5 @@ from . import models
 class TeacherListView(ListView):
     model = models.Teacher
     queryset = models.Teacher.objects.filter(is_valid=True)
-    paginate_by = 8
+    paginate_by = 1
 
