@@ -7,11 +7,9 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views import View
 
-
 from . import forms
 from django.contrib.auth import login, authenticate, logout
 from . import models
-
 
 
 class LoginView(View):
@@ -80,14 +78,15 @@ class VerifyEmail(View):
         if form.is_valid():
             try:
                 token = self.request.session['token']
+                randcode = form.cleaned_data['randcode']
 
-                new_user = models.NewUser.objects.get(token=token)
-                user, is_admin = models.User.objects.get_or_create(username=new_user.username, email=new_user.email)
+                new_user = models.NewUser.objects.get(token=token, randcode=randcode)
+                user = models.User.objects.create(username=new_user.username,email=new_user.email)
                 user.set_password(new_user.password)
                 user.save()
                 new_user.delete()
                 self.request.session['token'] = None
-                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('/')
             except models.NewUser.DoesNotExist:
                 form.add_error('randcode', 'code is wrong.')
@@ -145,5 +144,3 @@ class ChangePasswordView(View):
                 return redirect('/')
 
         return render(request, 'account/change_password.html', context={'form': form})
-
-

@@ -84,7 +84,16 @@ class RegisterForm(forms.Form):
         username = self.cleaned_data.get('username')
         if len(username) > 50:
             raise ValidationError('The maximum length of the username is 50 characters')
+
+        if User.objects.filter(username=username).exists():
+            raise ValidationError('This name exists')
         return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('This email exists')
+        return email
 
 
 class VerifyEmailForm(forms.Form):
@@ -106,5 +115,3 @@ class ChangePasswordForm(forms.Form):
         confirm_password = self.cleaned_data.get('confirm_password')
         if password != confirm_password:
             return VerifyEmailForm('Your password and confirmation password do not match.')
-
-

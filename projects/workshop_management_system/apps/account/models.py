@@ -155,8 +155,16 @@ class NewUser(models.Model):
     confirm_password = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = _('New User')
+        verbose_name_plural = _('New Users')
+
 
 class EmailChangePassword(models.Model):
     email = models.EmailField()
     token = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Email Change Password')
+        verbose_name_plural = _('Emails Change Password')

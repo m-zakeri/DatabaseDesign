@@ -27,8 +27,8 @@ class CourseLabel(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Course Label')
-        verbose_name_plural = _('Course Labels')
+        verbose_name = _('Label')
+        verbose_name_plural = _('Labels')
 
 
 class CourseCategory(models.Model):
@@ -43,8 +43,8 @@ class CourseCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
-        verbose_name = _('Course Category')
-        verbose_name_plural = _('Course Categories')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __str__(self):
         return self.name
@@ -88,7 +88,7 @@ class Course(models.Model):
     label = models.ManyToManyField(CourseLabel, related_name='course', verbose_name=_('Label'))
     category = models.ManyToManyField(CourseCategory, related_name='course', verbose_name=_('Category'))
     teacher = models.ManyToManyField(Teacher, related_name='course', verbose_name=_('Teacher'))
-    customer = models.ManyToManyField(Customer, null=True,blank=True,related_name='course', verbose_name=_('Costumer'))
+    customer = models.ManyToManyField(Customer, blank=True, related_name='course', verbose_name=_('Costumer'))
 
     number_customer = models.PositiveIntegerField(default=0, verbose_name=_('Costumer Number'))
     number_video = models.PositiveIntegerField(default=0, verbose_name=_('Number Of Video'))
@@ -139,8 +139,8 @@ class CourseDescription(models.Model):
         return f'{self.subject} -> {self.content[:50]}'
 
     class Meta:
-        verbose_name = _('Course Description')
-        verbose_name_plural = _('Course Descriptions')
+        verbose_name = _('Description')
+        verbose_name_plural = _('Descriptions')
 
 
 class CourseDescriptionItem(models.Model):
@@ -152,8 +152,8 @@ class CourseDescriptionItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
-        verbose_name = _('Course Description Item')
-        verbose_name_plural = _('Course Description Items')
+        verbose_name = _('Description Item')
+        verbose_name_plural = _('Description Items')
 
 
 class CourseLikes(models.Model):
@@ -162,8 +162,8 @@ class CourseLikes(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     class Meta:
-        verbose_name = _('Course like')
-        verbose_name_plural = _('Course Likes')
+        verbose_name = _('like')
+        verbose_name_plural = _('Likes')
 
 
 class CourseCertificate(models.Model):
@@ -176,8 +176,8 @@ class CourseCertificate(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Course Certificate')
-        verbose_name_plural = _('Course Certificates')
+        verbose_name = _('Certificate')
+        verbose_name_plural = _('Certificates')
 
 
 class CouponCode(models.Model):
@@ -215,8 +215,8 @@ class CourseComment(models.Model):
         return f'{self.user}-> {self.message[:30]} '
 
     class Meta:
-        verbose_name = _('Course Comment')
-        verbose_name_plural = _('Course Comments')
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')
 
 
 class LikesCourseComment(models.Model):

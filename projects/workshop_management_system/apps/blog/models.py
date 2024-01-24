@@ -25,8 +25,8 @@ class BlogCategory(models.Model):
     show_image.short_description = _('image')
 
     class Meta:
-        verbose_name = _('Blog Category')
-        verbose_name_plural = _('Blog Categories')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
 
 class BlogLabel(models.Model):
@@ -37,8 +37,8 @@ class BlogLabel(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Blog Label')
-        verbose_name_plural = _('Blog Labels')
+        verbose_name = _('Label')
+        verbose_name_plural = _('Labels')
 
 
 class Blog(models.Model):
@@ -80,8 +80,8 @@ class BlogDescription(models.Model):
         return f'{self.subject} -> {self.content[:50]}'
 
     class Meta:
-        verbose_name = _('BlogDescription')
-        verbose_name_plural = _('BlogDescriptions')
+        verbose_name = _('Description')
+        verbose_name_plural = _('Descriptions')
 
 
 class BlogDescriptionItem(models.Model):
@@ -93,8 +93,8 @@ class BlogDescriptionItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
-        verbose_name = _('Blog Description Item')
-        verbose_name_plural = _('Blog Description Items')
+        verbose_name = _('Description Item')
+        verbose_name_plural = _('Description Items')
 
 
 class BlogComment(models.Model):
@@ -108,8 +108,8 @@ class BlogComment(models.Model):
         return f'{self.user} -> {self.message[:30]}'
 
     class Meta:
-        verbose_name = _('Blog Comment')
-        verbose_name_plural = _('Blog Comments')
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')
 
 
 class LikesBlogComment(models.Model):
@@ -118,6 +118,6 @@ class LikesBlogComment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     class Meta:
-        verbose_name = _('Blog Comment Like')
-        verbose_name_plural = _('Blog Comment Likes')
+        verbose_name = _('Comment Like')
+        verbose_name_plural = _('Comment Likes')
 

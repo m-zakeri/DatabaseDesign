@@ -28,5 +28,5 @@ class TeacherIncome(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
-        verbose_name = _('Teacher Income')
-        verbose_name_plural = _('Teacher Incomes')
+        verbose_name = _('Income')
+        verbose_name_plural = _('Incomes')
