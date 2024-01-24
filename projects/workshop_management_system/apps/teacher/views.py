@@ -1,3 +1,10 @@
 from django.shortcuts import render
+from django.views.generic import ListView
+from . import models
 
-# Create your views here.
+
+class TeacherListView(ListView):
+    model = models.Teacher
+    queryset = models.Teacher.objects.filter(is_valid=True)
+    paginate_by = 8
+

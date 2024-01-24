@@ -49,20 +49,21 @@
             <!-- Nav item 4 Megamenu-->
 
             <li class="nav-item dropdown dropdown-fullwidth">
-                <a class="nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}" href="{% url 'contact_app:about_us' %}"  aria-haspopup="true"
+                <a class="nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}"
+                   href="{% url 'contact_app:about_us' %}" aria-haspopup="true"
                    aria-expanded="false">درباره ما</a>
 
             </li>
 
             <!-- Nav item 5 link-->
             <li class="nav-item dropdown dropdown-fullwidth">
-                <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                <a class="nav-link {% if request.resolver_match.url_name == 'teacher_list' %}active{% endif %}"
+                   href="{% url 'teacher_app:teacher_list' %}" aria-haspopup="true"
                    aria-expanded="false">مدرسین</a>
-
-            </li>
-            <!-- Nav item 6 link-->
+                <!-- Nav item 6 link-->
             <li class="nav-item dropdown dropdown-fullwidth">
-                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact_app:contact' %}"  aria-haspopup="true"
+                <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                   href="{% url 'contact_app:contact' %}" aria-haspopup="true"
                    aria-expanded="false">تماس با ما</a>
 
             </li>
