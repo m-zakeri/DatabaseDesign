@@ -92,7 +92,7 @@ class Course(models.Model):
 
     number_customer = models.PositiveIntegerField(default=0, verbose_name=_('Costumer Number'))
     number_video = models.PositiveIntegerField(default=0, verbose_name=_('Number Of Video'))
-    video_time = models.DurationField(verbose_name=_('Video Time'))
+    video_time = models.DurationField(default=0, verbose_name=_('Video Time'))
     course_start_date = models.DateField(verbose_name=_('Course Start Date'))
 
     is_exam = models.BooleanField(default=False, verbose_name=_('Is exam'))
@@ -105,7 +105,7 @@ class Course(models.Model):
     start_discount = models.DateTimeField(null=True, blank=True, verbose_name=_('Start Discount'))
     end_discount = models.DateTimeField(null=True, blank=True, verbose_name=_('End Discount'))
     total_points = models.FloatField(default=0, verbose_name=_('Total Points'))
-    type = models.CharField(max_length=50, choices=type_course, verbose_name=_('Type'))
+    type = models.CharField(max_length=50, choices=type_course, default='Online class', verbose_name=_('Type'))
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))

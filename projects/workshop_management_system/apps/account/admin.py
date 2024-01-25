@@ -16,8 +16,9 @@ class UserAdmin(BaseUserAdmin):
     prepopulated_fields = {'username': ('email',)}
     fieldsets = [
         (None, {"fields": ["username", "email", "password"]}),
-        ("Personal info", {"fields": ["first_name", "last_name", "phone_number", "date_of_birth", "image"]}),
-        ("Permissions", {"fields": ["is_admin", "roles"]}),
+        ("Personal info",
+         {"fields": ["first_name", "last_name", "date_of_birth", "caption", "phone_number", "roles", "image"]}),
+        ("Permissions", {"fields": ["is_admin"]}),
     ]
 
     add_fieldsets = [

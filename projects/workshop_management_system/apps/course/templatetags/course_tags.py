@@ -22,3 +22,17 @@ def is_like_course(course_id, user_id):
         return True
     except:
         return False
+
+
+@register.simple_tag
+def my_url(value, field_name, urlencode=None):
+    url = '?{}={}'.format(field_name, value)
+
+    if urlencode is not None:
+        querystring = urlencode.split('&')
+        queryfilter = filter(lambda p: p.split('=')[0] != field_name, querystring)
+        query = '&'.join(queryfilter)
+        url = '{}&{}'.format(url, query)
+
+    return url
+

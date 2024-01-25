@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load course_tags %}
 
 {% block title %} instructor list{% endblock %}
 
@@ -18,7 +19,8 @@
                             <div class="d-flex justify-content-center">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
-                                        <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'home_app:home' %}">صفحه اصلی</a>
+                                        </li>
                                         <li class="breadcrumb-item active" aria-current="page">لیست مدرس</li>
                                     </ol>
                                 </nav>
@@ -41,8 +43,14 @@
                     <div class="col-sm-6 col-xl-4">
                         <form class="border rounded p-2">
                             <div class="input-group input-borderless">
-                                <input class="form-control me-1" type="search" placeholder="جستجوی مدرس">
-                                <button type="button" class="btn btn-primary mb-0 rounded"><i class="fas fa-search"></i>
+                                <input class="form-control me-1" type="search" placeholder="جستجوی مدرس" name="q">
+                                {% if request.GET.sort %}
+                                    <input type="hidden" name='sort' value="{{ request.GET.sort }}">
+                                {% endif %}
+                                {% if request.GET.category %}
+                                    <input type="hidden" name="category" value="{{ request.GET.category }}">
+                                {% endif %}
+                                <button type="submit" class="btn btn-primary mb-0 rounded"><i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </form>
@@ -51,533 +59,165 @@
                     <!-- Select option -->
                     <div class="col-sm-6 col-xl-3 mt-3 mt-lg-0">
                         <form class="border rounded p-2 input-borderless">
-                            <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm">
-                                <option value="">دسته بندی</option>
-                                <option>همه</option>
-                                <option>برنامه نویسی</option>
-                                <option>طراحی وب</option>
-                                <option>حسابداری</option>
-                                <option>داده کاوی</option>
-                                <option>مالی</option>
-                                <option>گرافیک</option>
-                                <option>عکاسی</option>
-                                <option>نوشتاری</option>
-                                <option>SEO</option>
+                            <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm"
+                                    name="category">
+                                <option value="all">دسته بندی</option>
+                                {% for category in categories.all %}
+                                    <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endfor %}
+
                             </select>
-                        </form>
+
                     </div>
 
                     <!-- Select option -->
-                    <div class="col-sm-6 col-xl-3 mt-3 mt-xl-0">
-                        <form class="border rounded p-2 input-borderless">
-                            <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm">
-                                <option value="">مرتب سازی</option>
-                                <option>پربازدیدترین</option>
-                                <option>پرفروش ترین</option>
-                                <option>امتیاز بالا</option>
-                            </select>
-                        </form>
+                    <div class="border rounded p-2 col-sm-6 col-xl-3 mt-3 mt-xl-0">
+
+                        <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm"
+                                name="sort">
+                            <option value="all">مرتب سازی</option>
+                            <option value="Bestselling">پرفروش ترین</option>
+                            <option value="HighScore"> امتیاز بالا</option>
+                        </select>
+
                     </div>
+                    {% if request.GET.sort %}
+                        <input type="hidden" name='sort' value="{{ request.GET.sort }}">
+                    {% endif %}
+                    {% if request.GET.category %}
+                        <input type="hidden" name="category" value="{{ request.GET.category }}">
+                    {% endif %}
 
                     <!-- Button -->
                     <div class="col-sm-6 col-xl-2 mt-3 mt-xl-0 d-grid">
-                        <a href="#" class="btn btn-lg btn-primary mb-0">فیلتر</a>
+                        <button type="submit" class="btn btn-lg btn-primary mb-0">فیلتر</button>
                     </div>
+                    </form>
+
                 </div>
                 <!-- Search option END -->
 
                 <!-- Instructor list START -->
                 <div class="row g-4 justify-content-center">
+                    {% for teacher in teacher_list %}
+                        <!-- Card item START -->
+                        <div class="col-lg-10 col-xl-6">
+                            <div class="card shadow p-2">
+                                <div class="row g-0">
+                                    <!-- Image -->
+                                    <div class="col-md-4">
+                                        <img src="{{ teacher.user.image.url }}" class="rounded-3" alt="...">
+                                    </div>
 
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/01.jpg" class="rounded-3" alt="...">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">میلاد ناصری</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه تهران</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.3<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
+                                    <!-- Card body -->
+                                    <div class="col-md-8">
+                                        <div class="card-body">
                                             <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">دیجیتال مارکتنیگ</h6>
+                                            <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
+                                                <div>
+                                                    <h5 class="card-title mb-0"><a
+                                                            href="#">{{ teacher.user.username }}</a></h5>
+                                                    {% if teacher.work.all %}
+                                                        <p class="small mb-2 mb-sm-0">{{ teacher.work.all.first.name }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                <span class="h6 fw-light">{{ teacher.score }}<i
+                                                        class="fas fa-star text-warning ms-1"></i></span>
+                                            </div>
+                                            {% if teacher.user.caption %}
+                                                <!-- Content -->
+                                                <p class="text-truncate-2 mb-3">{{ teacher.user.caption }}</p>
+                                                <!-- Info -->
+                                            {% endif %}
+                                            <div class="d-sm-flex justify-content-sm-between align-items-center">
+                                                <!-- Title -->
+                                                <h6 class="text-orange mb-0 fw-normal">{{ teacher.course.all.first.category.all.first.name }}</h6>
 
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
+                                                <!-- Social button -->
+                                                <ul class="list-inline mb-0 mt-3 mt-sm-0">
+                                                    {% for social_media in teacher.user.social_media.all %}
+                                                        {% if social_media.is_active %}
+                                                            {% if social_media.platform == 'facebook' %}
+                                                                <li class="list-inline-item">
+                                                                    <a class="mb-0 me-1 text-facebook"
+                                                                       href="{{ social_media.profile_link }}"><i
+                                                                            class="fab fa-fw fa-facebook-f"></i></a>
+                                                                </li>
+                                                            {% endif %}
+                                                            {% if social_media.platform == 'instagram' %}
+                                                                <li class="list-inline-item">
+                                                                    <a class="mb-0 me-1 text-instagram-gradient"
+                                                                       href="{{ social_media.profile_link }}"><i
+                                                                            class="fab fa-fw fa-instagram"></i></a>
+                                                                </li>
+                                                            {% endif %}
+                                                            {% if social_media.platform == 'twitter' %}
+                                                                <li class="list-inline-item">
+                                                                    <a class="mb-0 me-1 text-twitter"
+                                                                       href="{{ social_media.profile_link }}"><i
+                                                                            class="fab fa-fw fa-twitter"></i></a>
+                                                                </li>
+                                                            {% endif %}
+                                                            {% if social_media.platform == 'linkedin' %}
+                                                                <li class="list-inline-item">
+                                                                    <a class="mb-0 text-linkedin"
+                                                                       href="{{ social_media.profile_link }}"><i
+                                                                            class="fab fa-fw fa-linkedin-in"></i></a>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+
+
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Card item END -->
+                        <!-- Card item END -->
+                    {% endfor %}
 
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/02.jpg" class="rounded-3" alt="...">
-                                </div>
 
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">لیلا مرادی</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه آزاد</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.0<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">طراح گرافیک</h6>
 
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
+                    {% if page_obj.has_other_pages %}
+                        <!-- Pagination START -->
+                        <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+                            <ul class="pagination pagination-primary-soft d-inline-block d-md-flex rounded mb-0">
+                                {% if page_obj.has_next %}
+                                    <li class="page-item mb-0"><a class="page-link"
+                                                                  href="{% my_url page_obj.next_page_number 'page' request.GET.urlencode %}"
+                                                                  tabindex="-1"><i
+                                            class="fas fa-angle-double-right"></i></a></li>
+                                {% endif %}
 
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/03.jpg" class="rounded-3" alt="...">
-                                </div>
+                                {% for page_number in page_obj.paginator.page_range reversed %}
+                                    {% if page_obj.number == page_number %}
+                                        <li class="page-item mb-0 active"><a class="page-link"
+                                                                             href="{% my_url page_number 'page' request.GET.urlencode %}">{{ page_number }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item mb-0"><a class="page-link"
+                                                                      href="{% my_url page_number 'page' request.GET.urlencode %}">{{ page_number }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
 
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">سعید محمدی</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه شریف</p>
-                                            </div>
-                                            <span class="h6 fw-light">3.8<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">مهندس فیزیک</h6>
 
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
 
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/04.jpg" class="rounded-3" alt="...">
-                                </div>
 
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">سارا تقی زاده</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه امیرکبیر</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.5<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">طراح گرافیک</h6>
-
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/06.jpg" class="rounded-3" alt="...">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">نیلوفر علیزاده</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه پیام نور</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.8<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">طراح وب</h6>
-
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/07.jpg" class="rounded-3" alt="...">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">شیما حسینی</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه تهران</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.2<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">مهندس عمران</h6>
-
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/08.jpg" class="rounded-3" alt="...">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">سهراب حجازی</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه شریف</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.5<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">دیجیتال مارکتنیگ</h6>
-
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-
-                    <!-- Card item START -->
-                    <div class="col-lg-10 col-xl-6">
-                        <div class="card shadow p-2">
-                            <div class="row g-0">
-                                <!-- Image -->
-                                <div class="col-md-4">
-                                    <img src="assets/images/instructor/09.jpg" class="rounded-3" alt="...">
-                                </div>
-
-                                <!-- Card body -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <!-- Title -->
-                                        <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
-                                            <div>
-                                                <h5 class="card-title mb-0"><a href="#">فاطمه افخمی</a></h5>
-                                                <p class="small mb-2 mb-sm-0">مدرس دانشگاه امیرکبیر</p>
-                                            </div>
-                                            <span class="h6 fw-light">4.6<i
-                                                    class="fas fa-star text-warning ms-1"></i></span>
-                                        </div>
-                                        <!-- Content -->
-                                        <p class="text-truncate-2 mb-3">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از
-                                            صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-                                        <!-- Info -->
-                                        <div class="d-sm-flex justify-content-sm-between align-items-center">
-                                            <!-- Title -->
-                                            <h6 class="text-orange mb-0 fw-normal">طراح گرافیک</h6>
-
-                                            <!-- Social button -->
-                                            <ul class="list-inline mb-0 mt-3 mt-sm-0">
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-facebook" href="#"><i
-                                                            class="fab fa-fw fa-facebook-f"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-instagram-gradient" href="#"><i
-                                                            class="fab fa-fw fa-instagram"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 me-1 text-twitter" href="#"><i
-                                                            class="fab fa-fw fa-twitter"></i></a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a class="mb-0 text-linkedin" href="#"><i
-                                                            class="fab fa-fw fa-linkedin-in"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item mb-0"><a class="page-link"
+                                                                  href="{% my_url page_obj.previous_page_number 'page' request.GET.urlencode %}"><i
+                                            class="fas fa-angle-double-left"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        <!-- Pagination END -->
+                    {% endif %}
 
                 </div>
-                <!-- Instructor list END -->
-
-                {% if page_obj.has_other_pages %}
-                    <!-- Pagination START -->
-                    <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
-                        <ul class="pagination pagination-primary-soft d-inline-block d-md-flex rounded mb-0">
-                            {% if page_obj.has_next %}
-                                <li class="page-item mb-0"><a class="page-link"
-                                                              href="?page={{ page_obj.next_page_number }}"
-                                                              tabindex="-1"><i
-                                        class="fas fa-angle-double-right"></i></a></li>
-                            {% endif %}
-
-                            {% for page_number in page_obj.paginator.page_range reversed %}
-                                {% if page_obj.number == page_number %}
-                                    <li class="page-item mb-0 active"><a class="page-link"
-                                                                         href="?page={{ page_number }}">{{ page_number }}</a>
-                                    </li>
-                                {% else %}
-                                      <li class="page-item mb-0"><a class="page-link"
-                                                                         href="?page={{ page_number }}">{{ page_number }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-
-
-
-
-                            {% if page_obj.has_previous %}
-                                <li class="page-item mb-0"><a class="page-link"
-                                                              href="?page={{ page_obj.previous_page_number }}"><i
-                                        class="fas fa-angle-double-left"></i></a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                    <!-- Pagination END -->
-                {% endif %}
-
-            </div>
         </section>
         <!-- =======================
         Inner part END -->
@@ -636,3 +276,4 @@
 
 
 {% endblock %}
+
