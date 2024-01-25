@@ -71,6 +71,9 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.username
 
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     def show_image(self):
         return format_html(f"<img src={self.image.url} width='50px' height='50px'>")
 

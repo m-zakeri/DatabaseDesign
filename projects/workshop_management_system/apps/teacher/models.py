@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Sum
+
 from apps.account.models import User
 from .validators import validate_credit_work_phone
 
@@ -14,16 +16,17 @@ class Teacher(models.Model):
     description = models.TextField(verbose_name=_('Description'))
     score = models.FloatField(default=0, verbose_name=_('Score'))
     gender = models.CharField(max_length=50, choices=gender_teacher, default='man', verbose_name=_('Gender'))
+    teaching_experience = models.IntegerField(default=0, verbose_name=_('teaching experience'))
     is_valid = models.BooleanField(default=False, verbose_name=_('Is Valid'))
     crated_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
-
-
     def __str__(self):
         return self.user.username
 
-
+    def number_customer(self):
+        count = self.course.all().aggregate(Sum('number_customer'))
+        return count['number_customer__sum']
 
     class Meta:
         verbose_name = _('Teacher')
@@ -48,6 +51,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     description = models.TextField(verbose_name=_('Description'))
     certificate_photo = models.FileField(upload_to='document/certificate/skill', verbose_name=_('Certificate Photo'))
+    learningـpercentage = models.FloatField(default=0, verbose_name=_('Learning percentage'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
@@ -70,7 +74,7 @@ class LevelEducation(models.Model):
 
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='level_education',
                                 verbose_name=_('Teacher'))
-    name_university = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Name University'))
+    name_university = models.CharField(max_length=50, verbose_name=_('Name University'))
     date_of_graduation = models.DateField(verbose_name=_('Date Of Graduation'))
     graduation = models.CharField(max_length=50, choices=graduations, default='diploma', verbose_name=_('Graduation'))
     Academic_discipline = models.CharField(max_length=50, verbose_name=_('Academic Discipline'))
