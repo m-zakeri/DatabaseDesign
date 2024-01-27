@@ -22,8 +22,12 @@
                             <div class="col-xl-6">
                                 <form class="border rounded p-2">
                                     <div class="input-group input-borderless">
-                                        <input class="form-control me-1" type="search" placeholder="جستجو دوره ...">
-                                        <button type="button" class="btn btn-primary mb-0 rounded z-index-1"><i
+                                        <input class="form-control me-1" name="q" type="search"
+                                               placeholder="جستجو دوره ..."
+                                               {% if request.GET.q %}value="{{ request.GET.q }}" {% endif %}>
+
+
+                                        <button type="submit" class="btn btn-primary mb-0 rounded z-index-1"><i
                                                 class="fas fa-search"></i></button>
                                     </div>
                                 </form>
@@ -31,13 +35,29 @@
 
                             <!-- Select option -->
                             <div class="col-xl-3 mt-3 mt-xl-0">
-                                <form class="border rounded p-2 input-borderless">
+                                <form id="myForm" class="border rounded p-2 input-borderless">
                                     <select class="form-select form-select-sm js-choice border-0"
-                                            aria-label=".form-select-sm">
-                                        <option value="">پربازدیدترین</option>
-                                        <option>بروزترین</option>
-                                        <option>پرفروش ترین</option>
-                                        <option>جدیدترین</option>
+                                            aria-label=".form-select-sm" name="sort" onchange="this.form.submit();">
+                                        {% if request.GET.sort %}
+                                            {% if request.GET.sort == 'all' %}
+                                                <option value="" disabled selected hidden>جدید ترین</option>
+
+                                            {% elif request.GET.sort == 'update' %}
+                                                <option value="" disabled selected hidden>بروز ترین</option>
+
+                                            {% elif request.GET.sort == 'bestseller' %}
+                                                <option value="" disabled selected hidden>پرفروش ترین</option>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <option value="" disabled selected hidden>دسته بندی</option>
+                                        {% endif %}
+
+
+                                        <option value="all">جدیدترین</option>
+                                        <option value="update">بروزترین</option>
+                                        <option value="bestseller">پرفروش ترین</option>
+
                                     </select>
                                 </form>
                             </div>
@@ -50,7 +70,8 @@
                                     <i class="fas fa-sliders-h me-1"></i> نمایش فیلتر
                                 </button>
                                 <!-- Advanced filter responsive toggler END -->
-                                <p class="mb-0 text-end">نمایش 1-7 از 32 نتیجه</p>
+                                <p class="mb-0 text-end">نمایش {{ page_obj.start_index }}-{{ page_obj.end_index }}
+                                    از {{ course_list.count }} نتیجه</p>
                             </div>
 
                         </div>
@@ -148,7 +169,7 @@
                                                                           tabindex="-1"><i
                                                     class="fas fa-angle-double-right"></i></a></li>
                                         {% endif %}
-                                        {% for page_number in page_obj.paginator.page_range %}
+                                        {% for page_number in page_obj.paginator.page_range reversed %}
                                             {% if page_obj.number == page_number %}
                                                 <li class="page-item mb-0 active" aria-current="page"><a
                                                         class="page-link"
@@ -195,116 +216,64 @@
                                             <!-- Checkbox -->
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault9">
+                                                    {% existence_variable request 'categories' 'all' as flag %}
+
+                                                    <input class="form-check-input" type="checkbox" name="categories"
+                                                           value="all"
+                                                           id="flexCheckDefault9"
+                                                           {% if flag %}checked{% endif %}>
                                                     <label class="form-check-label" for="flexCheckDefault9">همه</label>
                                                 </div>
-                                                <span class="small">(1256)</span>
+                                                <span class="small">({{ course_list.all.count }})</span>
                                             </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault10">
-                                                    <label class="form-check-label" for="flexCheckDefault10">طراحی
-                                                        وب</label>
+                                            {% for category in categories.all|first_half %}
+                                                {% existence_variable request 'categories' category.name as flag %}
+                                                <!-- Checkbox -->
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               value="{{ category.name }}"
+                                                               id="flexCheckDefault10" name="categories"
+                                                               {% if flag %}checked{% endif %}>
+                                                        <label class="form-check-label"
+                                                               for="flexCheckDefault10">{{ category.name }}</label>
+                                                    </div>
+                                                    <span class="small">({{ category.course.all.count }})</span>
                                                 </div>
-                                                <span class="small">(365)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault11">
-                                                    <label class="form-check-label" for="flexCheckDefault11">برنامه
-                                                        نویسی</label>
-                                                </div>
-                                                <span class="small">(156)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault12">
-                                                    <label class="form-check-label"
-                                                           for="flexCheckDefault12">حسابداری</label>
-                                                </div>
-                                                <span class="small">(65)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault17">
-                                                    <label class="form-check-label" for="flexCheckDefault17">بانک
-                                                        اطلاعات</label>
-                                                </div>
-                                                <span class="small">(245)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault13">
-                                                    <label class="form-check-label" for="flexCheckDefault13">داده
-                                                        کاوی</label>
-                                                </div>
-                                                <span class="small">(184)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault14">
-                                                    <label class="form-check-label"
-                                                           for="flexCheckDefault14">شبکه</label>
-                                                </div>
-                                                <span class="small">(65)</span>
-                                            </div>
-                                            <!-- Checkbox -->
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="flexCheckDefault15">
-                                                    <label class="form-check-label"
-                                                           for="flexCheckDefault15">عکاسی</label>
-                                                </div>
-                                                <span class="small">(99)</span>
-                                            </div>
+                                            {% endfor %}
+
 
                                             <!-- Collapse body -->
                                             <div class="collapse multi-collapse" id="multiCollapseExample1">
                                                 <div class="card card-body p-0">
-                                                    <!-- Checkbox -->
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                   id="flexCheckDefault16">
-                                                            <label class="form-check-label" for="flexCheckDefault16">طراحی
-                                                                سایت</label>
+                                                    {% for category in categories.all|second_half %}
+                                                        {% existence_variable request 'categories' category.name as flag %}
+                                                        <!-- Checkbox -->
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                       value="{{ category.name }}"
+                                                                       id="flexCheckDefault16" name="categories"
+                                                                       {% if flag %}checked{% endif %}>
+                                                                <label class="form-check-label"
+                                                                       for="flexCheckDefault16">{{ category.name }}</label>
+                                                            </div>
+                                                            <span class="small">({{ category.course.all.count }})</span>
                                                         </div>
-                                                        <span class="small">(178)</span>
-                                                    </div>
-                                                    <!-- Checkbox -->
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                   id="flexCheckDefault18">
-                                                            <label class="form-check-label"
-                                                                   for="flexCheckDefault18">سئو</label>
-                                                        </div>
-                                                        <span class="small">(104)</span>
-                                                    </div>
+                                                    {% endfor %}
+
                                                 </div>
                                             </div>
-                                            <!-- Collapse button -->
-                                            <a class=" p-0 mb-0 mt-2 btn-more d-flex align-items-center"
-                                               data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
-                                               aria-expanded="false" aria-controls="multiCollapseExample1">
-                                                مشاهده <span class="see-more ms-1">بیشتر</span><span
-                                                    class="see-less ms-1">کمتر</span><i
-                                                    class="fas fa-angle-down ms-2"></i>
-                                            </a>
+                                            {% if categories.all|second_half %}
+                                                <!-- Collapse button -->
+                                                <a class=" p-0 mb-0 mt-2 btn-more d-flex align-items-center"
+                                                   data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
+                                                   aria-expanded="false" aria-controls="multiCollapseExample1">
+                                                    مشاهده <span class="see-more ms-1">بیشتر</span><span
+                                                        class="see-less ms-1">کمتر</span><i
+                                                        class="fas fa-angle-down ms-2"></i>
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <!-- Category END -->
@@ -316,19 +285,25 @@
                                         <ul class="list-inline mb-0">
                                             <!-- Rent -->
                                             <li class="list-inline-item">
-                                                <input type="radio" class="btn-check" name="options" id="option1">
+                                                <input value="all" type="radio" class="btn-check" name="price"
+                                                       id="option1"
+                                                       {% if request.GET.price and request.GET.price == 'all' %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check"
                                                        for="option1">همه</label>
                                             </li>
                                             <!-- Sale -->
                                             <li class="list-inline-item">
-                                                <input type="radio" class="btn-check" name="options" id="option2">
+                                                <input type="radio" class="btn-check" name="price" id="option2"
+                                                       value="free"
+                                                       {% if request.GET.price and request.GET.price == 'free' %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check"
                                                        for="option2">رایگان</label>
                                             </li>
                                             <!-- Buy -->
                                             <li class="list-inline-item">
-                                                <input type="radio" class="btn-check" name="options" id="option3">
+                                                <input value="buyable" type="radio" class="btn-check"
+                                                       id="option3" name="price"
+                                                       {% if request.GET.price and request.GET.price == 'buyable' %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check"
                                                        for="option3">خریدنی</label>
                                             </li>
@@ -343,23 +318,34 @@
                                         <ul class="list-inline mb-0">
                                             <!-- Item -->
                                             <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-12">
+                                                {% existence_variable request 'levels' 'All levels' as flag %}
+
+                                                <input type="checkbox" value="All levels" class="btn-check"
+                                                       id="btn-check-12"
+                                                       name="levels" {% if flag %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check" for="btn-check-12">همه
                                                     سطح</label>
                                             </li>
                                             <!-- Item -->
                                             <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-9">
+                                                {% existence_variable request 'levels' 'Beginner' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-9"
+                                                       value="Beginner" name="levels" {% if flag %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check" for="btn-check-9">مبتدی</label>
                                             </li>
                                             <!-- Item -->
                                             <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-10">
+                                                {% existence_variable request 'levels' 'preliminary' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-10"
+                                                       value="preliminary" name="levels"
+                                                       {% if flag %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check" for="btn-check-10">مقدماتی</label>
                                             </li>
                                             <!-- Item -->
                                             <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-11">
+                                                {% existence_variable request 'levels' 'advanced' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-11"
+                                                       value="advanced" name="levels" {% if flag %}checked{% endif %}>
                                                 <label class="btn btn-light btn-primary-soft-check" for="btn-check-11">پیشرفته</label>
                                             </li>
                                         </ul>
@@ -371,51 +357,35 @@
                                         <!-- Title -->
                                         <h4 class="mb-3 fs-6">فیلتر زبان</h4>
                                         <ul class="list-inline mb-0 g-3">
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-2">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-2">انگلیسی</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-3">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-3">فرانسه</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-4">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-4">هند</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-5">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-5">روسی</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-6">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-6">اسپانیا</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-7">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-7">ایتالیا</label>
-                                            </li>
-                                            <!-- Item -->
-                                            <li class="list-inline-item mb-2">
-                                                <input type="checkbox" class="btn-check" id="btn-check-8">
-                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-8">آلمان</label>
-                                            </li>
+                                            {% for item in languages.all %}
+                                                <!-- Item -->
+                                                <li class="list-inline-item mb-2">
+                                                    {% existence_variable request 'languages' item.name as flag %}
+                                                    <input name="languages" value="{{ item.name }}" type="checkbox"
+                                                           class="btn-check" id="{{ item.name }}"
+                                                           {% if flag %}checked{% endif %}>
+                                                    <label class="btn btn-light btn-primary-soft-check"
+                                                           for="{{ item.name }}">{{ item.name }}</label>
+                                                </li>
+                                            {% endfor %}
+
                                         </ul>
                                     </div>
                                     <!-- Language END -->
-                                </form><!-- Form End -->
+
                             </div>
 
                             <!-- Button -->
                             <div class="d-grid p-2 p-lg-0 text-center">
-                                <button class="btn btn-primary mb-0">نتیجه فیلتر</button>
+                                <button type="submit" class="btn btn-primary mb-0">نتیجه فیلتر</button>
                             </div>
+                            {% if request.GET.q %}
+                                <input type="hidden" value="{{ request.GET.q }}" name="q">
+                            {% endif %}
+                            {% if request.GET.sort %}
+                                <input type="hidden" value="{{ request.GET.sort }}" name="sort">
+                            {% endif %}
+                            </form><!-- Form End -->
 
                         </div>
                         <!-- Responsive offcanvas body END -->
@@ -511,5 +481,6 @@
             })
         }
     </script>
+
 
 {% endblock %}

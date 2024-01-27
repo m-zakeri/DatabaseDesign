@@ -34,7 +34,7 @@
 
             <!-- Nav item 2 Pages -->
             <li class="nav-item dropdown">
-                <a class="nav-link" href="#" id="pagesMenu" data-bs-toggle="dropdown"
+                <a class="nav-link  {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}" href="{% url 'course_app:course_list' %}" id="pagesMenu"
                    aria-haspopup="true" aria-expanded="false">دوره ها</a>
 
             </li>

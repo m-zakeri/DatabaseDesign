@@ -1,7 +1,7 @@
 from django.db.models import Sum
 
 
-def filter(request, queryset):
+def filter_teacher(request, queryset):
     search = request.GET.get('q')
     category = request.GET.get('category')
     sort = request.GET.get('sort')

@@ -36,3 +36,24 @@ def my_url(value, field_name, urlencode=None):
 
     return url
 
+
+@register.simple_tag
+def existence_variable(request, name, variable):
+    lst = request.GET.getlist(name)
+
+    if variable in lst:
+        return True
+    else:
+        return False
+
+
+@register.filter
+def first_half(lst):
+    first_half = len(lst) // 2
+    return lst[:first_half]
+
+
+@register.filter
+def second_half(lst):
+    second_half = len(lst) // 2
+    return lst[second_half:]

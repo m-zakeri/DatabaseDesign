@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from . import models
-from . import filter_teacher
+from . import madule
 from apps.course.models import Course, CourseCategory
 
 
@@ -12,7 +12,7 @@ class TeacherListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return filter_teacher.filter(self.request, queryset)
+        return madule.filter_teacher(self.request, queryset)
 
 
 class TeacherDetailView(DetailView):
