@@ -43,13 +43,9 @@
                     <div class="col-sm-6 col-xl-4">
                         <form class="border rounded p-2">
                             <div class="input-group input-borderless">
-                                <input class="form-control me-1" type="search" placeholder="جستجوی مدرس" name="q">
-                                {% if request.GET.sort %}
-                                    <input type="hidden" name='sort' value="{{ request.GET.sort }}">
-                                {% endif %}
-                                {% if request.GET.category %}
-                                    <input type="hidden" name="category" value="{{ request.GET.category }}">
-                                {% endif %}
+                                <input class="form-control me-1" type="search" placeholder="جستجوی مدرس" name="q"
+                                       {% if request.GET.q %}value="{{ request.GET.q }}{% endif %}">
+
                                 <button type="submit" class="btn btn-primary mb-0 rounded"><i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -61,7 +57,12 @@
                         <form class="border rounded p-2 input-borderless">
                             <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm"
                                     name="category">
-                                <option value="all">دسته بندی</option>
+                                {% if request.GET.category %}
+                                    <option value="{{ request.GET.category }}" disabled selected
+                                            hidden>{{ request.GET.category }}</option>
+                                {% else %}
+                                    <option value="" disabled selected hidden>دسته بندی</option>
+                                {% endif %}
                                 {% for category in categories.all %}
                                     <option value="{{ category.name }}">{{ category.name }}</option>
                                 {% endfor %}
@@ -75,18 +76,25 @@
 
                         <select class="form-select form-select-sm js-choice" aria-label=".form-select-sm"
                                 name="sort">
-                            <option value="all">مرتب سازی</option>
+                            {% if request.GET.sort %}
+                                {% if request.GET.sort == 'Bestselling' %}
+                                    <option value="Bestselling" disabled selected hidden>پرفروش ترین</option>
+                                {% else %}
+                                    <option value="HighScore" disabled selected hidden> امتیاز بالا</option>
+                                {% endif %}
+
+                            {% else %}
+                                <option value="" disabled selected hidden>مرتب سازی</option>
+                            {% endif %}
                             <option value="Bestselling">پرفروش ترین</option>
                             <option value="HighScore"> امتیاز بالا</option>
                         </select>
 
                     </div>
-                    {% if request.GET.sort %}
-                        <input type="hidden" name='sort' value="{{ request.GET.sort }}">
+                    {% if request.GET.q %}
+                        <input type="hidden" value="{{ request.GET.q }}" name="q">
                     {% endif %}
-                    {% if request.GET.category %}
-                        <input type="hidden" name="category" value="{{ request.GET.category }}">
-                    {% endif %}
+
 
                     <!-- Button -->
                     <div class="col-sm-6 col-xl-2 mt-3 mt-xl-0 d-grid">

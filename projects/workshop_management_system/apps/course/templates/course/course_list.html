@@ -40,13 +40,13 @@
                                             aria-label=".form-select-sm" name="sort" onchange="this.form.submit();">
                                         {% if request.GET.sort %}
                                             {% if request.GET.sort == 'all' %}
-                                                <option value="" disabled selected hidden>جدید ترین</option>
+                                                <option value="all" disabled selected hidden>جدید ترین</option>
 
                                             {% elif request.GET.sort == 'update' %}
-                                                <option value="" disabled selected hidden>بروز ترین</option>
+                                                <option value="update" disabled selected hidden>بروز ترین</option>
 
                                             {% elif request.GET.sort == 'bestseller' %}
-                                                <option value="" disabled selected hidden>پرفروش ترین</option>
+                                                <option value="bestseller" disabled selected hidden>پرفروش ترین</option>
                                             {% endif %}
 
                                         {% else %}

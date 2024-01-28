@@ -7,13 +7,13 @@ def filter_teacher(request, queryset):
     sort = request.GET.get('sort')
 
     if category:
-        if category != 'all':
-            queryset = queryset.filter(course__category__name=category)
+        if category:
+            queryset = queryset.filter(course__category__name__icontains=category)
 
     if search:
         queryset = queryset.filter(user__username__icontains=search)
 
-    if sort and sort != 'all':
+    if sort :
 
         if sort == 'HighScore':
             queryset = queryset.order_by('-score')
