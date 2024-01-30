@@ -1,5 +1,13 @@
+import datetime
+
 from django import template
 from apps.course import models
+
+from jdatetime import datetime
+from datetime import timezone
+from django.utils import timezone as Timezone
+from apps.course.madul import format_time
+
 
 register = template.Library()
 
@@ -10,9 +18,11 @@ def time_course(time):
     hours = int(total_seconds // 3600)
     minutes = int((total_seconds % 3600) // 60)
 
-    if hours != 0:
-        return f'{hours}ساعت ' + f'{minutes}دیقه '
-    return f'{minutes}دیقه '
+    if hours != 0 and minutes != 0:
+        return f'{hours}ساعت ' + f'{minutes}دقیقه '
+    elif hours != 0 and minutes == 0:
+        return f'{hours}ساعت '
+    return f'{minutes}دقیقه '
 
 
 @register.simple_tag
@@ -57,3 +67,112 @@ def first_half(lst):
 def second_half(lst):
     second_half = len(lst) // 2
     return lst[second_half:]
+
+
+@register.simple_tag
+def permission_video(request, meeting_id, course_id):
+    meeting = models.Meeting.objects.get(id=meeting_id)
+    course = models.Course.objects.get(id=course_id)
+
+    if meeting.free:
+        return True
+    elif not request.user.is_authenticated:
+        return False
+
+    elif course.customer.filter(user=request.user).exists():
+        return True
+
+    elif course.teacher.filter(user=request.user).exists():
+        return True
+    return False
+
+
+@register.simple_tag
+def license_course(request, course_id):
+    course = models.Course.objects.get(id=course_id)
+
+    if not request.user.is_authenticated:
+        return False
+    elif course.customer.filter(user=request.user).exists():
+        return True
+    elif course.teacher.filter(user=request.user).exists():
+        return True
+    return False
+
+
+@register.simple_tag
+def is_discount(course_id):
+    course = models.Course.objects.get(id=course_id)
+    if course.discount == 0:
+        return False
+
+    now = Timezone.now()
+    if course.start_discount <= now <= course.end_discount:
+        return True
+
+    return False
+
+
+@register.simple_tag
+def time_left_for_discount(course_id):
+    course = models.Course.objects.get(id=course_id)
+
+    now = datetime.now(timezone.utc)
+    end_discount = course.end_discount.replace(tzinfo=timezone.utc)
+    date_difference = end_discount - now
+
+    return format_time(date_difference)
+
+
+@register.simple_tag
+def difference_time_sending_comment(comment_id, is_course_comment=True):
+    if is_course_comment:
+        comment = models.CourseComment.objects.get(id=comment_id)
+    else:
+        comment = models.AskedQuestion.objects.get(id=comment_id)
+
+    now = datetime.now(timezone.utc)
+
+    start = comment.created_at.replace(tzinfo=timezone.utc)
+    date_difference = now - start
+    return format_time(date_difference)
+
+
+@register.simple_tag
+def convert_to_shamsi(string_date):
+    def to_persian(text):
+        translation_dict = {
+            "Saturday": "شنبه",
+            "Sunday": "یک‌شنبه",
+            "Monday": "دوشنبه",
+            "Tuesday": "سه‌شنبه",
+            "Wednesday": "چهارشنبه",
+            "Thursday": "پنج‌شنبه",
+            "Friday": "جمعه",
+            "Bahman": "بهمن",
+            "Esfand": "اسفند",
+            "Farvardin": "فروردین",
+            "Ordibehesht": "اردیبهشت",
+            "Khordad": "خرداد",
+            "Tir": "تیر",
+            "Mordad": "مرداد",
+            "Shahrivar": "شهریور",
+            "Mehr": "مهر",
+            "Aban": "آبان",
+            "Azar": "آذر",
+            "Dey": "دی"
+        }
+        for en, fa in translation_dict.items():
+            text = text.replace(en, fa)
+        return text
+
+    shamsi_date = datetime.fromgregorian(date=string_date)
+    formatted_date = to_persian(shamsi_date.strftime('%A %d %B %Y'))
+
+    return formatted_date
+
+
+@register.simple_tag
+def number_video_season(id):
+    season = models.Season.objects.get(id=id)
+    return season.meetings.filter(is_publish=True).exclude(video=None).count()

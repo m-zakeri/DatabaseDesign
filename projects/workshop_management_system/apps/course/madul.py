@@ -27,3 +27,22 @@ def filter_course(request, queryset):
             queryset = queryset.order_by('-number_customer')
 
     return queryset
+
+
+def format_time(date_difference):
+    days_difference = date_difference.days
+    hours_difference, remainder = divmod(date_difference.seconds, 3600)
+    minutes_difference, _ = divmod(remainder, 60)
+    formatted_time_difference = ""
+
+    if days_difference > 0:
+        formatted_time_difference += f"{days_difference} روز "
+
+    if hours_difference > 0 or formatted_time_difference:
+        formatted_time_difference += f"{hours_difference} ساعت "
+
+    if minutes_difference > 0 or formatted_time_difference:
+        formatted_time_difference += f"{minutes_difference} دقیقه "
+    else:
+       formatted_time_difference = 'در کمتر از 1 دقیقه '
+    return formatted_time_difference
