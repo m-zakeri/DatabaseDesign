@@ -25,8 +25,11 @@ class Teacher(models.Model):
         return self.user.username
 
     def number_customer(self):
-        count = self.course.all().aggregate(Sum('number_customer'))
-        return count['number_customer__sum']
+        count = self.course.all().aggregate(Sum('number_customer'))['number_customer__sum']
+        if count > 1000:
+            count = count // 1000
+            return f"{count}K"
+        return f"{count}"
 
     class Meta:
         verbose_name = _('Teacher')
@@ -51,7 +54,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     description = models.TextField(verbose_name=_('Description'))
     certificate_photo = models.FileField(upload_to='document/certificate/skill', verbose_name=_('Certificate Photo'))
-    learningـpercentage = models.FloatField(default=0, verbose_name=_('Learning percentage'))
+    learning_percentage = models.FloatField(default=0, verbose_name=_('Learning percentage'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 

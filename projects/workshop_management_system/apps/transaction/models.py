@@ -19,7 +19,7 @@ class Transaction(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transaction', verbose_name=_('User'))
     course = models.ManyToManyField(Course, related_name='transaction', verbose_name=_('Course'))
-    teacher = models.ManyToManyField(Teacher, related_name='transaction', verbose_name=_('Teacher'))
+    teacher = models.ManyToManyField(Teacher, blank=True, related_name='transaction', verbose_name=_('Teacher'))
     amount = models.PositiveIntegerField(verbose_name=_('Amount'))
     currency = models.CharField(max_length=50, choices=currencies, default='Rial', verbose_name=_('Currency'))
     payment_method = models.CharField(max_length=50, verbose_name=_('Payment Method'))
@@ -30,9 +30,10 @@ class Transaction(models.Model):
     recipient_card_number = models.CharField(max_length=11, validators=[validate_credit_card_number],
                                              verbose_name=_("Recipient's Card Number"))
     transaction_image = models.FileField(upload_to='document/transaction/user', verbose_name=_('Transaction Image'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
+        ordering = ('-updated_at', '-created_at')
         verbose_name = _('Transaction')
         verbose_name_plural = _('Transactions')

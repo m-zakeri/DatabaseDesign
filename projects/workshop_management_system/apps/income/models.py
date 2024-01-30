@@ -19,9 +19,9 @@ class TeacherIncome(models.Model):
     course = models.ManyToManyField(Course, related_name='teacher_income', verbose_name=_('Course'))
     amount = models.PositiveIntegerField(verbose_name=_('Amount'))
     status = models.CharField(max_length=50, choices=status_income, default='Unpaid', verbose_name=_('Status'))
-    method = models.CharField(max_length=50,choices=method_income,default='Online', verbose_name=_('Method'))
+    method = models.CharField(max_length=50, choices=method_income, default='Online', verbose_name=_('Method'))
     payment_date = models.DateTimeField(verbose_name=_('Payment Date'))
-    tax_amount = models.PositiveIntegerField(verbose_name=_('Tax Amount'))
+    tax_amount = models.PositiveIntegerField(default=0, verbose_name=_('Tax Amount'))
     transaction_image = models.FileField(upload_to='document/transaction/income_teacher',
                                          verbose_name=_('Transaction Image'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))

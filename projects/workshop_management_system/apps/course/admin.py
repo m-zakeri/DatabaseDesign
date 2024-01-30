@@ -1,4 +1,3 @@
-
 from .models import *
 from .filter_admin import *
 
@@ -26,13 +25,6 @@ class CourseAdmin(admin.ModelAdmin):
 class DescriptionCourseAdmin(admin.ModelAdmin):
     list_display = ('course', 'subject', 'content')
     search_fields = ('subject', 'content')
-
-
-@admin.register(CourseDescriptionItem)
-class DescriptionCourseItemAdmin(admin.ModelAdmin):
-    list_display = ('text', 'is_label')
-    list_editable = ('is_label',)
-    list_filter = ('is_label',)
 
 
 @admin.register(CourseLikes)

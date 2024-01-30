@@ -113,6 +113,11 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+    def get_number_of_customers(self):
+        if self.number_customer > 1000:
+            return f'{self.number_customer // 100}K'
+        return f'{self.number_customer}'
+
     def show_image(self):
         return format_html(f"<img src={self.image.url} width='50px' height='50px' >")
 
@@ -122,6 +127,7 @@ class Course(models.Model):
         return self.price - ((self.price * self.discount) / 100)
 
     class Meta:
+        ordering = ('created_at',)
         verbose_name = _('Course')
         verbose_name_plural = _('Courses')
 
@@ -129,7 +135,7 @@ class Course(models.Model):
 class CourseDescription(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='descriptions', verbose_name=_('Course'))
     subject = models.CharField(max_length=100, verbose_name=_('Subject'))
-    content = models.TextField(verbose_name=_('Content'))
+    content = models.TextField(null=True, blank=True, verbose_name=_('Content'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subs',
                                verbose_name=_('Parent'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
@@ -141,19 +147,6 @@ class CourseDescription(models.Model):
     class Meta:
         verbose_name = _('Description')
         verbose_name_plural = _('Descriptions')
-
-
-class CourseDescriptionItem(models.Model):
-    course_description = models.ForeignKey(CourseDescription, on_delete=models.CASCADE, related_name='item',
-                                           verbose_name='Course Description')
-    text = models.TextField(verbose_name=_('Text'))
-    is_label = models.BooleanField(default=False, verbose_name=_('Is Label'))
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
-
-    class Meta:
-        verbose_name = _('Description Item')
-        verbose_name_plural = _('Description Items')
 
 
 class CourseLikes(models.Model):
@@ -230,7 +223,8 @@ class LikesCourseComment(models.Model):
 
 
 class FAQFrequently(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='fa_frequently', verbose_name=_('Course'))
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='faq_frequently',
+                               verbose_name=_('Course'))
     question = models.CharField(max_length=100, verbose_name=_('Question'))
     answer = models.TextField(verbose_name=_('Answer'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
@@ -250,14 +244,14 @@ class AskedQuestion(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     class Meta:
-        verbose_name = _('Frequently Asked Question')
-        verbose_name_plural = _('Frequently Asked Questions')
+        verbose_name = _('question and answer')
+        verbose_name_plural = _('question and answer')
 
 
 class Season(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='season', verbose_name=_('Course'))
     name = models.CharField(max_length=100, verbose_name=_('Name'))
-    description = models.TextField(verbose_name=_('Description'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
@@ -266,26 +260,28 @@ class Season(models.Model):
         return self.name
 
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = _('Season')
         verbose_name_plural = _('Seasons')
 
 
 class Meeting(models.Model):
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='meeting', verbose_name=_('Season'))
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='meetings', verbose_name=_('Season'))
     name = models.CharField(max_length=100, verbose_name=_('Name'))
-    description = models.TextField(verbose_name=_('Description'))
-    location_and_time = models.TextField(verbose_name=_('Location And Time'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
+    location_and_time = models.TextField(null=True, blank=True, verbose_name=_('Location And Time'))
     link = models.URLField(max_length=200, null=True, blank=True, verbose_name=_('Link'))
-    video = models.FileField(upload_to='video/meeting', verbose_name=_('Video'))
-    video_time = models.DurationField(verbose_name=_('Video Time'))
+    video = models.FileField(null=True, blank=True, upload_to='video/meeting', verbose_name=_('Video'))
+    video_time = models.DurationField(default=0, verbose_name=_('Video Time'))
 
-    file = models.FileField(upload_to='file/document', verbose_name=_('File'))
+    file = models.FileField(null=True, blank=True, upload_to='file/document', verbose_name=_('File'))
     free = models.BooleanField(default=False, verbose_name=_('Is Free'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = _('Meeting')
         verbose_name_plural = _('Meetings')
 
@@ -293,9 +289,9 @@ class Meeting(models.Model):
 class Exam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='exam', verbose_name=_('Course'))
     name = models.CharField(max_length=100, verbose_name=_('Name'))
-    description = models.TextField(verbose_name=_('Description'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
     start_exam = models.DateTimeField(verbose_name=_('Exam Start Date And Time'))
-    link = models.URLField(null=True, blank=True, verbose_name=_('Link'))
+    link = models.URLField(verbose_name=_('Link'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
@@ -341,5 +337,6 @@ class Festival(models.Model):
     show_image.short_description = _('image')
 
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = _('Festival')
         verbose_name_plural = _('Festivals')

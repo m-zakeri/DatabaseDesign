@@ -72,7 +72,9 @@ class User(AbstractBaseUser):
         return self.username
 
     def full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        if self.first_name and self.last_name:
+            return f'{self.first_name} {self.last_name}'
+        return self.username
 
     def show_image(self):
         return format_html(f"<img src={self.image.url} width='50px' height='50px'>")

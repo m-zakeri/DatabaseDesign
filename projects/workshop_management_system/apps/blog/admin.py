@@ -26,13 +26,6 @@ class DescriptionBlogAdmin(admin.ModelAdmin):
     search_fields = ('subject', 'content')
 
 
-@admin.register(BlogDescriptionItem)
-class DescriptionBlogItemAdmin(admin.ModelAdmin):
-    list_display = ('text', 'is_label')
-    list_editable = ('is_label',)
-    list_filter = ('is_label',)
-
-
 @admin.register(BlogComment)
 class CommentBlogAdmin(admin.ModelAdmin):
     list_display = ('user', 'blog', 'message', 'is_publish')

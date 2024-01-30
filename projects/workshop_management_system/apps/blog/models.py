@@ -84,17 +84,6 @@ class BlogDescription(models.Model):
         verbose_name_plural = _('Descriptions')
 
 
-class BlogDescriptionItem(models.Model):
-    blog_description = models.ForeignKey(BlogDescription, on_delete=models.CASCADE, related_name='item',
-                                         verbose_name=_('Blog Description'))
-    text = models.TextField(verbose_name=_('Text'))
-    is_label = models.BooleanField(default=False, verbose_name=_('Is Lable'))
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
-
-    class Meta:
-        verbose_name = _('Description Item')
-        verbose_name_plural = _('Description Items')
 
 
 class BlogComment(models.Model):
@@ -103,6 +92,7 @@ class BlogComment(models.Model):
     message = models.CharField(max_length=300, verbose_name=_('Message'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE,null=True,blank=True, related_name='subs', verbose_name=_('Parent'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     def __str__(self):
         return f'{self.user} -> {self.message[:30]}'
