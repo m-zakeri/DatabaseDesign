@@ -13,16 +13,13 @@ class Person(models.Model):
     Picture = models.ImageField(upload_to='images/', null=True, blank=True) #
     National_Code = models.CharField(max_length=10, unique=True) #
 
-
-
     def age_calculator(self):
         current_time = datetime.datetime.now().year
         birth_year = self.Date_of_Birth.year
         return current_time - birth_year
 
     def __str__(self):
-        return self.name + " " + self.family
-
+        return self.First_Name + " " + self.Last_Name
 
 
 class Email(models.Model):
