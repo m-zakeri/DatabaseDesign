@@ -96,3 +96,79 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+
+class Storage(models.Model):
+    storage_id = models.AutoField(primary_key=True)
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.Name
+
+class Product_Info(models.Model):
+    product_id = models.AutoField(primary_key=True)
+    storage_id = models.ForeignKey(Storage, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500) #
+    quantity = models.IntegerField()
+    creation_Date = models.DateField() #
+    expiration_Date = models.DateField() #
+
+    def __str__(self):
+        return self.Name
+
+
+
+class Supervisor(models.Model):
+    Rank = (("Instructor", "Instructor"), ("Assistant", "Assistant"), ("Associate Professor", "Associate Professor"),
+            ("Professor", "Professor"), ("Full Professor", "Full Professor")) #
+    Supervisor_ID = models.AutoField(primary_key=True)
+    Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
+    Rank = models.CharField(max_length=100, choices=Rank, default='Instructor')
+    Department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
+    Field = models.CharField(max_length=100)
+    Salary = models.IntegerField()
+
+"""    def __str__(self):
+        return self.Supervisor_Name"""
+
+class Degree(models.Model):
+    supervisor_ID = models.ForeignKey(Supervisor, on_delete=models.CASCADE, primary_key=True)
+    educational_Degree = models.CharField(max_length=100)
+    university = models.CharField(max_length=100) #
+    started_Date = models.DateField()
+
+    def __str__(self):
+        return self.name
+
+class Company(models.Model):
+    company_ID = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name
+
+class Contact_Ways(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, primary_key=True)
+    phone_number = models.CharField(max_length=11)
+    email_address = models.EmailField(max_length=100)
+
+
+class Research(models.Model):
+    status = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated")) #
+    research_ID = models.AutoField(primary_key=True)
+    student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
+    department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
+    #storage_ID = models.ForeignKey(Storage, on_delete=models.CASCADE) #
+    company_ID = models.ForeignKey(Company, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    budget = models.IntegerField()
+    purpose = models.CharField(max_length=500)
+    start_Date = models.DateField()
+    end_Date = models.DateField(blank= True)
+
+    def __str__(self):
+        return self.name
