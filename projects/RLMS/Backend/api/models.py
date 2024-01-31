@@ -121,14 +121,14 @@ class Product_Info(models.Model):
 
 
 class Supervisor(models.Model):
-    Rank = (("Instructor", "Instructor"), ("Assistant", "Assistant"), ("Associate Professor", "Associate Professor"),
+    rank = (("Instructor", "Instructor"), ("Assistant", "Assistant"), ("Associate Professor", "Associate Professor"),
             ("Professor", "Professor"), ("Full Professor", "Full Professor")) #
-    Supervisor_ID = models.AutoField(primary_key=True)
-    Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Rank = models.CharField(max_length=100, choices=Rank, default='Instructor')
-    Department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
-    Field = models.CharField(max_length=100)
-    Salary = models.IntegerField()
+    supervisor_id = models.AutoField(primary_key=True)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
+    rank = models.CharField(max_length=100, choices=rank, default='Instructor')
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+    field = models.CharField(max_length=100)
+    salary = models.IntegerField()
 
 """    def __str__(self):
         return self.Supervisor_Name"""
