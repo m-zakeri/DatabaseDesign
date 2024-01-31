@@ -1,7 +1,3 @@
-from django.db import models
-
-# Create your models here.
-
 import datetime
 from django.db import models
 
@@ -18,89 +14,161 @@ class Person(models.Model):
     national_code = models.CharField(max_length=10, unique=True) #
 
 
+
     def age_calculator(self):
         current_time = datetime.datetime.now().year
         birth_year = self.date_of_birth.year
         return current_time - birth_year
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.first_namename + " " + self.last_name
 
 
 
 class Email(models.Model):
     email_types = (('Personal', 'Personal'), ('Work', 'Work'), ('University', 'University')) #
-    Email_ID = models.AutoField(primary_key=True)
-    Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Email_Address = models.EmailField(max_length=100)
-    Email_Type = models.CharField(max_length=100, choices=email_types, default='Personal')
+    email_if = models.AutoField(primary_key=True)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
+    email_address = models.EmailField(max_length=100)
+    email_type = models.CharField(max_length=100, choices=email_types, default='Personal')
 
     def __str__(self):
-        return self.Email_Address
-
-    def get_email_type(self):
-        return self.email_type
+        return self.email_address
 
 class Phone(models.Model):
-    Phone_ID = models.AutoField(primary_key=True)
-    Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Phone_Number = models.CharField(max_length=11)
+    phone_id = models.AutoField(primary_key=True)
+    person_id  = models.ForeignKey(Person, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=11)
 
     def __str__(self):
-        return self.Phone_Number
+        return self.phone_number
 
 class Student(models.Model):
-    Student_ID = models.AutoField(primary_key=True)
-    Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Educational_Degree = models.CharField(max_length=100) #
-    University = models.CharField(max_length=100) #
-    GPA = models.FloatField() #
-    Field = models.CharField(max_length=100)
+    student_id = models.AutoField(primary_key=True)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
+    educational_degree = models.CharField(max_length=100) #
+    university = models.CharField(max_length=100) #
+    gpa = models.FloatField() #
+    field = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.Student_Number
+        return self.student_id
 
 class Subscription_plan(models.Model):
-    Student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
-    Start_Date = models.DateField()
-    Subscription_Duration = models.DuritionField()
-    Price = models.IntegerField()
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    subscription_duration = models.DuritionField()
+    price = models.IntegerField()
 
     @property
     def end_date(self):
-        return self.Start_Date + self.Subscription_Duration
+        return self.start_date + self.subscription_duration
 
-    def __str__(self):
-        return self.Plan_Name
 
 class Course(models.Model):
-    Course_ID = models.AutoField(primary_key=True)
-    Student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
-    Name = models.CharField(max_length=100)
-    Platform = models.CharField(max_length=100)
-    Subject = models.CharField(max_length=100)
-    Session_Number = models.IntegerField()
-    Estimated_Time = models.DurationField()
-    Description = models.CharField(max_length=500) #
-    Price = models.IntegerField() #
+    course_id = models.AutoField(primary_key=True)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    platform = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100)
+    session_number = models.IntegerField()
+    estimated_time = models.DurationField()
+    description = models.CharField(max_length=500) #
+    price = models.IntegerField() #
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 class Department(models.Model):
-    Department_ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=100)
-    Location = models.Model(max_length=500)
-    Work_Time = models.DurationField()
+    department_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    location = models.Model(max_length=500)
+    work_time = models.DurationField()
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 class Room(models.Model):
-    Room_ID = models.AutoField(primary_key=True)
-    Department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
-    Name = models.CharField(max_length=100)
+    room_id = models.AutoField(primary_key=True)
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.name
+
+class Storage(models.Model):
+    storage_id = models.AutoField(primary_key=True)
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
 
 
     def __str__(self):
         return self.Name
+
+class Product_Info(models.Model):
+    product_id = models.AutoField(primary_key=True)
+    storage_id = models.ForeignKey(Storage, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500) #
+    quantity = models.IntegerField()
+    creation_Date = models.DateField() #
+    expiration_Date = models.DateField() #
+
+    def __str__(self):
+        return self.Name
+
+
+
+class Supervisor(models.Model):
+    rank = (("Instructor", "Instructor"), ("Assistant", "Assistant"), ("Associate Professor", "Associate Professor"),
+            ("Professor", "Professor"), ("Full Professor", "Full Professor")) #
+    supervisor_id = models.AutoField(primary_key=True)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
+    rank = models.CharField(max_length=100, choices=rank, default='Instructor')
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
+    field = models.CharField(max_length=100)
+    salary = models.IntegerField()
+
+"""    def __str__(self):
+        return self.Supervisor_Name"""
+
+class Degree(models.Model):
+    supervisor_ID = models.ForeignKey(Supervisor, on_delete=models.CASCADE, primary_key=True)
+    educational_Degree = models.CharField(max_length=100)
+    university = models.CharField(max_length=100) #
+    started_Date = models.DateField()
+
+    def __str__(self):
+        return self.name
+
+class Company(models.Model):
+    company_ID = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name
+
+class Contact_Ways(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, primary_key=True)
+    phone_number = models.CharField(max_length=11)
+    email_address = models.EmailField(max_length=100)
+
+
+class Research(models.Model):
+    status = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated")) #
+    research_ID = models.AutoField(primary_key=True)
+    student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
+    department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
+    #storage_ID = models.ForeignKey(Storage, on_delete=models.CASCADE) #
+    company_ID = models.ForeignKey(Company, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    budget = models.IntegerField()
+    purpose = models.CharField(max_length=500)
+    start_Date = models.DateField()
+    end_Date = models.DateField(blank= True)
+
+    def __str__(self):
+        return self.name
