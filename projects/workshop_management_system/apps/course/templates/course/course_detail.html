@@ -925,7 +925,13 @@
                                             {% license_course request object.id as flag %}
                                             {% if not flag %}
                                                 {% if not object.price == 0 %}
-                                                    <a href="#" class="btn btn-success mb-0">خرید دوره</a>
+                                                    <form method="post" action="{% url 'cart_app:cart' %}">
+                                                        <input type="hidden" value="{{ object.slug }}" name="slug">
+                                                        <button  class="btn btn-success mb-0" type="submit">خرید دوره</button>
+
+                                                        {% csrf_token %}
+                                                    </form>
+
                                                 {% else %}
                                                     <a href="#" class="btn btn-success mb-0">ثبت نام رایگان</a>
                                                 {% endif %}

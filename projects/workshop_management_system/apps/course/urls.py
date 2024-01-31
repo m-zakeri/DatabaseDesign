@@ -6,6 +6,6 @@ urlpatterns = [
     path('list/', views.CourseListView.as_view(), name='course_list'),
     path('detail/<slug:slug>/', views.CourseDetailView.as_view(), name='course_detail'),
     path('like/<int:id>/', views.LikeCourseView.as_view(), name='like_course'),
-    path('like/comment/<int:id>/', views.LikeCourseCommentView.as_view(), name='like_comment')
+    path('like/comment/<int:id>/', views.LikeCourseCommentView.as_view(), name='like_comment'),
 
 ]

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-
+from django.utils import timezone as Timezone
 from apps.account.models import User, Card
 from apps.teacher.models import Teacher
 from apps.customer.models import Customer
@@ -124,6 +124,12 @@ class Course(models.Model):
     show_image.short_description = _('image')
 
     def apply_discount(self):
+        now = Timezone.now()
+        if self.discount == 0:
+            return self.price
+        if self.start_discount and self.end_discount:
+            if not self.start_discount <= now <= self.end_discount:
+                return self.price
         return self.price - ((self.price * self.discount) / 100)
 
     class Meta:
@@ -174,9 +180,10 @@ class CourseCertificate(models.Model):
 
 
 class CouponCode(models.Model):
-    user_costumer = models.ManyToManyField(Customer, related_name='coupon_code', verbose_name=_('User Costumer'))
+    user_costumer = models.ManyToManyField(Customer, blank=True, related_name='coupon_code',
+                                           verbose_name=_('User Costumer'))
     course = models.ManyToManyField(Course, related_name='coupon_code', verbose_name=_('Course'))
-    name = models.CharField(max_length=50, verbose_name=_('Name'))
+    name = models.CharField(max_length=50, unique=True, verbose_name=_('Name'))
     discount = models.FloatField(verbose_name=_('Discount'))
     number_discount = models.PositiveIntegerField(verbose_name=_('Number Of Discount'))
     is_active = models.BooleanField(default=False, verbose_name=_('Is Active'))
