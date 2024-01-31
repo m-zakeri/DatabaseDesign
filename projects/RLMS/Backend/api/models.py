@@ -38,6 +38,9 @@ class Email(models.Model):
     def __str__(self):
         return self.Email_Address
 
+    def get_email_type(self):
+        return self.email_type
+
 class Phone(models.Model):
     Phone_ID = models.AutoField(primary_key=True)
     Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
