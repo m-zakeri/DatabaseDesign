@@ -13,8 +13,6 @@ class Person(models.Model):
     picture = models.ImageField(upload_to='images/', null=True, blank=True) #
     national_code = models.CharField(max_length=10, unique=True) #
 
-
-
     def age_calculator(self):
         current_time = datetime.datetime.now().year
         birth_year = self.date_of_birth.year
@@ -34,6 +32,9 @@ class Email(models.Model):
 
     def __str__(self):
         return self.email_address
+
+    def get_email_type(self):
+        return self.email_type
 
 class Phone(models.Model):
     phone_id = models.AutoField(primary_key=True)
