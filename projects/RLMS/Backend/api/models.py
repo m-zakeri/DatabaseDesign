@@ -169,18 +169,18 @@ class Contact_Ways(models.Model):
 
 
 class Research(models.Model):
-    status = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated")) #
+    statuses = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated"),("Suspand","Suspand")) #
     research_ID = models.AutoField(primary_key=True)
     student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
     department_ID = models.ForeignKey(Department, on_delete=models.CASCADE)
     #storage_ID = models.ForeignKey(Storage, on_delete=models.CASCADE) #
-    company_ID = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company_ID = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     subject = models.CharField(max_length=100)
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, choices=statuses, default='Pending')
     budget = models.IntegerField()
     purpose = models.CharField(max_length=500)
     start_Date = models.DateField()
-    end_Date = models.DateField(blank= True)
+    end_Date = models.DateField(null=True, blank=True)
 
-    def __str__(self):
-        return self.name
+    def get_statusr(self):
+        return self.status
