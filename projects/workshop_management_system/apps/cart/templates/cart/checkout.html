@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
-{% block title %} Cart {% endblock %}
+{% block title %} Checkout{% endblock %}
 
 {% block content %}
+
     <!-- **************** MAIN CONTENT START **************** -->
     <main>
 
@@ -17,8 +18,8 @@
                             <div class="d-flex justify-content-center">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb breadcrumb-dots mb-0">
-                                        <li class="breadcrumb-item"><a href="{% url 'home_app:home' %}">صفحه اصلی</a>
-                                        </li>
+                                        <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                                        <li class="breadcrumb-item"><a href="#">صفحات</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">سبد خرید</li>
                                     </ol>
                                 </nav>
@@ -41,7 +42,15 @@
                     <div class="col-lg-8 mb-4 mb-sm-0">
                         <div class="card card-body p-4 shadow">
                             <!-- Alert -->
-
+                            <div class="alert alert-danger alert-dismissible d-flex justify-content-between align-items-center fade  py-3 pe-2"
+                                 role="alert" id="alert-message">
+                                <div>
+                                    <span class="fs-5 me-1">🔥</span>
+                                    <span id="text-message"></span>
+                                </div>
+                                <button type="button" class="btn btn-link mb-0 text-primary-hover text-end"
+                                        data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                            </div>
 
 
                             <div class="table-responsive border-0 rounded-3">
@@ -50,9 +59,9 @@
                                     <!-- Table head -->
                                     <!-- Table body START -->
                                     <tbody class="border-top-0">
-                                    {% for item in cart %}
+                                    {% for item in order.items.all %}
                                         <!-- Table item -->
-                                        <tr id="{{ item.course.slug }}">
+                                        <tr>
                                             <!-- Course item -->
                                             <td>
                                                 <div class="d-lg-flex align-items-center">
@@ -69,16 +78,12 @@
                                             </td>
 
                                             <!-- Amount item -->
-                                            <td class="text-center">
-                                                <h5 class="text-success mb-0">{{ item.price }} تومان</h5>
+                                            <td style="text-align: end;">
+                                                <h5 class="text-success mb-0">{{ item.final_price }} تومان</h5>
                                             </td>
-                                            <!-- Action item -->
-                                            <td style="text-align: end">
 
-                                                <button onclick="RemoveCourse('{{ item.course.slug }}')" class="btn btn-sm btn-danger-soft px-2 mb-0"><i
-                                                        class="fas fa-fw fa-times"></i></button>
-                                            </td>
                                         </tr>
+
                                     {% endfor %}
 
 
@@ -86,7 +91,26 @@
                                 </table>
                             </div>
 
+                            <!-- Coupon input and button -->
+                            <div class="row g-3 mt-2">
+                                <form method="post" id="form-coupon"
+                                      style="display: flex;align-items: center">
+                                    {% csrf_token %}
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input class="form-control form-control " placeholder="کد تخفیف"
+                                                   name="name_discount">
 
+                                        </div>
+                                    </div>
+                                    <!-- Update button -->
+                                    <div class="col-md-6 text-md-end">
+                                        <button id="submit-coupon" type="submit" class="btn btn-primary mb-0">
+                                            اعمال
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <!-- Main content END -->
@@ -102,20 +126,19 @@
                             <ul class="list-group list-group-borderless mb-2">
                                 <li class="list-group-item px-0 d-flex justify-content-between">
                                     <span class="h6 fw-light mb-0">قیمت</span>
-                                    <span class="h6 fw-light mb-0 fw-bold"
-                                          id="total-price">{{ cart.total_price }} تومان</span>
+                                    <span class="h6 fw-light mb-0 fw-bold">{{ order.total_price }} تومان</span>
                                 </li>
-
+                                <li class="list-group-item px-0 d-flex justify-content-between">
+                                    <span class="h5 mb-0">قیمت نهایی</span>
+                                    <span class="h5 mb-0" id="total-price">{{ order.total_price }} تومان</span>
+                                </li>
                             </ul>
 
                             <!-- Button -->
                             <div class="d-grid">
-                                <a href="{% url 'cart_app:order_creation' %}" class="btn btn-lg btn-success">تسویه حساب</a>
+                                <a href="checkout.html" class="btn btn-lg btn-success">تسویه حساب</a>
                             </div>
 
-                            <!-- Content -->
-                            <p class="small mb-0 mt-2 text-center">با تکمیل خرید خود، <a href="#"><strong>شرایط و قوانین
-                                سایت</strong></a> را خواهید پذیرفت.</p>
 
                         </div>
                         <!-- Card total END -->
@@ -129,31 +152,47 @@
         Page content END -->
 
     </main>
-    <!-- **************** MAIN CONTENT END **************** -->
 
-    <!-- =======================
+    <!-- **************** MAIN CONTENT END **************** -->
 
 {% endblock %}
 
 
+
 {% block js %}
-      <script>
-       function RemoveCourse(slug){
-           var course = document.getElementById(slug);
-           $.get(`/cart/remove/course/${slug}/`).then(response =>{
 
-               if (response['response'] === 'ok'){
-                   if (response['total_price'] == 0){
-                    window.location.reload()
-                   };
-                   course.remove();
-                   document.getElementById('total-price').innerHTML = response['total_price'];
+    <script>
+        var btn = document.getElementById('submit-coupon');
+        var id = '{{ order.id }}'
 
-               }
-           })
-       }
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var message = document.getElementById('alert-message');
+            var formData = new FormData(document.getElementById('form-coupon'));
 
+            axios.post(`/cart/order/coupon/${id}/`, formData)
+                .then(res => {
+                    document.getElementById('text-message').innerHTML = res.data.text_message;
+
+                    if (res.data.final_price === 0) {
+                        document.getElementById('alert-message').className = 'alert alert-danger alert-dismissible d-flex justify-content-between align-items-center fade  py-3 pe-2 show';
+
+
+                    } else {
+                        document.getElementById('alert-message').className = 'alert alert-success alert-dismissible d-flex justify-content-between align-items-center fade  py-3 pe-2 show';
+                        document.getElementById('total-price').innerHTML = res.data.final_price
+
+
+                    }
+                })
+                .catch(err => {
+                    window.alert(err);
+                });
+        });
     </script>
+
+
+
 {% endblock %}
 
 

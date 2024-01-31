@@ -2,6 +2,7 @@ from django.utils import timezone
 
 from apps.course.models import Course
 from apps.course.models import CouponCode
+from .models import Order
 
 
 class Cart:
@@ -47,8 +48,9 @@ class Cart:
         self.session.modified = True
 
 
-def apply_coupon(request, name_discount):
+def apply_coupon(request, name_discount, order_id):
     coupon = CouponCode.objects.filter(name=name_discount)
+    order = Order.objects.get(id=order_id)
     text_message = ''
     final_price = 0
     now = timezone.now()
@@ -59,15 +61,18 @@ def apply_coupon(request, name_discount):
     elif request.user in coupon[0].user_costumer.all():
         text_message = 'You have already used this code'
 
+    elif order.is_discount:
+        text_message = 'You cannot use more than one discount code for an order'
+
 
     elif not coupon[0].valid_from <= now <= coupon[0].valid_to or coupon[0].number_discount == 0:
         text_message = 'The discount code is not valid'
 
     else:
-        cart = Cart(request)
-        for course in cart:
-            price = course.apply_discount()
-            if course in coupon[0].course.all():
+
+        for obj in order.items.all():
+            price = obj.final_price
+            if obj.course in coupon[0].course.all():
                 discount = coupon[0].discount
                 price = price - ((price * discount) / 100)
 
@@ -75,5 +80,6 @@ def apply_coupon(request, name_discount):
         coupon[0].user_costumer.add(request.user)
         coupon[0].number_discount -= 1
         coupon[0].save()
+        text_message = f'{coupon[0].discount}% discount has been successfully applied'
 
-    return (text_message, final_price)
+    return text_message, final_price
