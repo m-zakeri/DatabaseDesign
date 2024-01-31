@@ -161,6 +161,12 @@ class Contact_Ways(models.Model):
     phone_number = models.CharField(max_length=11)
     email_address = models.EmailField(max_length=100)
 
+    def get_email(self):
+        return self.email_address
+
+    def get_phone(self):
+        return self.phone_number
+
 
 class Research(models.Model):
     status = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated")) #
