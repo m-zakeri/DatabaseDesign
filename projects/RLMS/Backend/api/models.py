@@ -13,6 +13,7 @@ class Person(models.Model):
     picture = models.ImageField(upload_to='images/', null=True, blank=True) #
     national_code = models.CharField(max_length=10, unique=True) #
 
+    @property
     def age_calculator(self):
         current_time = datetime.datetime.now().year
         birth_year = self.date_of_birth.year
@@ -45,15 +46,19 @@ class Phone(models.Model):
         return self.phone_number
 
 class Student(models.Model):
+    educational_degree_types = (("Associate", "Associate"), ("Bachelor", "Bachelor"), ("Master", "Master"),
+                                ("PhD", "PhD")) #
     student_id = models.AutoField(primary_key=True)
     person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
-    educational_degree = models.CharField(max_length=100) #
+    educational_degree = models.CharField(max_length=100, choices= educational_degree_types) #
     university = models.CharField(max_length=100) #
     gpa = models.FloatField() #
     field = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.student_id
+    def resume(self):
+        return (f"The Student with Student ID" + {self.student_id} + "\n" + "and has " + {self.educational_degree}
+                + "in "+ {self.field} + "from " + {self.university} + "with " + {self.gpa})
+
 
 class Subscription_plan(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -116,9 +121,10 @@ class Product_Info(models.Model):
     creation_Date = models.DateField() #
     expiration_Date = models.DateField() #
 
-    def __str__(self):
-        return self.Name
-
+    def is_available(self):
+        if self.quantity > 0:
+            return True
+        return False
 
 
 class Supervisor(models.Model):
@@ -131,8 +137,7 @@ class Supervisor(models.Model):
     field = models.CharField(max_length=100)
     salary = models.IntegerField()
 
-"""    def __str__(self):
-        return self.Supervisor_Name"""
+
 
 class Degree(models.Model):
     supervisor_ID = models.ForeignKey(Supervisor, on_delete=models.CASCADE, primary_key=True)
