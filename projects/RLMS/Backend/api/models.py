@@ -9,7 +9,7 @@ class Person(models.Model):
     gender_types = (("Male", "Male"), ("Female", "Female")) #
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=100)
-    Last_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     father_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100) #
     address = models.CharField(max_length=500)
@@ -18,23 +18,22 @@ class Person(models.Model):
     national_code = models.CharField(max_length=10, unique=True) #
 
 
-
     def age_calculator(self):
         current_time = datetime.datetime.now().year
         birth_year = self.date_of_birth.year
         return current_time - birth_year
 
     def __str__(self):
-        return self.name + " " + self.family
+        return self.first_name + " " + self.last_name
 
 
 
 class Email(models.Model):
-    email_ypes = (('Personal', 'Personal'), ('Work', 'Work'), ('University', 'University')) #
+    email_types = (('Personal', 'Personal'), ('Work', 'Work'), ('University', 'University')) #
     Email_ID = models.AutoField(primary_key=True)
     Person_ID = models.ForeignKey(Person, on_delete=models.CASCADE)
     Email_Address = models.EmailField(max_length=100)
-    Email_Type = models.CharField(max_length=100, choices=Email_Types, default='Personal')
+    Email_Type = models.CharField(max_length=100, choices=email_types, default='Personal')
 
     def __str__(self):
         return self.Email_Address
