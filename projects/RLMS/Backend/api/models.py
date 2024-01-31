@@ -192,3 +192,4 @@ class Research(models.Model):
 
     def get_status(self):
         return self.status
+
