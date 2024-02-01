@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class BlogCategory(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     slug = models.SlugField()
-    description = models.TextField(null=True,blank=True,verbose_name=_('Description'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
     image = models.ImageField(upload_to='img/category/blog', verbose_name=_('Image'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subs',
@@ -84,14 +84,13 @@ class BlogDescription(models.Model):
         verbose_name_plural = _('Descriptions')
 
 
-
-
 class BlogComment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comment', verbose_name=_('Blog'))
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_comment', verbose_name=_('User'))
     message = models.CharField(max_length=300, verbose_name=_('Message'))
     is_publish = models.BooleanField(default=False, verbose_name=_('Is Publish'))
-    parent = models.ForeignKey('self', on_delete=models.CASCADE,null=True,blank=True, related_name='subs', verbose_name=_('Parent'))
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subs',
+                               verbose_name=_('Parent'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
 
     def __str__(self):
@@ -110,4 +109,3 @@ class LikesBlogComment(models.Model):
     class Meta:
         verbose_name = _('Comment Like')
         verbose_name_plural = _('Comment Likes')
-
