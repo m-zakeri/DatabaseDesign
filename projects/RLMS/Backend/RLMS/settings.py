@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "api",
 ]
 
 MIDDLEWARE = [
@@ -77,13 +78,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "RLMS",
-        "USER": "root",
-        "PASSWORD": "root",
+        "USER": "user",
+        "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "3306",
     }
 }
-
 
 
 # Password validation

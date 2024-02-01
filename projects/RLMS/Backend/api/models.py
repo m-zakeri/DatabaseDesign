@@ -65,7 +65,7 @@ class Student(models.Model):
 class Subscription_plan(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     start_date = models.DateField()
-    subscription_duration = models.DuritionField()
+    subscription_duration = models.DurationField()
     price = models.IntegerField()
 
     @property
@@ -91,7 +91,7 @@ class Course(models.Model):
 class Department(models.Model):
     department_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    location = models.Model(max_length=500)
+    location = models.CharField(max_length=500)
     work_time = models.DurationField()
 
     def __str__(self):
