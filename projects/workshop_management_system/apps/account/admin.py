@@ -10,14 +10,14 @@ class UserAdmin(BaseUserAdmin):
     form = forms.UserChangeForm
     add_form = forms.UserCreationForm
 
-    list_display = ["username", "email", "roles", "is_admin", "show_image"]
+    list_display = ["username", "email", "is_teacher", "is_admin", "show_image"]
     list_filter = ["is_admin"]
     list_editable = ["is_admin"]
     prepopulated_fields = {'username': ('email',)}
     fieldsets = [
         (None, {"fields": ["username", "email", "password"]}),
         ("Personal info",
-         {"fields": ["first_name", "last_name", "date_of_birth", "caption", "phone_number", "roles", "image"]}),
+         {"fields": ["first_name", "last_name", "date_of_birth", "caption", "phone_number", "is_teacher", "image"]}),
         ("Permissions", {"fields": ["is_admin"]}),
     ]
 

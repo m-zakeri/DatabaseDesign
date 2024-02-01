@@ -156,12 +156,20 @@ class AddAddressView(LoginRequiredMixin, View):
         form = forms.AddAddressForm(request.POST)
         next_page = request.GET.get('next')
         if form.is_valid():
+            address_user = models.Address.objects.filter(is_active=True)
+            if address_user.exists():
+                address_user[0].is_active = False
+                address_user[0].save()
+
             address = form.save(commit=False)
-            address.user = request.user
+            address.user = self.request.user
+
+            address.is_active = True
+
             address.save()
+
             if next_page:
                 return redirect(next_page)
             messages.success(request, 'The address has been successfully registered')
             return redirect('account_app:add_address')
         return render(request, 'account/add_address.html', {'form': form})
-

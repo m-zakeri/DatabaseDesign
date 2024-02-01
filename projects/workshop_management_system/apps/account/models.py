@@ -35,12 +35,6 @@ class MyUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    role_user = (
-        ('COSTUMER', _('Costumer')),
-        ('TEACHER', _('Teacher')),
-        ('TEACHER AND COSTUMER', _('Teacher and Costumer'))
-    )
-
     username = models.CharField(max_length=50, unique=True, verbose_name=_('Username'))
     first_name = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('First Name'))
     last_name = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('Last Name'))
@@ -59,7 +53,7 @@ class User(AbstractBaseUser):
 
     is_active = models.BooleanField(default=True, verbose_name=_('Is Active'))
     is_admin = models.BooleanField(default=False, verbose_name=_('Is Admin'))
-    roles = models.CharField(max_length=50, choices=role_user, default='COSTUMER', verbose_name=_('Roles'))
+    is_teacher = models.BooleanField(default=False, verbose_name=_('Is Teacher'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
 
@@ -120,7 +114,7 @@ class Address(models.Model):
                              verbose_name=_('City'))
     state = models.CharField(max_length=50, verbose_name=_('State'))
     postal_code = models.CharField(max_length=10, verbose_name=_('Postal Code'))
-    full_address = models.TextField(verbose_name=_('Full Address'))
+    full_address = models.TextField(unique=True, verbose_name=_('Full Address'))
     is_active = models.BooleanField(default=False, verbose_name=_('Is Active'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))

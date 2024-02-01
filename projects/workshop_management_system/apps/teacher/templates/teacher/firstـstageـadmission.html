@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Add Teacher {% endblock %}
+
+{% block content %}
+
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+        <!-- =======================
+        Main part START -->
+        <section>
+            <div class="container">
+                <div class="row g-5 justify-content-between">
+                    <!-- Admission form START -->
+                    <div class="col-md-8 mx-auto">
+                        <!-- Title -->
+                        <h2 class="mb-3 fs-4">اطلاعات شخصی</h2>
+                        <!-- Form START -->
+                        {% for message in messages %}
+                            <h6 class="text-danger">{{ message }}</h6>
+                        {% endfor %}
+                        <form class="row g-3" method="post">
+                            {% csrf_token %}
+
+
+                            <!-- first name -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">نام <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.first_name|attr:'class:form-control' }}
+                                        {% if form.first_name.errors %}
+                                            <h6 class="text-danger">{{ form.first_name.errors }}</h6>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- last name -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">نام خانوادگی<span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.last_name|attr:'class:form-control' }}
+                                        {% if form.last_name.errors %}
+                                            <h6 class="text-danger">{{ form.last_name.errors }}</h6>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- caption -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> کپشن <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.caption | attr:'class:form-control' }}
+                                        {% if form.caption.errors %}
+                                            <h6 class="text-danger">{{ form.caption.errors }}</h6>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- date of birth -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">تاریخ تولد<span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8" >
+                                        {{ form.date_of_birth }}
+                                        {% if form.date_of_birth.errors %}
+                                            <h6 class="text-danger">{{ form.date_of_birth.errors }}</h6>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- phone number -->
+
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">شماره موبایل <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.phone_number | attr:'class:form-control' }}
+                                        {% if form.phone_number.errors %}
+                                            <h6 class="text-danger">{{ form.phone_number.errors }}</h6>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Button -->
+                            <div class="col-12 text-sm-end">
+                                <button type="submit" class="btn btn-primary mb-0">مرحله بعد</button>
+                            </div>
+                        </form>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Admission form END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Main part END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+
+
+

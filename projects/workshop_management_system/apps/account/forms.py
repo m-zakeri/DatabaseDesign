@@ -122,7 +122,7 @@ class AddAddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
-        fields = ['user', 'country', 'city', 'state', 'postal_code', 'full_address']
+        fields = '__all__'
         widgets = {
             'country': forms.Select(),
             'city': forms.Select(),
