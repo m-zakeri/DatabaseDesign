@@ -11,5 +11,6 @@ urlpatterns = [
                   path('course/', include('apps.course.urls')),
                   path('', include('apps.contact.urls')),
                   path('teacher/', include('apps.teacher.urls')),
-                  path('cart/', include('apps.cart.urls'))
+                  path('cart/', include('apps.cart.urls')),
+                  path('blog/', include('apps.blog.urls'))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
