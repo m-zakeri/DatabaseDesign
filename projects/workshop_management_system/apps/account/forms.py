@@ -115,3 +115,18 @@ class ChangePasswordForm(forms.Form):
         confirm_password = self.cleaned_data.get('confirm_password')
         if password != confirm_password:
             return VerifyEmailForm('Your password and confirmation password do not match.')
+
+
+class AddAddressForm(forms.ModelForm):
+    user = forms.IntegerField(required=False)
+
+    class Meta:
+        model = Address
+        fields = ['user', 'country', 'city', 'state', 'postal_code', 'full_address']
+        widgets = {
+            'country': forms.Select(),
+            'city': forms.Select(),
+            'state': forms.TextInput(),
+            'postal_code': forms.TextInput(),
+            'full_address': forms.Textarea()
+        }

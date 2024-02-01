@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views import View
-
+from django.views.generic import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
 from django.contrib.auth import login, authenticate, logout
 from . import models
@@ -81,7 +82,7 @@ class VerifyEmail(View):
                 randcode = form.cleaned_data['randcode']
 
                 new_user = models.NewUser.objects.get(token=token, randcode=randcode)
-                user = models.User.objects.create(username=new_user.username,email=new_user.email)
+                user = models.User.objects.create(username=new_user.username, email=new_user.email)
                 user.set_password(new_user.password)
                 user.save()
                 new_user.delete()
@@ -144,3 +145,23 @@ class ChangePasswordView(View):
                 return redirect('/')
 
         return render(request, 'account/change_password.html', context={'form': form})
+
+
+class AddAddressView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = forms.AddAddressForm()
+        return render(request, 'account/add_address.html', {'form': form})
+
+    def post(self, request):
+        form = forms.AddAddressForm(request.POST)
+        next_page = request.GET.get('next')
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+            if next_page:
+                return redirect(next_page)
+            messages.success(request, 'The address has been successfully registered')
+            return redirect('account_app:add_address')
+        return render(request, 'account/add_address.html', {'form': form})
+

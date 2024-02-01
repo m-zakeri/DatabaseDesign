@@ -96,10 +96,28 @@ class User(AbstractBaseUser):
         verbose_name_plural = _('Users')
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=50, verbose_name=_('Country'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    name = models.CharField(max_length=50, verbose_name=_('City'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+
+    def __str__(self):
+        return self.name
+
+
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address', verbose_name=_('User'))
-    country = models.CharField(max_length=50, default=_('Iran'), verbose_name=_('Country'))
-    city = models.CharField(max_length=50, verbose_name=_('City'))
+    country = models.ForeignKey(Country, default='Iran', on_delete=models.CASCADE, related_name='address',
+                                verbose_name=_('Country'))
+    city = models.ForeignKey(City, default='Tehran', on_delete=models.CASCADE, related_name='address',
+                             verbose_name=_('City'))
     state = models.CharField(max_length=50, verbose_name=_('State'))
     postal_code = models.CharField(max_length=10, verbose_name=_('Postal Code'))
     full_address = models.TextField(verbose_name=_('Full Address'))
