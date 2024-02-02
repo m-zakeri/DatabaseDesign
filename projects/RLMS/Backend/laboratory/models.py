@@ -1,5 +1,7 @@
 import datetime
+from enum import unique
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Person(models.Model):
@@ -7,11 +9,12 @@ class Person(models.Model):
     id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     father_name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100, choices=gender_types)
     address = models.CharField(max_length=500)
     date_of_birth = models.DateField()
-    picture = models.ImageField(upload_to='images/', null=True, blank=True)
+    picture = models.ImageField(upload_to="images/", null=True, blank=True)
     national_code = models.CharField(max_length=10, unique=True)
 
     @property
@@ -25,11 +28,17 @@ class Person(models.Model):
 
 
 class Email(models.Model):
-    email_types = (('Personal', 'Personal'), ('Work', 'Work'), ('University', 'University'))
+    email_types = (
+        ("Personal", "Personal"),
+        ("Work", "Work"),
+        ("University", "University"),
+    )
     email_id = models.AutoField(primary_key=True)
     person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
     email_address = models.EmailField(max_length=100)
-    email_type = models.CharField(max_length=100, choices=email_types, default='Personal')
+    email_type = models.CharField(
+        max_length=100, choices=email_types, default="Personal"
+    )
 
     def __str__(self):
         return self.email_address
@@ -48,18 +57,29 @@ class Phone(models.Model):
 
 
 class Student(models.Model):
-    educational_degree_types = (("Associate", "Associate"), ("Bachelor", "Bachelor"), ("Master", "Master"),
-                                ("PhD", "PhD"))
+    educational_degree_types = (
+        ("Associate", "Associate"),
+        ("Bachelor", "Bachelor"),
+        ("Master", "Master"),
+        ("PhD", "PhD"),
+    )
     student_id = models.AutoField(primary_key=True)
-    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
-    educational_degree = models.CharField(max_length=100, choices=educational_degree_types)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE, unique=True)
+    educational_degree = models.CharField(
+        max_length=100, choices=educational_degree_types
+    )
     university = models.CharField(max_length=100)
     gpa = models.FloatField()
     field = models.CharField(max_length=100)
 
     def resume(self):
-        return (f"The Student with Student ID {self.student_id} \n and has {self.educational_degree} in "
-                f"{self.field} from {self.university} with {self.gpa}")
+        return (
+            f"The Student with Student ID {self.student_id} \n and has {self.educational_degree} in "
+            f"{self.field} from {self.university} with {self.gpa}"
+        )
+
+    def __str__(self) -> str:
+        return str(self.person_id)
 
 
 class Subscription_plan(models.Model):
@@ -92,7 +112,7 @@ class Department(models.Model):
     department_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=500)
-    work_time = models.DurationField()
+    # work_time = models.DurationField()
 
     def __str__(self):
         return self.name
@@ -132,27 +152,41 @@ class Product_Info(models.Model):
 
 
 class Supervisor(models.Model):
-    rank = (("Instructor", "Instructor"), ("Assistant", "Assistant"), ("Associate Professor", "Associate Professor"),
-            ("Professor", "Professor"), ("Full Professor", "Full Professor"))
+    rank = (
+        ("Instructor", "Instructor"),
+        ("Assistant", "Assistant"),
+        ("Associate Professor", "Associate Professor"),
+        ("Professor", "Professor"),
+        ("Full Professor", "Full Professor"),
+    )
     supervisor_id = models.AutoField(primary_key=True)
-    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
-    #supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE) #Trying to set relation from Supervosir table to Supervisor table
-    rank = models.CharField(max_length=100, choices=rank, default='Instructor')
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE, unique=True)
+    # supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE) #Trying to set relation from Supervosir table to Supervisor table
+    rank = models.CharField(max_length=100, choices=rank, default="Instructor")
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
     field = models.CharField(max_length=100)
     salary = models.IntegerField()
 
+    def __str__(self) -> str:
+        return str(self.person_id)
+
 
 class Degree(models.Model):
-    educational_degree_types = (("Associate", "Associate"), ("Bachelor", "Bachelor"), ("Master", "Master"),
-                                ("PhD", "PhD"))
-    supervisor_id = models.ForeignKey(Supervisor, on_delete=models.CASCADE, primary_key=True)
+    educational_degree_types = (
+        ("Associate", "Associate"),
+        ("Bachelor", "Bachelor"),
+        ("Master", "Master"),
+        ("PhD", "PhD"),
+    )
+    supervisor_id = models.ForeignKey(
+        Supervisor, on_delete=models.CASCADE, primary_key=True
+    )
     educational_degree = models.CharField(max_length=100)
     university = models.CharField(max_length=100)
     started_date = models.DateField()
 
     def __str__(self):
-        return f'Supervisor with ID {self.supervisor_id} Have Degree of {self.educational_degree}'
+        return f"Supervisor with ID {self.supervisor_id} Have Degree of {self.educational_degree}"
 
 
 class Company(models.Model):
@@ -177,14 +211,21 @@ class Contact_Ways(models.Model):
 
 
 class Research(models.Model):
-    statuses = (("Pending", "Pending"), ("Ongoing", "Ongoing"), ("Terminated", "Terminated"), ("Suspand", "Suspand"))
+    statuses = (
+        ("Pending", "Pending"),
+        ("Ongoing", "Ongoing"),
+        ("Terminated", "Terminated"),
+        ("Suspand", "Suspand"),
+    )
     research_id = models.AutoField(primary_key=True)
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     supervisor_id = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
-    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    company_id = models.ForeignKey(
+        Company, on_delete=models.CASCADE, null=True, blank=True
+    )
     subject = models.CharField(max_length=100)
-    status = models.CharField(max_length=100, choices=statuses, default='Pending')
+    status = models.CharField(max_length=100, choices=statuses, default="Pending")
     budget = models.IntegerField()
     purpose = models.CharField(max_length=500)
     start_date = models.DateField()
@@ -192,4 +233,3 @@ class Research(models.Model):
 
     def get_status(self):
         return self.status
-
