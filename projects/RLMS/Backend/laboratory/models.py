@@ -1,6 +1,6 @@
 import datetime
 from django.db import models
-import mysql.connector
+
 
 
 class Person(models.Model):
