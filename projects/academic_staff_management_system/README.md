@@ -3,31 +3,19 @@
 A back-end for managing academic staff in a university
 
 
-## Diagram and Models
+## Diagram, Schemas and Models
+
 ### Diagram
 [Digram in GoogleDrive](https://drive.google.com/file/d/1d3I85F1LHfmMR3n_x4SvY4TFgrGqdP1a/view?usp=sharing)
-you can see the diagram in ERD
-### Models
-- Address: store address for sevral entity
-    - state: name of state
-    - city: name of city
-    - street: name of street
-    - street_number: number of street
-    - building_name: name of building
-    - district: in which district the address is on
-    - floor: in which floor of building the address is on (0 for building without floors) 
-    - unit_number: which unit the address is on (1 for floors with one unit)
-    - plate_number: plate number for address (null for addresses without plate)
-    - postal_code: postal code for the address
-    - coordinate: coordinate for the  address in "latit"
 
+---
 
-## Schema
+### Schemas
 [Schema in GoogleDrive](https://drive.google.com/file/d/17Pfe_ew1TB88XZvp-da9OGawEj3wYojU/view?usp=drive_link)
 
-
-## Models
-### Address
+---
+### Models
+#### Address
 Represents an address entity.
 
 Attributes:
@@ -44,7 +32,7 @@ Attributes:
 - coordinate (CharField, optional): The coordinate of the address.
 - note (TextField, optional): Additional notes related to the address.
 
-### Education
+#### Education
 Represents an educational history entity.
 
 Attributes:
@@ -56,14 +44,14 @@ Attributes:
 - institution_name (CharField): The name of the educational institution.
 - institution_address (ForeignKey to Address): The address of the educational institution.
 
-### PhoneNumber
+#### PhoneNumber
 Represents a phone number entity.
 
 Attributes:
 - phone_number (CharField): The phone number.
 - phone_type (CharField): The type of the phone number. Choices: "Mobile", "Work", "Home" (default:"Mobile").
 
-### Person
+#### Person
 Represents a person entity.
 
 Attributes:
@@ -85,7 +73,7 @@ Methods:
 - get_persian_last_name(): Method to return the Persian last name of the person.
 - get_persian_full_name(): Method to return the full Persian name of the person.
 
-### Building
+#### Building
 Represents a building entity.
 
 Attributes:
@@ -96,7 +84,7 @@ Attributes:
 - rooms (IntegerField): The number of rooms in the building.
 - address (ForeignKey to Address): The address of the building.
 
-### Faculty
+#### Faculty
 Represents a faculty entity.
 
 Attributes:
@@ -104,7 +92,7 @@ Attributes:
 - creation_date (DateField): The creation date of the faculty.
 - building (ForeignKey to Building): The building associated with the faculty.
 
-### Department
+#### Department
 Represents a department entity.
 
 Attributes:
@@ -113,14 +101,14 @@ Attributes:
 - creation_date (DateField): The creation date of the department.
 - faculty (ForeignKey to Faculty): The faculty associated with the department.
 
-### Office
+#### Office
 Represents an office entity.
 
 Attributes:
 - phone_number (ForeignKey to PhoneNumber): The phone number associated with the office.
 - department (ForeignKey to Department): The department associated with the office (optional).
 
-### Employee
+#### Employee
 Represents an employee entity.
 
 Attributes:
@@ -132,7 +120,7 @@ Attributes:
 - office (ManyToManyField to Office): The offices associated with the employee.
 - is_committee (BooleanField): Indicates if the employee is part of a committee.
 
-### Field
+#### Field
 Represents a field entity.
 
 Attributes:
@@ -140,7 +128,7 @@ Attributes:
 - department (ForeignKey to Department): The department associated with the field.
 - head (OneToOneField to Professor): The head professor of the field (optional).
 
-### Professor
+#### Professor
 Represents a professor entity.
 
 Attributes:
@@ -149,14 +137,14 @@ Attributes:
 - field (ForeignKey to Field): The field associated with the professor.
 - is_in_committee (BooleanField): Indicates if the professor is in a committee.
 
-### Researcher
+#### Researcher
 Represents a researcher entity.
 
 Attributes:
 - employee (OneToOneField to Employee): The related employee instance.
 - field (ForeignKey to Field): The field associated with the researcher.
 
-### Research
+#### Research
 Represents a research entity.
 
 Attributes:
@@ -173,7 +161,7 @@ Attributes:
 - website (TextField, optional): The website related to the research.
 - related_research (TextField, optional): Related research information.
 
-### ResearchMember
+#### ResearchMember
 Represents a member associated with a research.
 
 Attributes:
@@ -182,7 +170,7 @@ Attributes:
 - research (ForeignKey to Research): The research associated with the member.
 - role (CharField): The role of the member.
 
-### Schedule
+#### Schedule
 Represents a schedule entity.
 
 Attributes:
@@ -190,7 +178,7 @@ Attributes:
 - start_time (TimeField): The start time of the schedule.
 - end_time (TimeField): The end time of the schedule.
 
-### Laboratory
+#### Laboratory
 Represents a laboratory entity.
 
 Attributes:
@@ -201,7 +189,7 @@ Attributes:
 - managers (ManyToManyField to Employee): The managers associated with the laboratory.
 - schedules (ManyToManyField to Schedule): The schedules associated with the laboratory.
 
-### Library
+#### Library
 Represents a library entity.
 
 Attributes:
@@ -216,6 +204,12 @@ Attributes:
 ## Features
 1. An API over all entities for CRUD
 2. Add authentication for create, update and delete accesses
+
+## Create development environment
+First install docker. Then run `docker compose up` command to start development server. There are ports you can test the website:
+- http://localhost:8000 is for backend and api
+- http://localhost:3000 is for frontend
+- http://localhost:8080 is main website over nginx webserver
 
 ## Deployment
 
