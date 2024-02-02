@@ -205,11 +205,21 @@ Attributes:
 1. An API over all entities for CRUD
 2. Add authentication for create, update and delete accesses
 
+# Tutorials
 ## Create development environment
 First install docker. Then run `docker compose up` command to start development server. There are ports you can test the website:
 - http://localhost:8000 is for backend and api
 - http://localhost:3000 is for frontend
 - http://localhost:8080 is main website over nginx webserver
+
+## How to use fake_data generator
+After you do the start up for development server do fallowing step:
+
+1. Command `docker container ls`. Find the container id for academic_staff_management_system-backend, suppose it is b3a4f9b1d432, we just use the first 4 letters .ie b3a4
+
+2. Command `docker exec -it b3a4 bash` to enter the docker space for backend container.
+
+3. Command `./manage.py shell < fake_data.py` to start fake data generation script. Please make sure you are connected to the internet
 
 ## Deployment
 
