@@ -21,10 +21,11 @@ const tabs = [
 ];
 
 const GenerateButtonStyle = (active: number, index: number) => {
+  const common = "p-4 my-1";
   if (active == index) {
-    return "bg-main-peach";
+    return common + " bg-main-peach";
   } else {
-    return "bg-main-peach/50";
+    return common + " bg-main-peach/50";
   }
 };
 
@@ -43,7 +44,11 @@ const ManageMenu = () => {
     </Link>
   ));
 
-  return <nav>{buttons}</nav>;
+  return (
+    <nav className="w-[350px] top-0 bg-main-peach/50 flex flex-col sticky">
+      {buttons}
+    </nav>
+  );
 };
 
 export default ManageMenu;

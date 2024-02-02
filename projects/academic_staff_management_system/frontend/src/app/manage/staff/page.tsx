@@ -1,13 +1,17 @@
 import ManagerHeader from "../../components/ManagerHeader";
 import ManageMenu from "../../components/ManageMenu";
-import LibraryForm from "@/app/components/LibraryForm";
+import PersonForm from "@/app/components/PersonForm";
 
 const page = () => {
   return (
-    <div className="bg-main-white min-h-screen">
+    <div className="bg-main-white min-h-screen flex flex-col">
       <ManagerHeader />
-      <ManageMenu />
-      <LibraryForm></LibraryForm>
+      <div className="flex">
+        <ManageMenu />
+        <div>
+          <PersonForm></PersonForm>
+        </div>
+      </div>
     </div>
   );
 };
