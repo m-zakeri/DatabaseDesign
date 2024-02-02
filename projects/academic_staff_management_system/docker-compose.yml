@@ -6,10 +6,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
 
-    command: sh -c "echo $PATH && pnpm dev"
+    command: pnpm dev
 
     ports:
       - 3000:3000
+    
+    stop_grace_period: 1s
     
     volumes:
       - ./frontend/:/code/
