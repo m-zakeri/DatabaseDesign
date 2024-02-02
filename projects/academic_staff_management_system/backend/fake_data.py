@@ -185,7 +185,7 @@ def gen_education_object(n):
 def gen_phone_number(n):
     for i in range(n - len(PhoneNumber.objects.all())):
         phone_number = PhoneNumber(
-            phone_number=fake.phone_number(), phone_type=random.choice(PHONE_TYPE)
+            phone_number=fake.phone_number(), phone_type=random.choice(PHONE_TYPES)
         )
         phone_number.save()
 
