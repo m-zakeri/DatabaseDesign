@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+import mysql.connector
 
 
 class Person(models.Model):
@@ -15,7 +16,7 @@ class Person(models.Model):
     national_code = models.CharField(max_length=10, unique=True)
 
     @property
-    def age_calculator(self):
+    def age(self):
         current_time = datetime.datetime.now().year
         birth_year = self.date_of_birth.year
         return current_time - birth_year
@@ -32,7 +33,7 @@ class Email(models.Model):
     email_type = models.CharField(max_length=100, choices=email_types, default='Personal')
 
     def __str__(self):
-        return self.email_address
+        return f"{self.person_id} {self.email_address}"
 
     def get_email_type(self):
         return self.email_type
@@ -192,4 +193,13 @@ class Research(models.Model):
 
     def get_status(self):
         return self.status
+
+
+class Teammates(models.Model):
+    def Teammates(self):
+        student_id = self.student_id
+        research_id = self.research_id
+        teammates = Student.objects.filter(research_id=research_id).exclude(student_id=student_id)
+
+        return 'ali'
 
