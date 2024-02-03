@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 class Person(models.Model):
     gender_types = (("Male", "Male"), ("Female", "Female"))
     id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    # first_name = models.CharField(max_length=100)
+    # last_name = models.CharField(max_length=100)
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     father_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=100, choices=gender_types)
@@ -24,7 +24,8 @@ class Person(models.Model):
         return current_time - birth_year
 
     def __str__(self):
-        return f"{self.first_name}" + " " + f"{self.last_name}"
+        # return f"{self.first_name}" + " " + f"{self.last_name}"
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 class Email(models.Model):
