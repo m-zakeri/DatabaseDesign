@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import settings
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', include('apps.home.urls')),
@@ -13,6 +14,7 @@ urlpatterns = [
                   path('teacher/', include('apps.teacher.urls')),
                   path('cart/', include('apps.cart.urls')),
                   path('blog/', include('apps.blog.urls')),
+                  path('', include('apps.account.api.urls')),
 
                   path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
                   # Optional UI:
