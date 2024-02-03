@@ -130,3 +130,10 @@ class LibraryViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LibrarySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = filters.LibraryFilter
+
+
+class DepartmentResponibility(viewsets.ModelViewSet):
+    queryset = models.DepartmentResponibility.objects.all()
+    serializer_class = serializers.DepartmentResponibilitySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    

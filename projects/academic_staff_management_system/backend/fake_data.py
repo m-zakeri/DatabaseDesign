@@ -150,139 +150,158 @@ UNIVERSITIES = [
 PHONE_TYPES = ["Mobile", "Work", "Home"]
 GENDERS = ["M", "F"]
 NATIONALITIES = ["Iran", "Japanese", "Iraq", "Chinese"]
-FACULTY_DEPARTMENT = {
-    "Arts and Sciences": [
-        "English",
-        "History",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Psychology",
-        "Sociology",
-        "Anthropology",
-        "Economics",
-        "Political Science",
-    ],
-    "Engineering": [
-        "Mechanical Engineering",
-        "Civil Engineering",
-        "Electrical Engineering",
-        "Computer Engineering",
-        "Chemical Engineering",
-        "Aerospace Engineering",
-        "Environmental Engineering",
-    ],
-    "Business": [
-        "Business Administration",
-        "Finance",
-        "Marketing",
-        "Management",
-        "Accounting",
-        "International Business",
-    ],
-    "Education": [
-        "Elementary Education",
-        "Secondary Education",
-        "Special Education",
-        "Educational Leadership",
-        "Curriculum and Instruction",
-    ],
-    "Health Sciences": [
-        "Nursing",
-        "Medicine",
-        "Public Health",
-        "Pharmacy",
-        "Physical Therapy",
-        "Occupational Therapy",
-    ],
-    "Social Work": [
-        "Social Work",
-        "Counseling",
-        "Human Services",
-    ],
-    "Fine Arts": [
-        "Studio Art",
-        "Performing Arts (Theatre, Dance, Music)",
-        "Art History",
-        "Graphic Design",
-    ],
-    "Communication": [
-        "Journalism",
-        "Public Relations",
-        "Media Studies",
-        "Advertising",
-        "Communication Sciences",
-    ],
-    "Law": [
-        "Juris Doctor (JD)",
-        "Legal Studies",
-    ],
-    "Information Technology": [
-        "Computer Science",
-        "Information Technology",
-        "Data Science",
-        "Cybersecurity",
-    ],
-    "Agriculture and Environmental Sciences": [
-        "Agricultural Business",
-        "Environmental Science",
-        "Horticulture",
-        "Animal Science",
-    ],
-    "Architecture and Planning": [
-        "Architecture",
-        "Urban Planning",
-        "Landscape Architecture",
-    ],
-    "Public Administration and Policy": [
-        "Public Administration",
-        "Policy Studie",
-    ],
+FACULTY_DEPARTMENT_FIELD = {
+    "Faculty of Arts and Sciences": {
+        "Department of English": ["English Literature", "Linguistics"],
+        "Department of History": ["Ancient History", "Modern History"],
+        "Department of Philosophy": [],
+        "Department of Mathematics": ["Pure Mathematics", "Applied Mathematics"],
+        "Department of Physics": ["Classical Physics", "Quantum Physics"],
+        "Department of Chemistry": [
+            "Organic Chemistry",
+            "Inorganic Chemistry",
+            "Physical Chemistry",
+        ],
+        "Department of Biology": ["Molecular Biology", "Ecology"],
+        "Department of Psychology": ["Clinical Psychology", "Experimental Psychology"],
+        "Department of Sociology": ["Social Theory", "Sociology of Education"],
+        "Department of Anthropology": [
+            "Cultural Anthropology",
+            "Biological Anthropology",
+        ],
+        "Department of Economics": ["Microeconomics", "Macroeconomics"],
+        "Department of Political Science": [
+            "International Relations",
+            "Comparative Politics",
+            "",
+        ],
+    },
+    "Faculty of Engineering": {
+        "Department of Mechanical Engineering": ["Thermodynamics", "Fluid Mechanics"],
+        "Department of Civil Engineering": [
+            "Structural Engineering",
+            "Transportation Engineering",
+        ],
+        "Department of Electrical Engineering": ["Power Systems", "Electronics"],
+        "Department of Computer Engineering": [
+            "Computer Networks",
+            "Software Engineering",
+        ],
+        "Department of Chemical Engineering": [
+            "Process Engineering",
+            "Biochemical Engineering",
+        ],
+        "Department of Aerospace Engineering": ["Aerodynamics", "Aircraft Design"],
+        "Department of Environmental Engineering": [
+            "Water Resources Engineering",
+            "Environmental Management",
+            "",
+        ],
+    },
+    "Faculty of Business": {
+        "Department of Business Administration": [
+            "Management",
+            "Organizational Behavior",
+        ],
+        "Department of Finance": ["Corporate Finance", "Investment Banking"],
+        "Department of Marketing": ["Digital Marketing", "Brand Management"],
+        "Department of Management": ["Strategic Management", "Operations Management"],
+        "Department of Accounting": ["Financial Accounting", "Managerial Accounting"],
+        "Department of International Business": [
+            "Global Marketing",
+            "International Trade",
+            "",
+        ],
+    },
+    "Faculty of Education": {
+        "Department of Elementary Education": [
+            "Curriculum Design",
+            "Classroom Management",
+        ],
+        "Department of Secondary Education": [
+            "Teaching Methods",
+            "Educational Technology",
+        ],
+        "Department of Special Education": [
+            "Inclusive Education",
+            "Learning Disabilities",
+        ],
+        "Department of Educational Leadership": [
+            "School Administration",
+            "Educational Policy",
+        ],
+        "Department of Curriculum and Instruction": [
+            "Curriculum Development",
+            "Instructional Design",
+            "",
+        ],
+    },
+    "Faculty of Health Sciences": {
+        "Department of Nursing": ["Medical-Surgical Nursing", "Pediatric Nursing"],
+        "Department of Medicine": ["Internal Medicine", "Family Medicine"],
+        "Department of Public Health": ["Epidemiology", "Health Policy"],
+        "Department of Pharmacy": ["Pharmaceutical Chemistry", "Pharmacology"],
+        "Department of Physical Therapy": [
+            "Musculoskeletal Physical Therapy",
+            "Neurological Physical Therapy",
+        ],
+        "Department of Occupational Therapy": [
+            "Pediatric Occupational Therapy",
+            "Geriatric Occupational Therap",
+        ],
+    },
 }
 
 
+def get_random_element(django_model):
+    random_id = random.randrange(1, len(django_model.objects.all()) + 1)
+    return django_model.objects.get(pk=random_id)
+
+
 def gen_address_object(n):
-        for _ in range(n - len(models.Address.objects.all())):
-                address = models.Address(
-                state=fake.city(),
-                city=fake.city(),
-                street=fake.street_name(),
-                street_number=fake.building_number(),
-                building_name=fake.building_number(),
-                district=fake.random_int(min=1, max=10),
-                floor=fake.random_int(min=1, max=10),
-                unit_number=fake.random_int(min=1, max=5),
-                plate_number=fake.zipcode(),
-                postal_code=fake.zipcode(),
-                coordinate=f"{fake.latitude()}:{fake.longitude()}",
-                )
-                address.save()
+    for _ in range(n - len(models.Address.objects.all())):
+        address = models.Address(
+            state=fake.city(),
+            city=fake.city(),
+            street=fake.street_name(),
+            street_number=fake.building_number(),
+            building_name=fake.building_number(),
+            district=fake.random_int(min=1, max=10),
+            floor=fake.random_int(min=1, max=10),
+            unit_number=fake.random_int(min=1, max=5),
+            plate_number=fake.zipcode(),
+            postal_code=fake.zipcode(),
+            coordinate=f"{fake.latitude()}:{fake.longitude()}",
+        )
+        address.save()
+
 
 def gen_education_object(n):
-    
-    num_addresses = models.Address.objects.count()    
-    
+
+    num_addresses = models.Address.objects.count()
+
     for _ in range(n - len(models.Education.objects.all())):
-        
+
         random_address_id = fake.random_int(min=1, max=num_addresses)
-        
+
         start_date_start = datetime.date(2010, 1, 1)
         start_date_end = datetime.date(2015, 12, 31)
-        
+
         graduation_date_start = datetime.date(2016, 1, 1)
         graduation_date_end = datetime.date(2020, 12, 31)
-        
-        
+
         education = models.Education(
-            start_date=fake.date_between(start_date=start_date_start, end_date=start_date_end),
-            graduation_date=fake.date_between(start_date=graduation_date_start, end_date=graduation_date_end),
+            start_date=fake.date_between(
+                start_date=start_date_start, end_date=start_date_end
+            ),
+            graduation_date=fake.date_between(
+                start_date=graduation_date_start, end_date=graduation_date_end
+            ),
             major=random.choice(MAJORS),
             degree=random.choice(DEGREES),
             gpa=random.randrange(0, 10000) / 100,
             institution_name=random.choice(UNIVERSITIES),
-            institution_address=models.Address.objects.all()[random_address_id-1],
+            institution_address=models.Address.objects.all()[random_address_id - 1],
         )
         education.save()
 
@@ -314,229 +333,211 @@ def gen_user(n):
             image_response = requests.get("https://thispersondoesnotexist.com/")
             image = image_response.content
             image_content = ContentFile(image)
-            uploaded_file = SimpleUploadedFile(fake.file_name(extension="jpg"), image_content.read())
-            
-            
+            uploaded_file = SimpleUploadedFile(
+                fake.file_name(extension="jpg"), image_content.read()
+            )
+
             random_address_id = models.Address.objects.count()
-            random_address = models.Address.objects.all()[random_address_id-1]
-            
+            random_address = models.Address.objects.all()[random_address_id - 1]
+
             start_date = datetime.date(1970, 1, 1)
             end_date = datetime.date(2000, 12, 31)
-            
+
             person = models.Person(
                 user=user,
                 persian_first_name=persian_first_name,
                 persian_last_name=persian_last_name,
                 gender=random.choice(GENDERS),
-                date_of_birth=fake.date_between(start_date=start_date, end_date=end_date),
+                date_of_birth=fake.date_between(
+                    start_date=start_date, end_date=end_date
+                ),
                 nationality=random.choice(NATIONALITIES),
                 national_code=fake.passport_number(),
                 picture=uploaded_file,
                 home_address=random_address,
             )
             person.save()
-            
+
             for j in range(random.randrange(1, 5)):
-                random_phone_number_id = fake.random_int(min=1, max=models.PhoneNumber.objects.count())
-                random_phone_number = models.PhoneNumber.objects.all()[random_phone_number_id-1]
+                random_phone_number_id = fake.random_int(
+                    min=1, max=models.PhoneNumber.objects.count()
+                )
+                random_phone_number = models.PhoneNumber.objects.all()[
+                    random_phone_number_id - 1
+                ]
                 person.phone_numbers.add(random_phone_number)
-            
+
             for j in range(random.randrange(1, 5)):
-                random_education_id = fake.random_int(min=1, max=models.Education.objects.count())
-                random_education = models.Education.objects.all()[random_education_id-1]
+                random_education_id = fake.random_int(
+                    min=1, max=models.Education.objects.count()
+                )
+                random_education = models.Education.objects.all()[
+                    random_education_id - 1
+                ]
                 person.educations.add(random_education)
         except:
             pass
 
 
 def gen_building_object(n):
-    
+
     num_address = models.Address.objects.count()
-    
+
     for _ in range(n - models.Building.objects.count()):
         try:
-        
+
             random_address_id = fake.random_int(min=1, max=num_address)
-            selected_address = models.Address.objects.all()[random_address_id-1]
-            
+            selected_address = models.Address.objects.all()[random_address_id - 1]
+
             start_date = datetime.date(2010, 1, 1)
             end_date = datetime.date(2014, 12, 31)
-            
+
             building = models.Building(
                 name=fake.company(),
-                creation_date=fake.date_between(start_date=start_date, end_date=end_date),
+                creation_date=fake.date_between(
+                    start_date=start_date, end_date=end_date
+                ),
                 floors=random.randint(1, 20),
-                capacity=random.randint(50, 1000), 
-                rooms=random.randint(1, 200), 
+                capacity=random.randint(50, 1000),
+                rooms=random.randint(1, 200),
                 address=selected_address,
             )
             building.save()
         except:
             pass
 
-        
-def gen_faculty_object(n):
 
-    num_buildings = models.Building.objects.count()
-    
-    for _ in range(n - models.Faculty.objects.count()):
+def gen_faculty_department_field():
+    for faculty_name in FACULTY_DEPARTMENT_FIELD:
         try:
-        
-            random_building_id = fake.random_int(min=1, max=num_buildings)
-            selected_building = models.Building.objects.all()[random_building_id-1]
-            
-            start_date = datetime.date(2015, 1, 1)
-            end_date = datetime.date(2016, 12, 31)
-            
-            faculty = models.Faculty(
-                name=fake.company(),
-                creation_date=fake.date_between(start_date=start_date, end_date=end_date),
-                building=selected_building,
-            )
-            faculty.save()
+            models.Faculty.objects.get(name=faculty_name)
+            return 0
         except:
             pass
-        
-def gen_department_object(n):
-    
-    num_faculties = models.Faculty.objects.count()
-    
-    for _ in range(n - models.Department.objects.count()):
-        try:
-        
-            random_faculty_id = fake.random_int(min=1, max=num_faculties)
-            selected_faculty = models.Faculty.objects.all()[random_faculty_id-1]
-            
-            start_date = datetime.date(2017, 1, 1)
-            end_date = datetime.date(2018, 12, 31)
-            
+        faculty = models.Faculty(
+            name=faculty_name,
+            creation_date=fake.date_between(),
+            building=get_random_element(models.Building),
+        )
+        faculty.save()
+        for dept_name in FACULTY_DEPARTMENT_FIELD[faculty_name]:
             department = models.Department(
-                name=fake.word(),
-                budget=random.randint(10000, 1000000), 
-                creation_date=fake.date_between(start_date=start_date, end_date=end_date),
-                faculty=selected_faculty,
+                name=dept_name,
+                creation_date=fake.date_between(),
+                budget=random.randrange(100, 1000),
+                faculty=faculty,
             )
             department.save()
-        except:
-            pass
+            for field_name in FACULTY_DEPARTMENT_FIELD[faculty_name][dept_name]:
+                field = models.Field(
+                    name=field_name,
+                    department=department,
+                )
+                field.save()
 
 
 def gen_office_object(n):
-    
+
     num_phone_numbers = models.PhoneNumber.objects.filter(phone_type="Work").count()
     num_departments = models.Department.objects.count()
-        
+
     for _ in range(n - len(models.Office.objects.all())):
-        
+
         random_phone_number_id = fake.random_int(min=1, max=num_phone_numbers)
-        selected_phone_number = models.PhoneNumber.objects.filter(phone_type="Work")[random_phone_number_id-1]
-        
-        random_department_id = fake.random_int(min=1, max=num_departments)
-        selected_department = models.Department.objects.all()[random_department_id-1]
-        
+        selected_phone_number = models.PhoneNumber.objects.filter(phone_type="Work")[
+            random_phone_number_id - 1
+        ]
+
         office = models.Office(
             phone_number=selected_phone_number,
-            department=selected_department
+            department=get_random_element(models.Department),
         )
         office.save()
 
 
-def gen_field_object(n):
-    
-    num_departments = models.Department.objects.count()
-    
-    for _ in range(n - models.Field.objects.count()):
-        
-        random_department_id = fake.random_int(min=1, max=num_departments)
-        selected_department = models.Department.objects.all()[random_department_id-1]
-        
-        
-        field = models.Field(
-            name=fake.word(),
-            department=selected_department,
-        )
-        field.save()
-
-
 def gen_employee_object():
-    
-    num_persons = models.Person.objects.count()
-    num_offices = models.Office.objects.count()
-    
     for selected_person in models.Person.objects.all():
-        
-        random_office_id = fake.random_int(min=1, max=num_offices)
-        selected_office = models.Office.objects.all()[random_office_id-1]
-        
+        try:
+            selected_person.employee
+            return None
+        except:
+            pass
         office_hours = f"{fake.time()}-{fake.time()}"
-        
-        
         employee = models.Employee(
-        person=selected_person,
-        salary=random.randint(10000, 1000000),
-        hire_date=selected_person.user.date_joined.date(),
-        office_hours=office_hours,
-        status=random.choice(['Full-time', 'Part-time']),
-        is_committee=random.choice([True, False]) 
+            person=selected_person,
+            salary=random.randint(10000, 1000000),
+            hire_date=selected_person.user.date_joined.date(),
+            office_hours=office_hours,
+            status=random.choice(["Full-time", "Part-time"]),
+            is_committee=random.choice([True, False]),
         )
         employee.save()
-        employee.office.add(selected_office)
-        
+        employee.office.add(get_random_element(models.Office))
+
 
 def gen_professor_object(n):
-    
+
     num_fields = models.Field.objects.count()
-    
+
     for selected_employee in models.Employee.objects.all()[:n]:
-        try:                    
-            random_field_id = fake.random_int(min=1, max=num_fields)
-            selected_field = models.Field.objects.all()[random_field_id-1]
-            
+        try:
+
             professor = models.Professor(
                 employee=selected_employee,
-                rank=random.choice(["Instructor", "Assistant Professor", "Associative Professor", "Full Professor"]),
-                field=selected_field,
-                is_in_committee=fake.boolean(chance_of_getting_true=50)
-            ) 
+                rank=random.choice(
+                    [
+                        "Instructor",
+                        "Assistant Professor",
+                        "Associative Professor",
+                        "Full Professor",
+                    ]
+                ),
+                field=get_random_element(models.Field),
+                is_in_committee=fake.boolean(chance_of_getting_true=50),
+            )
             professor.save()
         except:
             pass
 
 
 def gen_researcher_object(n):
-    
+
     num_professors = models.Professor.objects.count()
     num_fields = models.Field.objects.count()
-    
-    for selected_employee in models.Employee.objects.all()[num_professors+1: num_professors+n+1]:
-        try:        
-            random_field_id = fake.random_int(min=1, max=num_fields)
-            selected_field = models.Field.objects.all()[random_field_id-1]
-            
+
+    for selected_employee in models.Employee.objects.all()[
+        num_professors + 1 : num_professors + n + 1
+    ]:
+        try:
+
             researcher = models.Researcher(
                 employee=selected_employee,
-                field=selected_field,
+                field=get_random_element(models.Field),
             )
-            
+
             researcher.save()
         except:
             pass
 
 
 def gen_research_object(n):
-    
+
     for _ in range(n - models.Research.objects.count()):
-        
+
         start_date_start = datetime.date(2010, 1, 1)
         start_date_end = datetime.date(2015, 12, 31)
-        
+
         end_date_start = datetime.date(2016, 1, 1)
         end_date_end = datetime.date(2020, 12, 31)
-        
+
         research = models.Research(
             title=fake.sentence(),
-            start_date=fake.date_between(start_date=start_date_start, end_date=start_date_end),
-            end_date=fake.date_between(start_date=end_date_start, end_date=end_date_end),
+            start_date=fake.date_between(
+                start_date=start_date_start, end_date=start_date_end
+            ),
+            end_date=fake.date_between(
+                start_date=end_date_start, end_date=end_date_end
+            ),
             search_area=fake.paragraph(),
             funding_source=fake.paragraph(),
             budget=random.randint(1000, 100000),
@@ -545,60 +546,37 @@ def gen_research_object(n):
             keywords=fake.words(),
             status=random.choice(["ToDo", "InProgress", "Done"]),
         )
-        
+
         research.save()
 
 
-def gen_professor_research_member_object(n):
-    
-    num_professors = models.Professor.objects.count()
-    num_researches = models.Research.objects.count()
-    
-    
-    for _ in range(n - models.ResearchMember.objects.filter(professor__isnull=False).count()):
-        
-        random_professor_id = fake.random_int(min=1, max=num_professors)
-        selected_professor = models.Professor.objects.all()[random_professor_id-1]
-        
-        random_research_id = fake.random_int(min=1, max=num_researches)
-        selected_research = models.Research.objects.all()[random_research_id-1]
-        
-        research_member = models.ResearchMember(
-            professor=selected_professor,
-            research=selected_research,
-            role=fake.word()
-        )
-        research_member.save()  
+def gen_research_member_object(n):
 
+    for _ in range(
+        n - models.ResearchMember.objects.filter(professor__isnull=False).count()
+    ):
+        professor, researcher = None, None
+        if random.randint(0, 1):
+            professor = get_random_element(models.Professor)
+        else:
+            researcher = get_random_element(models.Researcher)
 
-def gen_researcher_research_member_object(n):
-    
-    num_researchers = models.Researcher.objects.count()
-    num_researches = models.Research.objects.count()
-    
-    for _ in range(n - models.ResearchMember.objects.filter(researcher__isnull=False).count()):
-        
-        random_researcher_id = fake.random_int(min=1, max=num_researchers)
-        selected_researcher = models.Researcher.objects.all()[random_researcher_id-1]
-        
-        random_research_id = fake.random_int(min=1, max=num_researchers)
-        selected_research = models.Research.objects.all()[random_researcher_id-1]
-        
         research_member = models.ResearchMember(
-            researcher=selected_researcher,
-            research=selected_research,
-            role=fake.word()
+            professor=professor,
+            researcher=researcher,
+            research=get_random_element(models.Research),
+            role=fake.word(),
         )
-        research_member.save()  
+        research_member.save()
 
 
 def gen_schedule_object(n):
-    
+
     for i in range(n - models.Schedule.objects.count()):
-        
+
         random_time1 = fake.time()
         randon_time2 = fake.time()
-        
+
         schedule = models.Schedule(
             day=random.choice(["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]),
             start_time=min(random_time1, randon_time2),
@@ -608,59 +586,52 @@ def gen_schedule_object(n):
 
 
 def gen_laboratory_object(n):
-    
-    num_employees = models.Employee.objects.count()
-    num_schedules = models.Schedule.objects.count()
-    
-    for _ in range(n - models.Laboratory.objects.count()):        
-                
+
+    for _ in range(n - models.Laboratory.objects.count()):
+
         laboratory = models.Laboratory(
             name=fake.company(),
             equipments=fake.text(),
-            capacity=random.randint(10, 1000),  
+            capacity=random.randint(10, 1000),
             budget=random.randint(1000, 100000),
         )
-        
+
         laboratory.save()
-        
+
         for i in range(random.randrange(1, 5)):
-            random_employee_id = fake.random_int(min=1, max=models.Employee.objects.count())
-            selected_employee = models.Employee.objects.all()[random_employee_id-1]
-            laboratory.managers.add(selected_employee) 
-        
+            laboratory.managers.add(get_random_element(models.Employee))
+
         for i in range(random.randrange(1, 5)):
-            random_schedule_id = fake.random_int(min=1, max=models.Schedule.objects.count())
-            selected_schedule = models.Schedule.objects.all()[random_schedule_id-1]
-            laboratory.schedules.add(selected_schedule)        
-       
+            laboratory.schedules.add(get_random_element(models.Schedule))
+
 
 def gen_library_object(n):
-    
-    num_employees = models.Employee.objects.count()
-    num_schedules = models.Schedule.objects.count()
-    
-    for _ in range(n - models.Library.objects.count()):        
-                
+
+    for _ in range(n - models.Library.objects.count()):
+
         library = models.Library(
             name=fake.company(),
-            capacity=random.randint(10, 1000),  
+            capacity=random.randint(10, 1000),
             books=random.randint(1000, 10000),
         )
-        
+
         library.save()
-        
+
         for i in range(random.randrange(1, 5)):
-            random_employee_id = fake.random_int(min=1, max=models.Employee.objects.count())
-            selected_employee = models.Employee.objects.all()[random_employee_id-1]
-            library.managers.add(selected_employee) 
-        
+            library.managers.add(get_random_element(models.Employee))
+
         for i in range(random.randrange(1, 5)):
-            random_schedule_id = fake.random_int(min=1, max=models.Schedule.objects.count())
-            selected_schedule = models.Schedule.objects.all()[random_schedule_id-1]
-            library.schedules.add(selected_schedule)        
- 
-        
-                              
+            library.schedules.add(get_random_element(models.Schedule))
+
+
+def choose_field_head():
+    for field in models.Field.objects.all():
+        if field.professor_set.all():
+            field.head = random.choice(list(field.professor_set.all()))
+            field.head.save()
+
+
+
 WANTED_ADDRESS = 500
 WANTED_EDUCATION = 1500
 WANTED_PHONE_TYPE = 3000
@@ -674,29 +645,24 @@ WANTED_EMPLOYEE = WANTED_USER
 WANTED_PROFESSOR = 150
 WANTED_RESEARCHER = 50
 WANTED_RESEARCH = 100
-WANTED_PROFESSOR_RESEARCH_MEMBER = 25
-WANTED_RESEARCHER_RESEARCH_MEMBER = 25
+WANTED_RESEARCH_MEMBER = 300
 WANTED_SCHEDULE = 1000
 WANTED_LABORATORY = 10
-WANTED_LIBRATY =  10
+WANTED_LIBRATY = 10
 
 gen_address_object(WANTED_ADDRESS)
 gen_education_object(WANTED_EDUCATION)
 gen_phone_number(WANTED_PHONE_TYPE)
 gen_user(WANTED_USER)
 gen_building_object(WANTED_BUILDING)
-gen_faculty_object(WANTED_FACULTY)
-gen_department_object(WANTED_DEPARTMENT)
+gen_faculty_department_field()
 gen_office_object(WANTED_OFFICE)
-gen_field_object(WANTED_FIELD)
 gen_employee_object()
 gen_professor_object(WANTED_PROFESSOR)
 gen_researcher_object(WANTED_RESEARCHER)
 gen_research_object(WANTED_RESEARCH)
-gen_professor_research_member_object(WANTED_PROFESSOR_RESEARCH_MEMBER)
-gen_researcher_research_member_object(WANTED_RESEARCHER_RESEARCH_MEMBER)
+gen_research_member_object(WANTED_RESEARCH_MEMBER)
 gen_schedule_object(WANTED_SCHEDULE)
 gen_laboratory_object(WANTED_LABORATORY)
 gen_library_object(WANTED_LIBRATY)
-
-
+choose_field_head()
