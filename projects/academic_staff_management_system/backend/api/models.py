@@ -62,12 +62,8 @@ class Education(models.Model):
             raise ValidationError("Graduation date cannot be in the future.")
         
         # GPA Constraints
-        if not (0 <= self.gpa <= 20):
-            raise ValidationError("GPA should be between 0.00 and 20.00.")
-    
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
+        if not (0 <= self.gpa <= 100):
+            raise ValidationError("GPA should be between 0.00 and 100.00.")
 
 
 class PhoneNumber(models.Model):
@@ -313,7 +309,7 @@ class Researcher(models.Model):
     field = models.ForeignKey(Field, on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"Professor: {self.employee.person.get_full_name()} field:{self.field}"
+        return f"Researcher: {self.employee.person.get_full_name()} field:{self.field}"
 
 
 class Research(models.Model):
