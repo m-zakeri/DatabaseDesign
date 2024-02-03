@@ -23,6 +23,7 @@ urlpatterns = [
                   path('', include('apps.notification.api.urls')),
                   path('', include('apps.ticket.api.urls')),
                   path('', include('apps.transaction.api.urls')),
+                  path('', include('apps.course.api.urls')),
 
                   path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
                   # Optional UI:
