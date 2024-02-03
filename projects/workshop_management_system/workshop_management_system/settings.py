@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django_password_validators',
     'django_password_validators.password_history',
     'rest_framework',
+    'drf_spectacular',
 
     # MY APP
     'apps.account.apps.AccountAppConfig',
@@ -171,3 +172,20 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+
+## Drf Spectacular
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+
+}
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+}
