@@ -78,9 +78,9 @@ WSGI_APPLICATION = "RLMS.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "rlms",
-        "USER": "root",
-        "PASSWORD": "vahid13820126",
+        "NAME": "RLMS",
+        "USER": "user",
+        "PASSWORD": "password",
         "HOST": "localhost",
         "PORT": "3306",
     }
