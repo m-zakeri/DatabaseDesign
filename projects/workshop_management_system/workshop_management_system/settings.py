@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 from os import path
 from decouple import config
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     'django_password_validators.password_history',
     'rest_framework',
     'drf_spectacular',
+    'rest_framework_simplejwt',
 
     # MY APP
     'apps.account.apps.AccountAppConfig',
@@ -184,8 +186,17 @@ SPECTACULAR_SETTINGS = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+
+}
+
+
+# JWT
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
 }
