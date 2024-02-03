@@ -258,7 +258,6 @@ class Employee(models.Model):
     office_hours = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     office = models.ManyToManyField(Office)
-    is_committee = models.BooleanField()
     
     def __str__(self):
         return f"Employee: {self.person.get_full_name()}"

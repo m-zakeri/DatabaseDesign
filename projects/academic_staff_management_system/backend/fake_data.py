@@ -1,13 +1,24 @@
 import random
-import io
+from datetime import datetime
 
-
-from googletrans import Translator
 import requests
+from googletrans import Translator
 from faker import Faker
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.base import ContentFile
-from api.models import Address, Education, PhoneNumber, User, Person
+
+
+from api.models import (
+    Address,
+    Building,
+    Department,
+    Education,
+    Faculty,
+    PhoneNumber,
+    User,
+    Person,
+    Employee,
+)
 
 translator = Translator()
 fake = Faker()
@@ -145,6 +156,97 @@ UNIVERSITIES = [
 PHONE_TYPES = ["Mobile", "Work", "Home"]
 GENDERS = ["M", "F"]
 NATIONALITIES = ["Iran", "Japanese", "Iraq", "Chinese"]
+FACULTY_DEPARTMENT = {
+    "Arts and Sciences": [
+        "English",
+        "History",
+        "Philosophy",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Psychology",
+        "Sociology",
+        "Anthropology",
+        "Economics",
+        "Political Science",
+    ],
+    "Engineering": [
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Electrical Engineering",
+        "Computer Engineering",
+        "Chemical Engineering",
+        "Aerospace Engineering",
+        "Environmental Engineering",
+    ],
+    "Business": [
+        "Business Administration",
+        "Finance",
+        "Marketing",
+        "Management",
+        "Accounting",
+        "International Business",
+    ],
+    "Education": [
+        "Elementary Education",
+        "Secondary Education",
+        "Special Education",
+        "Educational Leadership",
+        "Curriculum and Instruction",
+    ],
+    "Health Sciences": [
+        "Nursing",
+        "Medicine",
+        "Public Health",
+        "Pharmacy",
+        "Physical Therapy",
+        "Occupational Therapy",
+    ],
+    "Social Work": [
+        "Social Work",
+        "Counseling",
+        "Human Services",
+    ],
+    "Fine Arts": [
+        "Studio Art",
+        "Performing Arts (Theatre, Dance, Music)",
+        "Art History",
+        "Graphic Design",
+    ],
+    "Communication": [
+        "Journalism",
+        "Public Relations",
+        "Media Studies",
+        "Advertising",
+        "Communication Sciences",
+    ],
+    "Law": [
+        "Juris Doctor (JD)",
+        "Legal Studies",
+    ],
+    "Information Technology": [
+        "Computer Science",
+        "Information Technology",
+        "Data Science",
+        "Cybersecurity",
+    ],
+    "Agriculture and Environmental Sciences": [
+        "Agricultural Business",
+        "Environmental Science",
+        "Horticulture",
+        "Animal Science",
+    ],
+    "Architecture and Planning": [
+        "Architecture",
+        "Urban Planning",
+        "Landscape Architecture",
+    ],
+    "Public Administration and Policy": [
+        "Public Administration",
+        "Policy Studie",
+    ],
+}
 
 
 def gen_address_object(n):
@@ -208,7 +310,9 @@ def gen_user(n):
         image_response = requests.get("https://thispersondoesnotexist.com/")
         image = image_response.content
         image_content = ContentFile(image)
-        uploaded_file = SimpleUploadedFile(fake.file_name(extension="jpg"), image_content.read())
+        uploaded_file = SimpleUploadedFile(
+            fake.file_name(extension="jpg"), image_content.read()
+        )
         random_address_id = random.randrange(len(Address.objects.all()))
         random_address = Address.objects.get(pk=random_address_id)
         person = Person(
@@ -231,6 +335,60 @@ def gen_user(n):
             random_education_id = random.randrange(1, len(Education.objects.all()))
             random_education = Education.objects.get(pk=random_education_id)
             person.educations.add(random_education)
+
+
+def gen_building(n):
+    for i in range(n - len(Building.objects.all())):
+        random_address_id = random.randrange(1, len(Address.objects.all()))
+        random_address = Address.objects.get(pk=random_address_id)
+        building = Building(
+            name=fake.first_name(),
+            creation_date=fake.date_time(end_date=datetime.now()),
+            floors=random.randrange(3, 8),
+            capacity=random.ranrange(500, 700),
+            rooms=random.randrange(20, 50),
+            address=random_address,
+        )
+        building.save()
+
+
+def gen_faculty(n):
+    random_building_id = random.randrange(1, len(Building.objects.all()) + 1)
+    random_building = Building.objects.get(pk=random_building_id)
+    for faculty_name in FACULTY_DEPARTMENT:
+        faculty = Faculty(
+            name=faculty_name,
+            creation_date=fake.date_time(end_date=datetime.now()),
+            building=random_building
+        )
+        faculty.save()
+
+
+def get_department(n):
+    for faculty_name in FACULTY_DEPARTMENT:
+        faculty = Faculty.objects.get(name=faculty_name)
+        for department_name in FACULTY_DEPARTMENT[faculty_name]:
+            department = Department(
+                name=department_name,
+                budget=random.randrange(100, 1000),
+                
+            )
+
+
+def gen_office(n):
+    pass
+
+
+def gen_employee(n):
+    persons = Person.objects.all()
+    for person in persons:
+        if not person.employee:
+            employee = Employee(
+                person=person,
+                salary=random.randrange(100, 1000),
+                hire_date=fake.date_time(end_date=datetime.now()),
+                office_hours=random.randrange(6, 10),
+            )
 
 
 WANTED_ADDRESS = 1000
