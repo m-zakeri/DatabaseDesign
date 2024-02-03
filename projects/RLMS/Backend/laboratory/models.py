@@ -234,3 +234,6 @@ class Research(models.Model):
 
     def get_status(self):
         return self.status
+
+    def __str__(self) -> str:
+        return f"{self.research_id}:{self.subject}"
