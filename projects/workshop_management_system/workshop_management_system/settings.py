@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_password_validators',
     'django_password_validators.password_history',
+    'rest_framework',
 
     # MY APP
     'apps.account.apps.AccountAppConfig',
