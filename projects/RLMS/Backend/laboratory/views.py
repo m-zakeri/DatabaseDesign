@@ -13,7 +13,10 @@ def dashboard(request):
         researchs_team = []
         for research in researchs:
             data = Research.objects.filter(research_code=research["research_code"])
-            team = []
+            team = dict()
+            team["research"] =research
+            team_member = []
+            # researchs_team.append(data)
             for i in data:
                 member = dict()
                 if i.person_id.id != person:
@@ -32,12 +35,13 @@ def dashboard(request):
                     # print(name, role)
                     member["name"] = name
                     member["role"] = role
-                    team.append(member)
+                    team_member.append(member)
+            team["member"] = team_member
             researchs_team.append(team)
         # print("\n\n\n\n\n\n\n\n\n________", username, *researchs_team, sep="\n")
         context["Researchs"] = researchs
         context["researchs_team"] = researchs_team
-        # print(context)
+        # print("----------------", context["researchs_team"])
     return render(request, "pages/dashboard/dashboard.html", context)
 
 
