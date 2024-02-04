@@ -1,11 +1,8 @@
 import datetime
 from enum import unique
 from django.db import models
-<<<<<<< HEAD
 
-=======
 from django.contrib.auth.models import User
->>>>>>> ui
 
 
 class Person(models.Model):
