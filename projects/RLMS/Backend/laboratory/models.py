@@ -219,8 +219,10 @@ class Research(models.Model):
         ("Suspand", "Suspand"),
     )
     research_id = models.AutoField(primary_key=True)
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    supervisor_id = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
+    research_code = models.CharField(max_length=10)
+    person_id = models.ForeignKey(Person, on_delete=models.CASCADE)
+    # student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    # supervisor_id = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
     company_id = models.ForeignKey(
         Company, on_delete=models.CASCADE, null=True, blank=True
@@ -236,4 +238,4 @@ class Research(models.Model):
         return self.status
 
     def __str__(self) -> str:
-        return f"{self.research_id}:{self.subject}"
+        return f"{self.research_code}-{self.person_id}"
