@@ -30,6 +30,11 @@ This project is a University project aimed at implementing a Research Laboratory
 - **Database:** Mysql (for development, can be configured for other databases like PostgreSQL in production)
 
 
+## Database ERD and Schema
+You can find ERD of prject in:
+- *Backend/Research Laboratory Management ERD.png* 
+- *Research Laboratory Management Tables.jpg*
+
 ## Setup Instructions
 
 1. **Clone the Repository:**
