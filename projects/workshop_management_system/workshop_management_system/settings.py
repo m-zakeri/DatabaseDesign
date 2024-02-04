@@ -121,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator',
         'OPTIONS': {
             'min_length_digit': 0,
-            'min_length_alpha': 6,
+            'min_length_alpha': 8,
             'min_length_special': 1,
-            'min_length_lower': 5,
+            'min_length_lower': 7,
             'min_length_upper': 1,
             'special_characters': ".~!@#$%^&*()_+{}\":;'[]"
         }

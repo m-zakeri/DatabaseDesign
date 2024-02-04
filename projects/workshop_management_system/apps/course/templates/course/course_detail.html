@@ -1097,8 +1097,12 @@
                                             <!-- Hover element -->
                                             <div class="card-img-overlay">
                                                 <div class="card-element-hover d-flex justify-content-end">
-                                                    <a href="#" class="icon-md bg-white rounded-circle text-center">
-                                                        <i class="fas fa-shopping-cart text-danger"></i>
+                                                    <form method="post" action="{% url 'cart_app:cart' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" value="{{ item.slug }}" name="slug">
+                                                        <button type="submit" style="border: none" class="icon-md bg-white rounded-circle text-center">
+                                                            <i class="fas fa-shopping-cart text-danger"></i>
+                                                    </form>
                                                     </a>
                                                 </div>
                                             </div>
@@ -1179,8 +1183,7 @@
                 .then(res => {
 
 
-
-                        document.getElementById('questions').innerHTML += `<div class="border p-2 p-sm-4 rounded-3 mb-4">
+                    document.getElementById('questions').innerHTML += `<div class="border p-2 p-sm-4 rounded-3 mb-4">
                                                 <ul class="list-unstyled mb-0">
                                                     <li class="comment-item">
                                                         <div class="d-flex mb-3">
@@ -1213,7 +1216,6 @@
                                                     </li>
                                                 </ul>
                                             </div>`
-
 
 
                 })
