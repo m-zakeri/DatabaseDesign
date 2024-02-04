@@ -18,7 +18,7 @@ theme:
       primary: purple
       accent: purple
       toggle:
-        icon: material/toggle-switch
+        icon: material/toggle-switchsfsfsdfsdfsfs
         name: Light mode
   icon:
     logo: material/library
