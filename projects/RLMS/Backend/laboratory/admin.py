@@ -1,31 +1,48 @@
+# Register your models here.
 from django.contrib import admin
+from .models import *
 from .models import *
 
 # Register your models here.
+# admin.site.register(Student)
+
+
+class StudentInline(admin.TabularInline):
+    model = Student
+
+    extra = 1
+
+
+class SupervisortInline(admin.TabularInline):
+    model = Supervisor
+    extra = 1
+
+
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'date_of_birth', 'age']
+    inlines = [StudentInline, SupervisortInline]
 
-@admin.register(Email)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['person_id', 'email_address', 'email_type']
-
-@admin.register(Phone)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['person_id', 'phone_number']
 
 @admin.register(Student)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['person_id', 'field', 'gpa', 'university', 'educational_degree']
+class StudentAdmin(admin.ModelAdmin):
+    pass
 
-@admin.register(Subscription_plan)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['student_id', 'start_date', 'subscription_duration', 'price', 'end_date']
 
-@admin.register(Course)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ['course_id', 'name', 'subject', 'platform']
+@admin.register(Supervisor)
+class SupervisorAdmin(admin.ModelAdmin):
+    pass
 
-@admin.register(Teammates)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ["Teammates"]
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Research)
+class ResearchAdmin(admin.ModelAdmin):
+    pass
