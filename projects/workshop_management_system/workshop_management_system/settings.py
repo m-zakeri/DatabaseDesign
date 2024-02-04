@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'workshop_management_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('NAME_DATABASE'),
+        'USER': config('YOUR_MYSQL_USER'),
+        'PASSWORD': config('YOUR_MYSQL_PASSWORD'),
+        'HOST': config('HOST'),
+        'PORT': config('PORT'),
     }
 }
 
