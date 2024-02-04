@@ -8,4 +8,5 @@ urlpatterns = [
     path('like/<int:id>/', views.LikeCourseView.as_view(), name='like_course'),
     path('like/comment/<int:id>/', views.LikeCourseCommentView.as_view(), name='like_comment'),
 
+
 ]

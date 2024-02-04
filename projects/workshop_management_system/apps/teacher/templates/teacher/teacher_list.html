@@ -124,7 +124,7 @@
                                             <div class="d-sm-flex justify-content-sm-between mb-2 mb-sm-3">
                                                 <div>
                                                     <h5 class="card-title mb-0"><a
-                                                            href="#">{{ teacher.user.username }}</a></h5>
+                                                            href="{% url 'teacher_app:teacher_detail' teacher.id %}">{{ teacher.user.username }}</a></h5>
                                                     {% if teacher.work.all %}
                                                         <p class="small mb-2 mb-sm-0">{{ teacher.work.all.first.name }}</p>
                                                     {% endif %}

@@ -78,7 +78,7 @@
                                 <!-- Card body -->
                                 <div class="card-body">
                                     <!-- Title -->
-                                    <h5 class="card-title fw-normal"><a href="#">{{ blog.subject }}</a></h5>
+                                    <h5 class="card-title fw-normal"><a href="{% url 'blog_app:detail' blog.slug %}">{{ blog.subject }}</a></h5>
                                     {% if blog.caption %}
                                         <p class="text-truncate-2">{{ blog.caption }}</p>
                                     {% endif %}

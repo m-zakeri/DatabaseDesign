@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from . import models, madul
 from apps.account.models import User
+from .templatetags.course_tags import difference_time_sending_comment
 
 
 class CourseListView(ListView):
@@ -43,19 +44,23 @@ class CourseDetailView(DetailView):
         message = request.POST.get('message')
         score = request.POST.get('score')
         question = request.POST.get('question')
+        course = get_object_or_404(models.Course, slug=kwargs['slug'])
+        user = User.objects.get(id=self.request.user.id)
 
-        try:
-            course = models.Course.objects.get(slug=self.kwargs['slug'])
-            if message and score:
-                models.CourseComment.objects.create(user=self.request.user, score=score, message=message,
-                                                    course=course, is_publish=True)
-            if question:
-                models.AskedQuestion.objects.create(user=request.user, question=question, course=course,
-                                                    is_publish=True)
+        if score and message:
+            comment = models.CourseComment.objects.create(user=user, course=course, message=message, score=score,
+                                                          is_publish=True)
+            difference_time = difference_time_sending_comment(comment.id)
+            return JsonResponse({'FullName': user.full_name(), 'message': message, 'ImageUrl': user.image.url,
+                                 'DifferenceTime': difference_time})
 
-            return redirect(reverse('course_app:course_detail', kwargs={'slug': self.kwargs['slug']}))
-        except:
-            raise Http404('')
+        if question:
+            q = models.AskedQuestion.objects.create(user=user, course=course, question=question, is_publish=True)
+            difference_time = difference_time_sending_comment(q.id, False)
+            return JsonResponse(
+                {'FullName': user.full_name(), 'question': question, 'ImageUrl': user.image.url,
+                 'DifferenceTime': difference_time})
+        return redirect('course_app:course_detail', self.kwargs['slug'])
 
 
 class LikeCourseView(View, LoginRequiredMixin):

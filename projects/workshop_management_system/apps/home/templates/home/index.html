@@ -180,7 +180,8 @@
 
                         <div class="d-sm-flex align-items-center justify-content-center justify-content-lg-start">
                             <!-- Button -->
-                            <a href="#" class="btn btn-lg btn-danger-soft me-2 mb-4 mb-sm-0">شروع کن</a>
+                            <a href="{% url 'course_app:course_list' %}"
+                               class="btn btn-lg btn-danger-soft me-2 mb-4 mb-sm-0">شروع کن</a>
                             <!-- Video button -->
                             <div class="d-flex align-items-center justify-content-center py-2 ms-0 ms-sm-4">
                                 <a data-glightbox data-gallery="office-tour"
@@ -421,7 +422,8 @@
 
                                             </div>
                                             <!-- Title -->
-                                            <h5 class="card-title fw-normal"><a href="#">آموزش {{ course.name }}</a>
+                                            <h5 class="card-title fw-normal"><a
+                                                    href="{% url 'course_app:course_detail' course.slug %}">آموزش {{ course.name }}</a>
                                             </h5>
                                             {% if course.caption %}
                                                 <p class="mb-2 text-truncate-2">{{ course.caption }}</p>
@@ -520,7 +522,8 @@
                                         </div>
                                         <!-- Content and input -->
                                         <div class="col-lg-5 text-lg-end">
-                                            <a href="#" class="btn btn-outline-warning mb-0">ثبت نام</a>
+                                            <a href="{% url 'teacher_app:first_stage_admission' %}"
+                                               class="btn btn-outline-warning mb-0">ثبت نام</a>
                                         </div>
                                     </div>
                                 </div>
@@ -573,7 +576,8 @@
                                                     <a href="#" class="h6 fw-light mb-0"><i class="far fa-bookmark"></i></a>
                                                 </div>
                                                 <!-- Title -->
-                                                <h5 class="card-title fw-normal"><a href="#">{{ course.name }}</a>
+                                                <h5 class="card-title fw-normal"><a
+                                                        href="{% url 'course_app:course_detail' course.slug %}">{{ course.name }}</a>
                                                 </h5>
                                                 <!-- Rating -->
                                                 <div class="d-flex justify-content-between mb-2">
@@ -618,8 +622,17 @@
                                                         {% else %}
                                                             <h5 class="text-success mb-0 item-show">{{ course.price }}</h5>
                                                         {% endif %}
-                                                        <a href="#" class="btn btn-sm btn-success-soft item-show-hover"><i
-                                                                class="fas fa-shopping-cart me-2"></i>افزودن به سبد</a>
+                                                        <form method="post" action="{% url 'cart_app:cart' %}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="slug" value="{{ course.slug }}">
+                                                            <button type="submit"
+                                                                    class="btn btn-sm btn-success-soft item-show-hover">
+                                                                <i
+                                                                        class="fas fa-shopping-cart me-2"></i>افزودن به
+                                                                سبد
+                                                            </button>
+                                                        </form>
+
                                                     </div>
                                                 </div>
                                             </div>

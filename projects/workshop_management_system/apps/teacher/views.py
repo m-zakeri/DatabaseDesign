@@ -38,6 +38,7 @@ class TeacherDetailView(DetailView):
 
 class FirstStageAdmissionView(LoginRequiredMixin, View):
     def get(self, request):
+
         form = forms.FirstStageAdmissionForm(instance=self.request.user)
         return render(request, 'teacher/firstـstageـadmission.html', {'form': form})
 

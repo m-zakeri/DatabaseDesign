@@ -114,10 +114,10 @@
                                                 <div class="progress-bar bg-primary aos" role="progressbar"
                                                      data-aos="slide-left" data-aos-delay="200" data-aos-duration="1000"
                                                      data-aos-easing="ease-in-out"
-                                                     style="width: {{ item.learningـpercentage }}%;"
-                                                     aria-valuenow="{{ item.learningـpercentage }}"
+                                                     style="width: {{ item.learning_percentage }}%;"
+                                                     aria-valuenow="50"
                                                      aria-valuemin="0" aria-valuemax="100">
-                                                    <span class="progress-percent-simple h6 mb-0">{{ item.learningـpercentage }}%</span>
+                                                    <span class="progress-percent-simple h6 mb-0">{{ item.learning_percentage }}%</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -263,7 +263,7 @@
                                                     {% endif %}
                                                 </div>
                                                 <!-- Title -->
-                                                <h5 class="card-title fw-normal"><a href="#">دوره جامع
+                                                <h5 class="card-title fw-normal"><a href="{% url 'course_app:course_detail' course.slug %}">دوره جامع
                                                     آموزش {{ course.name }}</a>
                                                 </h5>
                                                 {% if course.caption %}
@@ -361,7 +361,7 @@
                                 <!-- Card body -->
                                 <div class="card-body text-center">
                                     <!-- Title -->
-                                    <h5 class="card-title"><a href="#">{{ teacher.user.full_name }}</a></h5>
+                                    <h5 class="card-title"><a href="{% url 'teacher_app:teacher_detail' teacher.id %}">{{ teacher.user.full_name }}</a></h5>
                                     <p class="mb-2">{{ teacher.course.all.first.category.all.first.name }}</p>
                                     <!-- Rating -->
                                     <ul class="list-inline hstack justify-content-center">

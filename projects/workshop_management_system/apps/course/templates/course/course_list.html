@@ -110,7 +110,7 @@
                                                 {% endif %}
                                             </div>
                                             <!-- Title -->
-                                            <h5 class="card-title fw-normal"><a href="#">آموزش {{ course.name }}</a>
+                                            <h5 class="card-title fw-normal"><a href="{% url 'course_app:course_detail' course.slug %}">آموزش {{ course.name }}</a>
                                             </h5>
                                             {% if course.caption %}
                                                 <p class="mb-2 text-truncate-2">{{ course.caption }}</p>

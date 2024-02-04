@@ -46,6 +46,7 @@ class RegisterView(View):
     def get(self, request):
         if self.request.user.is_authenticated:
             return redirect('/')
+
         form = forms.RegisterForm()
         return render(request, 'account/sign-up.html', context={'form': form})
 

@@ -706,7 +706,7 @@
 
                                         <!-- Review START -->
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-12" id="questions">
                                                 <h5 class="mb-4">پرسش و پاسخ</h5>
 
                                                 {% license_course request object.id as flag %}
@@ -720,13 +720,14 @@
                                                                               alt=""> </a>
                                                         </div>
 
-                                                        <form class="w-100 d-flex" method="post">
+                                                        <form class="w-100 d-flex" method="post" id="form-question">
                                                             {% csrf_token %}
                                                             <textarea name="question"
                                                                       class="one form-control pe-4 bg-light"
                                                                       id="autoheighttextarea" rows="1"
                                                                       placeholder="افزودن پرسش ..."></textarea>
-                                                            <button class="btn btn-primary ms-2 mb-0" type="submit">
+                                                            <button class="btn btn-primary ms-2 mb-0" type="submit"
+                                                                    id="submit-question">
                                                                 ارسال
                                                             </button>
                                                         </form>
@@ -927,7 +928,8 @@
                                                 {% if not object.price == 0 %}
                                                     <form method="post" action="{% url 'cart_app:cart' %}">
                                                         <input type="hidden" value="{{ object.slug }}" name="slug">
-                                                        <button  class="btn btn-success mb-0" type="submit">خرید دوره</button>
+                                                        <button class="btn btn-success mb-0" type="submit">خرید دوره
+                                                        </button>
 
                                                         {% csrf_token %}
                                                     </form>
@@ -1168,6 +1170,61 @@
 {% block js %}
 
     <script>
+
+
+        var btn1 = document.getElementById('submit-question');
+        btn1.addEventListener('click', function (e) {
+            e.preventDefault();
+            axios.post('', document.getElementById('form-question'))
+                .then(res => {
+
+
+
+                        document.getElementById('questions').innerHTML += `<div class="border p-2 p-sm-4 rounded-3 mb-4">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li class="comment-item">
+                                                        <div class="d-flex mb-3">
+                                                            <!-- Avatar -->
+                                                            <div class="avatar avatar-sm flex-shrink-0">
+                                                                <a href="#"><img
+                                                                        class="avatar-img rounded-circle"
+                                                                        src="${res.data.ImageUrl}"
+                                                                        alt=""></a>
+                                                            </div>
+                                                            <div class="ms-2">
+                                                                <!-- Comment by -->
+                                                                <div class="bg-light p-3 rounded">
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <div class="me-2">
+                                                                            <h6 class="mb-1 fw-normal"><a
+                                                                                    href="#">
+                                                                                ${res.data.FullName} </a>
+                                                                            </h6>
+                                                                            <p class="mb-0">${res.data.question}</p>
+                                                                        </div>
+                                                                        <small>${res.data.DifferenceTime}پیش</small>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </li>
+                                                </ul>
+                                            </div>`
+
+
+
+                })
+                .catch(err => {
+                    window.alert(err);
+                });
+        });
+
+
+    </script>
+    <script>
         function copyLink(linkElement) {
             const linkToCopy = linkElement.getAttribute("href");
             const tempInput = document.createElement("input");
@@ -1197,6 +1254,47 @@
 
 
     </script>
+
+    <script>
+
+        var btn = document.getElementById('submit-comment');
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            axios.post('', document.getElementById('form-comment'))
+                .then(res => {
+
+
+                    document.getElementById('comments').innerHTML += `<div class="d-md-flex mb-4 ps-4 ps-md-5">
+                                                                        <!-- Avatar -->
+                                                                        <div class="avatar avatar-lg me-4 flex-shrink-0">
+                                                                            <img class="avatar-img rounded-circle"
+                                                                                 src="${res.data.ImageUrl}"
+                                                                                 alt="avatar">
+                                                                        </div>
+                                                                        <!-- Text -->
+                                                                        <div>
+                                                                            <div class="d-sm-flex mt-1 mt-md-0 align-items-center">
+                                                                                <h5 class="me-3 mb-0 fw-normal">${res.data.FullName}</h5>
+
+
+
+                                                                            </div>
+                                                                            <!-- Info -->
+                                                                            <p class="small mb-2">${res.data.DifferenceTime}پیش</p>
+                                                                            <p class="mb-2">${res.data.message}</p>
+                                                                        </div>
+                                                                    </div>`
+
+
+                })
+                .catch(err => {
+                    window.alert(err);
+                });
+        });
+
+    </script>
+
+
 {% endblock %}
 
 

@@ -8,6 +8,7 @@ from datetime import timezone
 from django.utils import timezone as Timezone
 from apps.course.madul import format_time
 
+from persiantools.jdatetime import JalaliDate
 
 register = template.Library()
 
@@ -140,36 +141,9 @@ def difference_time_sending_comment(comment_id, is_course_comment=True):
 
 @register.simple_tag
 def convert_to_shamsi(string_date):
-    def to_persian(text):
-        translation_dict = {
-            "Saturday": "شنبه",
-            "Sunday": "یک‌شنبه",
-            "Monday": "دوشنبه",
-            "Tuesday": "سه‌شنبه",
-            "Wednesday": "چهارشنبه",
-            "Thursday": "پنج‌شنبه",
-            "Friday": "جمعه",
-            "Bahman": "بهمن",
-            "Esfand": "اسفند",
-            "Farvardin": "فروردین",
-            "Ordibehesht": "اردیبهشت",
-            "Khordad": "خرداد",
-            "Tir": "تیر",
-            "Mordad": "مرداد",
-            "Shahrivar": "شهریور",
-            "Mehr": "مهر",
-            "Aban": "آبان",
-            "Azar": "آذر",
-            "Dey": "دی"
-        }
-        for en, fa in translation_dict.items():
-            text = text.replace(en, fa)
-        return text
+    date = JalaliDate(string_date)
 
-    shamsi_date = datetime.fromgregorian(date=string_date)
-    formatted_date = to_persian(shamsi_date.strftime('%A %d %B %Y'))
-
-    return formatted_date
+    return date.strftime('%c', locale='fa')
 
 
 @register.simple_tag
