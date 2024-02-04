@@ -27,7 +27,7 @@ This project is a University project aimed at implementing a Research Laboratory
 - **Backend Framework:** Django
 - **ORM (Object-Relational Mapping):** Django ORM
 - **User Interface Library:** admin-volt
-- **Database:** SQLite (for development, can be configured for other databases like PostgreSQL in production)
+- **Database:** Mysql (for development, can be configured for other databases like PostgreSQL in production)
 
 
 ## Setup Instructions
