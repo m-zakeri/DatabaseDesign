@@ -1,0 +1,1302 @@
+{% extends 'base.html' %}
+{% load course_tags %}
+{% load static %}
+{% block title %}{{ object.slug }}{% endblock %}
+
+
+{% block content %}
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+        <!-- =======================
+        Page intro START -->
+        <section class="bg-light py-0 py-sm-5">
+            <div class="container">
+                <div class="row py-5">
+                    <div class="col-lg-8">
+                        <!-- Badge -->
+                        <h6 class="mb-3 font-base bg-primary text-white py-2 px-4 rounded-2 d-inline-block">{{ object.category.all.first.name }}</h6>
+                        <!-- Title -->
+                        <h1 class="fs-3">آموزش رایگان {{ object.name }}</h1>
+                        {% if object.caption %}
+                            <p>{{ course.caption }}</p>
+                        {% endif %}
+                        <!-- Content -->
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-3 mb-1 mb-sm-0"><i
+                                    class="fas fa-star text-warning me-2"></i>{{ course.total_points }}/5.0
+                            </li>
+                            <li class="list-inline-item me-3 mb-1 mb-sm-0"><i
+                                    class="fas fa-user-graduate text-orange me-2"></i>{{ course.number_customer }} شرکت
+                                کننده
+                            </li>
+                            <li class="list-inline-item me-3 mb-1 mb-sm-0"><i
+                                    class="fas fa-signal text-success me-2"></i>{{ course.level }}
+                            </li>
+                            <li class="list-inline-item me-3 mb-1 mb-sm-0"><i
+                                    class="bi bi-patch-exclamation-fill text-danger me-2"></i>آخرین
+                                بروزرسانی: {% convert_to_shamsi object.updated_at %}
+                            </li>
+                            <li class="list-inline-item mb-0"><i class="fas fa-globe text-info me-2"></i>
+                                {% for item in object.language.all %}
+                                    {{ item.name }}
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Page intro END -->
+
+        <!-- =======================
+        Page content START -->
+        <section class="pb-0 py-lg-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Main content START -->
+                    <div class="col-lg-8">
+                        <div class="card shadow rounded-2 p-0">
+                            <!-- Tabs START -->
+                            <div class="card-header border-bottom px-4 py-3">
+                                <ul class="nav nav-pills nav-tabs-line py-0" id="course-pills-tab" role="tablist">
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0 active" id="course-pills-tab-1"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-1" type="button"
+                                                role="tab" aria-controls="course-pills-1" aria-selected="true">توضیحات
+                                        </button>
+                                    </li>
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-2"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-2" type="button"
+                                                role="tab" aria-controls="course-pills-2" aria-selected="false">جلسات
+                                            دوره
+                                        </button>
+                                    </li>
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-3"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-3" type="button"
+                                                role="tab" aria-controls="course-pills-3" aria-selected="false">مدرس
+                                        </button>
+                                    </li>
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-4"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-4" type="button"
+                                                role="tab" aria-controls="course-pills-4" aria-selected="false">دیدگاه
+                                        </button>
+                                    </li>
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-5"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-5" type="button"
+                                                role="tab" aria-controls="course-pills-5" aria-selected="false">سوالات
+                                            متداول
+                                        </button>
+                                    </li>
+                                    <!-- Tab item -->
+                                    <li class="nav-item me-2 me-sm-4" role="presentation">
+                                        <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-6"
+                                                data-bs-toggle="pill" data-bs-target="#course-pills-6" type="button"
+                                                role="tab" aria-controls="course-pills-6" aria-selected="false">پرسش و
+                                            پاسخ
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Tabs END -->
+
+                            <!-- Tab contents START -->
+                            <div class="card-body p-4">
+                                <div class="tab-content pt-2" id="course-pills-tabContent">
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade show active" id="course-pills-1" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-1">
+                                        <!-- Course detail START -->
+                                        {% for item in object.descriptions.all %}
+                                            <h5 class="mb-3">{{ item.subject }}</h5>
+                                            <pre class="mb-3">{{ item.content }}</pre>
+                                        {% endfor %}
+
+
+                                    </div>
+                                    <!-- Content END -->
+
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade" id="course-pills-2" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-2">
+                                        <!-- Course accordion START -->
+                                        <div class="accordion accordion-icon accordion-bg-light" id="accordionExample2">
+                                            {% for headline in object.season.all %}
+                                                {% if headline.is_publish %}
+                                                    <!-- Item -->
+                                                    <div class="accordion-item mb-3">
+                                                        <h6 class="accordion-header font-base"
+                                                            id="heading-{{ headline.id }}">
+                                                            <button class="accordion-button fw-bold collapsed rounded d-sm-flex d-inline-block"
+                                                                    type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#collapse-{{ headline.id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="collapse-{{ headline.id }}">
+                                                                {{ headline.name }}
+                                                                <span class="small ms-0 ms-sm-2">({% number_video_season headline.id %} ویدیو)</span>
+                                                            </button>
+                                                        </h6>
+                                                        <div id="collapse-{{ headline.id }}"
+                                                             class="accordion-collapse collapse"
+                                                             aria-labelledby="heading-{{ headline.id }}"
+                                                             data-bs-parent="#accordionExample2">
+                                                            <!-- Accordion body START -->
+                                                            <div class="accordion-body mt-3">
+
+                                                                {% for meeting in headline.meetings.all %}
+
+                                                                    {% if meeting.is_publish %}
+                                                                        {% permission_video request meeting.id object.id as flag %}
+                                                                        {% if flag %}
+                                                                            <!-- Course lecture -->
+                                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                                <div class="position-relative d-flex align-items-center">
+                                                                                    <a href="{{ meeting.video.url }}"
+                                                                                       class="btn btn-danger-soft btn-round btn-sm mb-0 stretched-link position-static">
+                                                                                        <i class="fas fa-play me-0"></i>
+                                                                                    </a>
+                                                                                    <span class="d-inline-block text-truncate ms-2 mb-0 h6 fw-light w-100px w-sm-200px w-md-400px">{{ meeting.name }}</span>
+                                                                                </div>
+                                                                                <p class="mb-0">{% time_course meeting.video_time %}</p>
+                                                                            </div>
+
+
+                                                                        {% else %}
+                                                                            <!-- Course lecture -->
+                                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                                <div class="position-relative d-flex align-items-center">
+                                                                                    <div>
+                                                                                        <a href="{{ meeting.video.url }}"
+                                                                                           class="btn btn-danger-soft btn-round btn-sm mb-0 stretched-link position-static"
+                                                                                           data-bs-toggle="modal"
+                                                                                           data-bs-target="#exampleModal">
+                                                                                            <i class="fas fa-play me-0"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                    <div class="row g-sm-0"
+                                                                                         style="display: flex;align-items: center;justify-content: center">
+                                                                                        <div class="col-sm-6"
+                                                                                             style="display: flex;align-items: center;justify-content: center">
+                                                                                            <span class="d-inline-block text-truncate ms-2 mb-0 h6 fw-light w-100px w-md-100px">{{ meeting.name }}</span>
+                                                                                        </div>
+                                                                                        <div class="col-sm-6">
+                                                                                           <span class="badge text-bg-orange ms-2 ms-md-0"><i
+                                                                                                   class="fas fa-lock fa-fw me-1"></i>پولی</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p class="mb-0 d-inline-block text-truncate w-70px w-sm-60px">
+                                                                                    {% time_course meeting.video_time %}</p>
+                                                                            </div>
+
+                                                                        {% endif %}
+                                                                        <hr> <!-- Divider -->
+
+                                                                    {% endif %}
+                                                                {% endfor %}
+
+
+                                                            </div>
+                                                            <!-- Accordion body END -->
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+
+
+                                        </div>
+                                        <!-- Course accordion END -->
+                                    </div>
+                                    <!-- Content END -->
+
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade" id="course-pills-3" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-3">
+                                        {% for teacher in object.teacher.all %}
+                                            <!-- Card START -->
+                                            <div class="card mb-0 mb-md-4">
+                                                <div class="row g-0 align-items-center">
+                                                    <div class="col-md-5">
+                                                        <!-- Image -->
+                                                        <img src="{{ teacher.user.image.url }}"
+                                                             class="img-fluid rounded-3" alt="instructor-image">
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <!-- Card body -->
+                                                        <div class="card-body">
+                                                            <!-- Title -->
+                                                            <h3 class="card-title mb-0 fs-5">{{ teacher.user.full_name }}</h3>
+                                                            <p class="mb-2"></p>
+                                                            <!-- Social button -->
+                                                            <ul class="list-inline mb-3">
+                                                                {% for social_media in teacher.user.social_media.all %}
+                                                                    {% if social_media.platform == 'facebook' %}
+                                                                        <li class="list-inline-item"><a
+                                                                                class="btn px-2 btn-sm bg-facebook"
+                                                                                href="{{ social_media.profile_link }}"><i
+                                                                                class="fab fa-fw fa-facebook-f"></i></a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% if social_media.platform == 'instagram' %}
+                                                                        <li class="list-inline-item"><a
+                                                                                class="btn px-2 btn-sm bg-instagram-gradient"
+                                                                                href="{{ social_media.profile_link }}"><i
+                                                                                class="fab fa-fw fa-instagram"></i></a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% if social_media.platform == 'twitter' %}
+                                                                        <li class="list-inline-item"><a
+                                                                                class="btn px-2 btn-sm bg-twitter"
+                                                                                href="{{ social_media.profile_link }}"><i
+                                                                                class="fab fa-fw fa-twitter"></i></a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% if social_media.platform == 'linkedin' %}
+                                                                        <li class="list-inline-item"><a
+                                                                                class="btn px-2 btn-sm bg-linkedin"
+                                                                                href="{{ social_media.profile_link }}"><i
+                                                                                class="fab fa-fw fa-linkedin-in"></i></a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </ul>
+
+                                                            <!-- Info -->
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="d-flex align-items-center me-3 mb-2">
+                                                                    <span class="icon-md bg-orange bg-opacity-10 text-orange rounded-circle"><i
+                                                                            class="fas fa-user-graduate"></i></span>
+                                                                        <span class="h6 fw-light mb-0 ms-2">{{ teacher.number_customer }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="d-flex align-items-center me-3 mb-2">
+                                                                    <span class="icon-md bg-warning bg-opacity-15 text-warning rounded-circle"><i
+                                                                            class="fas fa-star"></i></span>
+                                                                        <span class="h6 fw-light mb-0 ms-2">{{ teacher.score }}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="d-flex align-items-center me-3 mb-2">
+                                                                    <span class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle"><i
+                                                                            class="fas fa-play"></i></span>
+                                                                        <span class="h6 fw-light mb-0 ms-2">{{ teacher.course.all.count }} دوره آموزشی</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="d-flex align-items-center me-3 mb-2">
+                                                                    <span class="icon-md bg-info bg-opacity-10 text-info rounded-circle"><i
+                                                                            class="fas fa-comment-dots"></i></span>
+                                                                        <span class="h6 fw-light mb-0 ms-2">{{ teacher.user.course_comment.all.count }}</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Card END -->
+
+                                            <!-- Instructor info -->
+                                            <h5 class="mb-3">درباره مدرس</h5>
+                                            {% if teacher.user.caption %}
+                                            {% endif %}
+                                            <p class="mb-3">{{ teacher.description }}</p>
+                                            <!-- Email address -->
+                                            <div class="col-12">
+                                                <ul class="list-group list-group-borderless mb-0">
+                                                    <li class="list-group-item pb-0">ایمیل: <a
+                                                            href="{{ teacher.user.email }}"
+                                                            class="ms-2">{{ teacher.user.email }}</a>
+                                                    </li>
+                                                    {% for socail_media in teacher.user.social_medial.all %}
+                                                        {% if socail_media.is_active %}
+                                                            {% if socail_media.platform == 'website' %}
+                                                                <li class="list-group-item pb-0">وب سایت: <a
+                                                                        href="{{ socail_media.profile_link }}"
+                                                                        class="ms-2">{{ socail_media.profile_link }}</a>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+
+
+                                                </ul>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                    <!-- Content END -->
+
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade" id="course-pills-4" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-4">
+                                        <!-- Review START -->
+                                        <div class="row mb-4">
+                                            <h5 class="mb-4">دیدگاه کاربران</h5>
+
+                                            <!-- Rating info -->
+                                            <div class="col-md-4 mb-3 mb-md-0">
+                                                <div class="text-center">
+                                                    <!-- Info -->
+                                                    <h2 class="mb-0">{{ course.total_points }}</h2>
+                                                    <!-- Star -->
+                                                    <ul class="list-inline mb-0">
+                                                        {% for i in '12345'|make_list %}
+
+                                                            {% if i|add:0 <= object.total_points|add:0 %}
+                                                                <li class="list-inline-item me-0 small"><i
+                                                                        class="fas fa-star text-warning"></i></li>
+                                                            {% else %}
+                                                                {% if i|add:0 == object.total_points|add:0.5 %}
+                                                                    <li class="list-inline-item me-0 small"><i
+                                                                            class="fas fa-star-half-alt text-warning"></i>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li class="list-inline-item me-0 small"><i
+                                                                            class="far fa-star text-warning"></i></li>
+                                                                {% endif %}
+
+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Progress-bar and star -->
+                                            <div class="col-md-8">
+                                                <div class="row align-items-center">
+                                                    <!-- Progress bar and Rating -->
+                                                    <div class="col-6 col-sm-8">
+                                                        <!-- Progress item -->
+                                                        <div class="progress progress-sm bg-warning bg-opacity-15">
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 style="width: 100%" aria-valuenow="100"
+                                                                 aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6 col-sm-4">
+                                                        <!-- Star item -->
+                                                        <ul class="list-inline mb-0">
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Progress bar and Rating -->
+                                                    <div class="col-6 col-sm-8">
+                                                        <!-- Progress item -->
+                                                        <div class="progress progress-sm bg-warning bg-opacity-15">
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6 col-sm-4">
+                                                        <!-- Star item -->
+                                                        <ul class="list-inline mb-0">
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Progress bar and Rating -->
+                                                    <div class="col-6 col-sm-8">
+                                                        <!-- Progress item -->
+                                                        <div class="progress progress-sm bg-warning bg-opacity-15">
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 style="width: 60%" aria-valuenow="60" aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6 col-sm-4">
+                                                        <!-- Star item -->
+                                                        <ul class="list-inline mb-0">
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Progress bar and Rating -->
+                                                    <div class="col-6 col-sm-8">
+                                                        <!-- Progress item -->
+                                                        <div class="progress progress-sm bg-warning bg-opacity-15">
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 style="width: 40%" aria-valuenow="40" aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6 col-sm-4">
+                                                        <!-- Star item -->
+                                                        <ul class="list-inline mb-0">
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Progress bar and Rating -->
+                                                    <div class="col-6 col-sm-8">
+                                                        <!-- Progress item -->
+                                                        <div class="progress progress-sm bg-warning bg-opacity-15">
+                                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                                 style="width: 20%" aria-valuenow="20" aria-valuemin="0"
+                                                                 aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6 col-sm-4">
+                                                        <!-- Star item -->
+                                                        <ul class="list-inline mb-0">
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Review END -->
+
+                                        <!-- Student review START -->
+                                        <div class="row" id="comments">
+                                            {% for comment in object.comment.all %}
+                                                {% if comment.is_publish %}
+                                                    {% if comment.parent == None %}
+
+                                                        <!-- Review item START -->
+                                                        <div class="d-md-flex my-4">
+                                                            <!-- Avatar -->
+                                                            <div class="avatar avatar-xl me-4 flex-shrink-0">
+                                                                <img class="avatar-img rounded-circle"
+                                                                     src="{{ comment.user.image.url }}" alt="avatar">
+                                                            </div>
+                                                            <!-- Text -->
+                                                            <div>
+                                                                <div class="d-sm-flex mt-1 mt-md-0 align-items-center">
+                                                                    <h5 class="me-3 mb-0 fw-normal">{{ comment.user.full_name }}</h5>
+                                                                    <!-- Review star -->
+                                                                    <ul class="list-inline mb-0">
+                                                                        {% for i in '12345'|make_list %}
+
+                                                                            {% if i|add:0 <= comment.score|add:0 %}
+                                                                                <li class="list-inline-item me-0 small">
+                                                                                    <i
+                                                                                            class="fas fa-star text-warning"></i>
+                                                                                </li>
+                                                                            {% else %}
+                                                                                {% if i|add:0 == comment.score|add:0.5 %}
+                                                                                    <li class="list-inline-item me-0 small">
+                                                                                        <i
+                                                                                                class="fas fa-star-half-alt text-warning"></i>
+                                                                                    </li>
+                                                                                {% else %}
+                                                                                    <li class="list-inline-item me-0 small">
+                                                                                        <i
+                                                                                                class="far fa-star text-warning"></i>
+                                                                                    </li>
+                                                                                {% endif %}
+
+
+
+
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                                <!-- Info -->
+                                                                <p class="small mb-2">{% difference_time_sending_comment comment.id %}پیش</p>
+                                                                <p class="mb-2">{{ comment.message }}</p>
+                                                                <!-- Like button -->
+                                                                <div class="btn-group" role="group"
+                                                                     aria-label="Basic radio toggle button group">
+                                                                    {% license_course request object.id as flag %}
+                                                                    {% if flag %}
+                                                                        <!-- Like button -->
+                                                                        <button onclick="LikeComment('{{ comment.id }}')"
+
+                                                                                id="btnradio{{ comment.id }}"
+                                                                                style="border: none;margin: 0;padding:0 ">
+                                                                        </button>
+                                                                        <label
+                                                                                class="btn btn-outline-light btn-sm mb-0"
+                                                                                for="btnradio{{ comment.id }}"><i
+                                                                                class="far fa-thumbs-up me-1"></i><span
+                                                                                id="number-like{{ comment.id }}">{{ comment.like.all.count }}</span>
+                                                                        </label>
+
+                                                                    {% endif %}
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% if comment.subs.all %}
+                                                            {% for item in  comment.subs.all %}
+                                                                {% if item.is_publish %}
+                                                                    <!-- Comment children level 1 -->
+                                                                    <div class="d-md-flex mb-4 ps-4 ps-md-5">
+                                                                        <!-- Avatar -->
+                                                                        <div class="avatar avatar-lg me-4 flex-shrink-0">
+                                                                            <img class="avatar-img rounded-circle"
+                                                                                 src="{{ item.user.image.url }}"
+                                                                                 alt="avatar">
+                                                                        </div>
+                                                                        <!-- Text -->
+                                                                        <div>
+                                                                            <div class="d-sm-flex mt-1 mt-md-0 align-items-center">
+                                                                                <h5 class="me-3 mb-0 fw-normal">{{ item.user.full_name }}</h5>
+                                                                            </div>
+                                                                            <!-- Info -->
+                                                                            <p class="small mb-2">{% difference_time_sending_comment item.id %}پیش</p>
+                                                                            <p class="mb-2">{{ item.message }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                        {% endif %}
+                                                        <!-- Divider -->
+                                                        <hr>
+
+                                                    {% endif %}
+                                                {% endif %}
+
+                                            {% endfor %}
+
+
+                                        </div>
+                                        <!-- Student review END -->
+
+                                        {% license_course request object.id as flag %}
+
+                                        {% if flag %}
+                                            <!-- Leave Review START -->
+                                            <div class="mt-2">
+                                                <h5 class="mb-4">ثبت دیدگاه</h5>
+                                                <form class="row g-3" method="post" id="form-comment">
+                                                    {% csrf_token %}
+
+                                                    <!-- Rating -->
+                                                    <div class="col-12 bg-light-input">
+                                                        <select id="inputState2" class="form-select js-choice"
+                                                                name="score">
+                                                            <option value="5" selected="">★★★★★ (5/5)</option>
+                                                            <option value="4">★★★★☆ (4/5)</option>
+                                                            <option value="3">★★★☆☆ (3/5)</option>
+                                                            <option value="2">★★☆☆☆ (2/5)</option>
+                                                            <option value="1">★☆☆☆☆ (1/5)</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Message -->
+                                                    <div class="col-12 bg-light-input">
+                                                    <textarea class="form-control" id="exampleFormControlTextarea1"
+                                                              name="message"
+                                                              placeholder="دیدگاه خود را بنویسید" rows="3"></textarea>
+                                                    </div>
+                                                    <!-- Button -->
+                                                    <div class="col-12">
+                                                        <button id="submit-comment" type="submit"
+                                                                class="btn btn-primary mb-0">ثبت دیدگاه
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- Leave Review END -->
+                                        {% endif %}
+
+                                    </div>
+                                    <!-- Content END -->
+
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade" id="course-pills-5" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-5">
+                                        <!-- Title -->
+                                        <h5 class="mb-3">سوالات متداول</h5>
+                                        <!-- Accordion START -->
+                                        <div class="accordion accordion-flush" id="accordionExample">
+                                            {% for questions in object.faq_frequently.all %}
+
+                                                <!-- Item -->
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headings{{ forloop.counter0 }}">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapses{{ forloop.counter0 }}"
+                                                                aria-expanded="true"
+                                                                aria-controls="collapses{{ forloop.counter0 }}">
+                                                            <span class="text-secondary fw-bold me-3">{{ forloop.counter }}.</span>
+                                                            <span class="h6 mb-0">{{ questions.question }}</span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapses{{ forloop.counter0 }}"
+                                                         class="accordion-collapse collapse"
+                                                         aria-labelledby="headings{{ forloop.counter0 }}"
+                                                         data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body pt-0">
+                                                            {{ questions.answer }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+
+
+                                        </div>
+                                        <!-- Accordion END -->
+                                    </div>
+                                    <!-- Content END -->
+
+                                    <!-- Content START -->
+                                    <div class="tab-pane fade" id="course-pills-6" role="tabpanel"
+                                         aria-labelledby="course-pills-tab-6">
+
+                                        <!-- Review START -->
+                                        <div class="row">
+                                            <div class="col-12" id="questions">
+                                                <h5 class="mb-4">پرسش و پاسخ</h5>
+
+                                                {% license_course request object.id as flag %}
+                                                {% if flag %}
+                                                    <!-- Comment box -->
+                                                    <div class="d-flex mb-4">
+                                                        <!-- Avatar -->
+                                                        <div class="avatar avatar-sm flex-shrink-0 me-2">
+                                                            <a href="#"> <img class="avatar-img rounded-circle"
+                                                                              src="{% static 'images/avatar/09.jpg' %}"
+                                                                              alt=""> </a>
+                                                        </div>
+
+                                                        <form class="w-100 d-flex" method="post" id="form-question">
+                                                            {% csrf_token %}
+                                                            <textarea name="question"
+                                                                      class="one form-control pe-4 bg-light"
+                                                                      id="autoheighttextarea" rows="1"
+                                                                      placeholder="افزودن پرسش ..."></textarea>
+                                                            <button class="btn btn-primary ms-2 mb-0" type="submit"
+                                                                    id="submit-question">
+                                                                ارسال
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+
+                                                {% for comment in object.ask_question.all %}
+                                                    {% if comment.parent == None and comment.is_publish %}
+                                                        <!-- Comment item START -->
+                                                        <div class="border p-2 p-sm-4 rounded-3 mb-4">
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li class="comment-item">
+                                                                    <div class="d-flex mb-3">
+                                                                        <!-- Avatar -->
+                                                                        <div class="avatar avatar-sm flex-shrink-0">
+                                                                            <a href="#"><img
+                                                                                    class="avatar-img rounded-circle"
+                                                                                    src="{{ comment.user.image.url }}"
+                                                                                    alt=""></a>
+                                                                        </div>
+                                                                        <div class="ms-2">
+                                                                            <!-- Comment by -->
+                                                                            <div class="bg-light p-3 rounded">
+                                                                                <div class="d-flex justify-content-center">
+                                                                                    <div class="me-2">
+                                                                                        <h6 class="mb-1 fw-normal"><a
+                                                                                                href="#!">
+                                                                                            {{ comment.user.full_name }} </a>
+                                                                                        </h6>
+                                                                                        <p class="mb-0">{{ comment.question }}</p>
+                                                                                    </div>
+                                                                                    <small>{% difference_time_sending_comment comment.id False %}پیش</small>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {% if comment.subs.all %}
+                                                                        {% for item in comment.subs.all %}
+                                                                            {% if item.is_publish %}
+                                                                                <!-- Comment item nested START -->
+                                                                                <ul class="list-unstyled ms-4">
+                                                                                    <!-- Comment item START -->
+                                                                                    <li class="comment-item">
+                                                                                        <div class="d-flex">
+                                                                                            <!-- Avatar -->
+                                                                                            <div class="avatar avatar-xs flex-shrink-0">
+                                                                                                <a href="#"><img
+                                                                                                        class="avatar-img rounded-circle"
+                                                                                                        src="{{ item.user.image.url }}"
+                                                                                                        alt=""></a>
+                                                                                            </div>
+                                                                                            <!-- Comment by -->
+                                                                                            <div class="ms-2">
+                                                                                                <div class="bg-light p-3 rounded">
+                                                                                                    <div class="d-flex justify-content-center">
+                                                                                                        <div class="me-2">
+                                                                                                            <h6 class="mb-1 fw-normal">
+                                                                                                                <a
+                                                                                                                        href="#">
+                                                                                                                    {{ item.user.full_name }} </a>
+                                                                                                            </h6>
+                                                                                                            <p class=" mb-0">{{ item.question }}</p>
+                                                                                                        </div>
+                                                                                                        <small>{% difference_time_sending_comment item.id False %}پیش</small>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <!-- Comment item END -->
+                                                                                </ul>
+                                                                                <!-- Comment item nested END -->
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- Comment item END -->
+                                                        <hr>
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- Content END -->
+
+                                </div>
+                            </div>
+                            <!-- Tab contents END -->
+                        </div>
+                    </div>
+                    <!-- Main content END -->
+
+                    <!-- Right sidebar START -->
+                    <div class="col-lg-4 pt-5 pt-lg-0">
+                        <div class="row mb-5 mb-lg-0">
+                            <div class="col-md-6 col-lg-12">
+                                <!-- Video START -->
+                                <div class="card shadow p-2 mb-4 z-index-9">
+                                    <div class="overflow-hidden rounded-3">
+                                        <img src="{{ object.image.url }}" class="card-img"
+                                             alt="course image">
+                                        <!-- Overlay -->
+                                        <div class="bg-overlay bg-dark opacity-6"></div>
+                                        <div class="card-img-overlay d-flex align-items-start flex-column p-3">
+                                            <!-- Video button and link -->
+                                            <div class="m-auto">
+                                                {% if object.introduction_video %}
+                                                    <a href="{{ object.introduction_video.url }}"
+                                                       class="btn btn-lg text-danger btn-round btn-white-shadow mb-0"
+                                                       data-glightbox="" data-gallery="course-video">
+                                                        <i class="fas fa-play"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card body -->
+                                    <div class="card-body px-3">
+                                        <!-- Info -->
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Price and time -->
+                                            {% license_course request object.id as flag %}
+                                            {% if not flag %}
+                                                <div>
+                                                    <div class="d-flex align-items-center">
+                                                        {% is_discount object.id as is_discount %}
+                                                        {% if not object.price == 0 %}
+                                                            {% if not is_discount %}
+                                                                <h3 class="fw-bold mb-0 fs-5 me-2">{{ object.price }}
+                                                                    تومان</h3>
+                                                            {% else %}
+                                                                <h3 class="fw-bold mb-0 fs-5 me-2">{{ object.apply_discount }}
+                                                                    تومان</h3>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <h3 class="fw-bold mb-0 fs-5 me-2">رایگان</h3>
+                                                        {% endif %}
+
+
+
+
+                                                        {% if is_discount %}
+
+                                                            <span class="text-decoration-line-through mb-0 me-2">{{ object.price }}</span>
+                                                            <span class="badge text-bg-orange mb-0">{{ object.discount }}% تخفیف</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if is_discount %}
+                                                        <p class="mb-0 text-danger"><i
+                                                                class="fas fa-stopwatch me-2"></i>{% time_left_for_discount object.id %}
+
+                                                            باقی مانده</p>
+                                                    {% endif %}
+
+                                                </div>
+                                            {% endif %}
+
+                                            <!-- Share button with dropdown -->
+                                            <div class="dropdown">
+                                                <!-- Share button -->
+                                                <a href="#" class="btn btn-sm btn-light rounded small" role="button"
+                                                   id="dropdownShare" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-fw fa-share-alt"></i>
+                                                </a>
+                                                <!-- dropdown button -->
+                                                <ul class="dropdown-menu dropdown-w-sm dropdown-menu-end min-w-auto shadow rounded"
+                                                    aria-labelledby="dropdownShare">
+
+                                                    <li>
+                                                        <button id="myLink" onclick="copyLink(this)"
+                                                                class="dropdown-item"
+                                                                href="http://127.0.0.1:8000/course/detail/{{ object.slug }}/">
+                                                            <i class="fas fa-copy me-2"></i>کپی لینک
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div class="mt-3 d-sm-flex justify-content-sm-between">
+                                            {% if object.introduction_video %}
+                                                <a href="{{ course.introduction_video.url }}"
+                                                   class="btn btn-outline-primary mb-0">پیش نمایش</a>
+                                            {% endif %}
+                                            {% license_course request object.id as flag %}
+                                            {% if not flag %}
+                                                {% if not object.price == 0 %}
+                                                    <form method="post" action="{% url 'cart_app:cart' %}">
+                                                        <input type="hidden" value="{{ object.slug }}" name="slug">
+                                                        <button class="btn btn-success mb-0" type="submit">خرید دوره
+                                                        </button>
+
+                                                        {% csrf_token %}
+                                                    </form>
+
+                                                {% else %}
+                                                    <a href="#" class="btn btn-success mb-0">ثبت نام رایگان</a>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Video END -->
+
+                                <!-- Course info START -->
+                                <div class="card card-body shadow p-4 mb-4">
+                                    <!-- Title -->
+                                    <h4 class="mb-3 fs-5">مشخصات دوره</h4>
+                                    <ul class="list-group list-group-borderless">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-book-open text-primary"></i>تعداد ویدیو ها</span>
+                                            <span>{{ course.number_video }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-clock text-primary"></i>مدت زمان دوره</span>
+                                            <span>{% time_course object.video_time %}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-signal text-primary"></i>سطح دوره</span>
+                                            <span>{{ object.level }}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-globe text-primary"></i>زبان</span>
+                                            {% for item in object.language.all %}
+                                                <span>{{ item.name }}</span>
+                                            {% endfor %}
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-medal text-primary"></i>امتحان</span>
+                                            {% if object.is_exam %}
+                                                <span>دارد</span>
+                                            {% else %}
+                                                <span>ندارد</span>
+                                            {% endif %}
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-user-clock text-primary"></i>تاریخ ایجاد</span>
+                                            <span>{% convert_to_shamsi object.created_at %}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-medal text-primary"></i>مدرک</span>
+                                            {% if object.is_graduation %}
+                                                <span>دارد</span>
+                                            {% else %}
+                                                <span>ندارد</span>
+                                            {% endif %}
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="h6 fw-light mb-0"><i
+                                                    class="fas fa-fw fa-medal text-primary"></i>امتحان</span>
+                                            {% if object.is_exam %}
+                                                <span>دارد</span>
+                                            {% else %}
+                                                <span>ندارد</span>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Course info END -->
+                            </div>
+
+                            <div class="col-md-6 col-lg-12">
+                                <!-- Recently Viewed START -->
+                                <div class="card card-body shadow p-4 mb-4">
+                                    <!-- Title -->
+                                    <h4 class="mb-3 fs-5">آخرین دوره ها</h4>
+                                    {% for item in last_two_courses.all %}
+                                        <!-- Course item START -->
+                                        <div class="row gx-3 mb-3">
+                                            <!-- Image -->
+                                            <div class="col-4">
+                                                <img class="rounded" src="{{ item.image.url }}" alt="">
+                                            </div>
+                                            <!-- Info -->
+                                            <div class="col-8">
+                                                <h6 class="mb-0 fw-normal"><a
+                                                        href="{% url 'course_app:course_detail' item.slug %}">{{ item.name }}</a>
+                                                </h6>
+                                                <ul class="list-group list-group-borderless mt-1 d-flex justify-content-between">
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        {% if not item.price == 0 %}
+                                                            <span class="text-success">{{ item.apply_discount }} تومان</span>
+                                                        {% else %}
+                                                            <span class="text-success">رایگان</span>
+                                                        {% endif %}
+                                                        <span class="h6 fw-light">{{ item.total_points }}<i
+                                                                class="fas fa-star text-warning ms-1"></i></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- Course item END -->
+
+                                    {% endfor %}
+                                </div>
+                                <!-- Recently Viewed END -->
+
+                                <!-- Tags START -->
+                                <div class="card card-body shadow p-4">
+                                    <h4 class="mb-3 fs-5">برچسب ها</h4>
+                                    <ul class="list-inline mb-0">
+                                        {% for label in course.label.all %}
+                                            <li class="list-inline-item"><a class="btn btn-outline-light btn-sm"
+                                                                            href="#">{{ label.name }}</a>
+                                            </li>
+                                        {% endfor %}
+
+
+                                    </ul>
+                                </div>
+                                <!-- Tags END -->
+                            </div>
+                        </div><!-- Row End -->
+                    </div>
+                    <!-- Right sidebar END -->
+
+                </div><!-- Row END -->
+            </div>
+        </section>
+        <!-- =======================
+        Page content END -->
+
+        <!-- =======================
+        Listed courses START -->
+        <section class="pt-0">
+            <div class="container">
+                <!-- Title -->
+                <div class="row mb-4">
+                    <h2 class="mb-0 fs-4">دوره های پیشنهادی</h2>
+                </div>
+
+                <div class="row">
+                    <!-- Slider START -->
+                    <div class="tiny-slider arrow-round arrow-blur arrow-hover">
+                        <div class="tiny-slider-inner" data-autoplay="false" data-arrow="true" data-edge="2"
+                             data-dots="false" data-items="3" data-items-lg="2" data-items-sm="1">
+
+
+                            {% for item in suggested_courses.all %}
+                                <!-- Card Item START -->
+                                <div class="pb-4">
+                                    <div class="card p-2 border">
+                                        <div class="rounded-top overflow-hidden">
+                                            <div class="card-overlay-hover">
+                                                <img src="{{ item.image.url }}" class="card-img-top"
+                                                     alt="course image">
+                                            </div>
+                                            <!-- Hover element -->
+                                            <div class="card-img-overlay">
+                                                <div class="card-element-hover d-flex justify-content-end">
+                                                    <form method="post" action="{% url 'cart_app:cart' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" value="{{ item.slug }}" name="slug">
+                                                        <button type="submit" style="border: none" class="icon-md bg-white rounded-circle text-center">
+                                                            <i class="fas fa-shopping-cart text-danger"></i>
+                                                    </form>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <!-- Badge and icon -->
+                                            <div class="d-flex justify-content-between">
+                                                <!-- Rating and info -->
+                                                <ul class="list-inline hstack gap-2 mb-0">
+                                                    <!-- Info -->
+                                                    <li class="list-inline-item d-flex justify-content-center align-items-center">
+                                                        <div class="icon-md bg-orange bg-opacity-10 text-orange rounded-circle">
+                                                            <i class="fas fa-user-graduate"></i></div>
+                                                        <span class="h6 fw-light ms-2 mb-0">{{ item.get_number_of_customers }}</span>
+                                                    </li>
+                                                    <!-- Rating -->
+                                                    <li class="list-inline-item d-flex justify-content-center align-items-center">
+                                                        <div class="icon-md bg-warning bg-opacity-15 text-warning rounded-circle">
+                                                            <i class="fas fa-star"></i></div>
+                                                        <span class="h6 fw-light ms-2 mb-0">{{ item.total_points }}</span>
+                                                    </li>
+                                                </ul>
+                                                <!-- Avatar -->
+                                                <div class="avatar avatar-sm">
+                                                    <img class="avatar-img rounded-circle"
+                                                         src="{{ item.teacher.all.first.user.image.url }}"
+                                                         alt="avatar">
+                                                </div>
+                                            </div>
+                                            <!-- Divider -->
+                                            <hr>
+                                            <!-- Title -->
+                                            <h5 class="card-title fw-normal"><a
+                                                    href="{% url 'course_app:course_detail' item.slug %}">{{ item.name }}</a>
+                                            </h5>
+                                            <!-- Badge and Price -->
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="#" class="badge bg-info bg-opacity-10 text-info"><i
+                                                        class="fas fa-circle small fw-bold me-2"></i>{{ item.category.all.first.name }}
+                                                </a>
+                                                <!-- Price -->
+                                                {% if not item.price == 0 %}
+                                                    <h3 class="text-success mb-0 fs-5">{{ item.price }} تومان</h3>
+                                                {% else %}
+                                                    <h3 class="text-success mb-0 fs-5">رایگان</h3>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Item END -->
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <!-- Slider END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Listed courses END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+
+{% endblock %}
+
+{% block js %}
+
+    <script>
+
+
+        var btn1 = document.getElementById('submit-question');
+        btn1.addEventListener('click', function (e) {
+            e.preventDefault();
+            axios.post('', document.getElementById('form-question'))
+                .then(res => {
+
+
+                    document.getElementById('questions').innerHTML += `<div class="border p-2 p-sm-4 rounded-3 mb-4">
+                                                <ul class="list-unstyled mb-0">
+                                                    <li class="comment-item">
+                                                        <div class="d-flex mb-3">
+                                                            <!-- Avatar -->
+                                                            <div class="avatar avatar-sm flex-shrink-0">
+                                                                <a href="#"><img
+                                                                        class="avatar-img rounded-circle"
+                                                                        src="${res.data.ImageUrl}"
+                                                                        alt=""></a>
+                                                            </div>
+                                                            <div class="ms-2">
+                                                                <!-- Comment by -->
+                                                                <div class="bg-light p-3 rounded">
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <div class="me-2">
+                                                                            <h6 class="mb-1 fw-normal"><a
+                                                                                    href="#">
+                                                                                ${res.data.FullName} </a>
+                                                                            </h6>
+                                                                            <p class="mb-0">${res.data.question}</p>
+                                                                        </div>
+                                                                        <small>${res.data.DifferenceTime}پیش</small>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </li>
+                                                </ul>
+                                            </div>`
+
+
+                })
+                .catch(err => {
+                    window.alert(err);
+                });
+        });
+
+
+    </script>
+    <script>
+        function copyLink(linkElement) {
+            const linkToCopy = linkElement.getAttribute("href");
+            const tempInput = document.createElement("input");
+            document.body.appendChild(tempInput);
+            tempInput.setAttribute("value", linkToCopy);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+        }
+
+        function LikeComment(id) {
+            NumberLike = 'number-like' + id
+            var like = document.getElementById(NumberLike)
+            $.get(`/course/like/comment/${id}/`).then(response => {
+                if (response['response'] === 'like') {
+
+                    like.innerHTML = Number(like.innerHTML) + 1;
+
+
+                }
+                if (response['response'] === 'dislike') {
+                    like.innerHTML = Number(like.innerHTML) - 1
+                }
+            })
+        }
+
+
+    </script>
+
+    <script>
+
+        var btn = document.getElementById('submit-comment');
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            axios.post('', document.getElementById('form-comment'))
+                .then(res => {
+
+
+                    document.getElementById('comments').innerHTML += `<div class="d-md-flex mb-4 ps-4 ps-md-5">
+                                                                        <!-- Avatar -->
+                                                                        <div class="avatar avatar-lg me-4 flex-shrink-0">
+                                                                            <img class="avatar-img rounded-circle"
+                                                                                 src="${res.data.ImageUrl}"
+                                                                                 alt="avatar">
+                                                                        </div>
+                                                                        <!-- Text -->
+                                                                        <div>
+                                                                            <div class="d-sm-flex mt-1 mt-md-0 align-items-center">
+                                                                                <h5 class="me-3 mb-0 fw-normal">${res.data.FullName}</h5>
+
+
+
+                                                                            </div>
+                                                                            <!-- Info -->
+                                                                            <p class="small mb-2">${res.data.DifferenceTime}پیش</p>
+                                                                            <p class="mb-2">${res.data.message}</p>
+                                                                        </div>
+                                                                    </div>`
+
+
+                })
+                .catch(err => {
+                    window.alert(err);
+                });
+        });
+
+    </script>
+
+
+{% endblock %}
+
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+   {% include 'includes/head.html' %}
+
+</head>
+
+<body>
+
+<!-- Header START -->
+<header class="navbar-light navbar-sticky header-static">
+    <!-- Nav START -->
+    <nav class="navbar navbar-expand-xl">
+       {% include 'includes/navbar.html' %}
+    </nav>
+    <!-- Nav END -->
+</header>
+
+
+{% block content %}{% endblock %}
+
+
+
+<!-- Footer start -->
+
+<footer class="pt-5">
+{% include 'includes/footer.html' %}
+</footer>
+
+<!-- Footer END -->
+
+{% include 'includes/footer_link.html' %}
+{% block js %}{% endblock%}
+
+</body>
+
+</html>
