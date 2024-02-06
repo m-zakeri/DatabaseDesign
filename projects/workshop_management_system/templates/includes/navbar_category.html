@@ -1,0 +1,28 @@
+<!-- Nav category menu START -->
+<ul class="navbar-nav navbar-nav-scroll me-auto">
+    <!-- Nav item 1 Demos -->
+    <li class="nav-item dropdown dropdown-menu-shadow-stacked">
+        <a class="nav-link bg-primary bg-opacity-10 rounded-3 text-primary px-3 py-3 py-xl-0" href="#" id="categoryMenu"
+           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                class="bi bi-ui-radios-grid me-2"></i><span>دسته بندی</span></a>
+        <ul class="dropdown-menu" aria-labelledby="categoryMenu">
+
+            <!-- Dropdown submenu -->
+            {% for category in categories.all %}
+                {% if not category.parent %}
+                    {% if category.subs.all %}
+                        <li class="dropdown-submenu dropend">
+                            <a class="dropdown-item dropdown-toggle" href="#">{{ category.name }}</a>
+                            {% include 'includes/sub_categories.html' %}
+                        </li>
+                    {% else %}
+
+                        <li><a class="dropdown-item" href="#">{{ category.name }}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </li>
+</ul>
+<!-- Nav category menu END -->

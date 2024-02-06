@@ -1,0 +1,486 @@
+{% extends 'base.html' %}
+{% load course_tags %}
+
+{% block title %} Course List{% endblock %}
+
+{% block content %}
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+
+        <!-- =======================
+        Page content START -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Main content START -->
+                    <div class="col-lg-8 col-xl-9">
+
+                        <!-- Search option START -->
+                        <div class="row mb-4 align-items-center">
+                            <!-- Search bar -->
+                            <div class="col-xl-6">
+                                <form class="border rounded p-2">
+                                    <div class="input-group input-borderless">
+                                        <input class="form-control me-1" name="q" type="search"
+                                               placeholder="جستجو دوره ..."
+                                               {% if request.GET.q %}value="{{ request.GET.q }}" {% endif %}>
+
+
+                                        <button type="submit" class="btn btn-primary mb-0 rounded z-index-1"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Select option -->
+                            <div class="col-xl-3 mt-3 mt-xl-0">
+                                <form id="myForm" class="border rounded p-2 input-borderless">
+                                    <select class="form-select form-select-sm js-choice border-0"
+                                            aria-label=".form-select-sm" name="sort" onchange="this.form.submit();">
+                                        {% if request.GET.sort %}
+                                            {% if request.GET.sort == 'all' %}
+                                                <option value="all" disabled selected hidden>جدید ترین</option>
+
+                                            {% elif request.GET.sort == 'update' %}
+                                                <option value="update" disabled selected hidden>بروز ترین</option>
+
+                                            {% elif request.GET.sort == 'bestseller' %}
+                                                <option value="bestseller" disabled selected hidden>پرفروش ترین</option>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <option value="" disabled selected hidden>دسته بندی</option>
+                                        {% endif %}
+
+
+                                        <option value="all">جدیدترین</option>
+                                        <option value="update">بروزترین</option>
+                                        <option value="bestseller">پرفروش ترین</option>
+
+                                    </select>
+                                </form>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="col-12 col-xl-3 d-flex justify-content-between align-items-center mt-3 mt-xl-0">
+                                <!-- Advanced filter responsive toggler START -->
+                                <button class="btn btn-primary mb-0 d-lg-none" type="button" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                                    <i class="fas fa-sliders-h me-1"></i> نمایش فیلتر
+                                </button>
+                                <!-- Advanced filter responsive toggler END -->
+                                <p class="mb-0 text-end">نمایش {{ page_obj.start_index }}-{{ page_obj.end_index }}
+                                    از {{ course_list.count }} نتیجه</p>
+                            </div>
+
+                        </div>
+                        <!-- Search option END -->
+
+                        <!-- Course Grid START -->
+                        <div class="row g-4">
+
+                            {% for course in course_list.all %}
+                                <!-- Card item START -->
+                                <div class="col-sm-6 col-xl-4">
+                                    <div class="card shadow h-100">
+                                        <!-- Image -->
+                                        <img src="{{ course.image.url }}" class="card-img-top"
+                                             alt="course image">
+                                        <!-- Card body -->
+                                        <div class="card-body pb-0">
+                                            <!-- Badge and favorite -->
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <a href="#"
+                                                   class="badge bg-purple bg-opacity-10 text-purple">{{ course.level }}</a>
+                                                {% if request.user.is_authenticated %}
+                                                    {% is_like_course course.id request.user.id as is_like %}
+                                                    {% if is_like %}
+                                                        <button onclick="LikeCourse('{{ course.id }}','{{ course.name }}')"
+                                                                class="text-danger"
+                                                                style="background-color: inherit;border: none"><i
+                                                                class="fa fa-heart" id="{{ course.name }}"></i></button>
+                                                    {% else %}
+                                                        <button onclick="LikeCourse('{{ course.id }}','{{ course.name }}')"
+                                                                class="text-danger"
+                                                                style="background-color: inherit;border: none"><i
+                                                                class="far fa-heart" id="{{ course.name }}"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <!-- Title -->
+                                            <h5 class="card-title fw-normal"><a href="{% url 'course_app:course_detail' course.slug %}">آموزش {{ course.name }}</a>
+                                            </h5>
+                                            {% if course.caption %}
+                                                <p class="mb-2 text-truncate-2">{{ course.caption }}</p>
+                                            {% endif %}
+                                            <!-- Rating star -->
+                                            <ul class="list-inline mb-0">
+                                                {% for i in '12345'|make_list %}
+
+                                                    {% if i|add:0 <= course.total_points|add:0 %}
+                                                        <li class="list-inline-item me-0 small"><i
+                                                                class="fas fa-star text-warning"></i></li>
+                                                    {% else %}
+                                                        {% if i|add:0 == course.total_points|add:0.5 %}
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="fas fa-star-half-alt text-warning"></i></li>
+                                                        {% else %}
+                                                            <li class="list-inline-item me-0 small"><i
+                                                                    class="far fa-star text-warning"></i></li>
+                                                        {% endif %}
+
+
+
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <li class="list-inline-item ms-2 h6 fw-light mb-0">{{ course.total_points }}</li>
+                                            </ul>
+                                        </div>
+                                        <!-- Card footer -->
+                                        <div class="card-footer pt-0 pb-3">
+                                            <hr>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="h6 fw-light mb-0"><i
+                                                        class="far fa-clock text-danger me-2"></i>{% time_course course.video_time %}</span>
+                                                <span class="h6 fw-light mb-0"><i
+                                                        class="fas fa-table text-orange me-2"></i>{{ course.number_video }} ویدیو</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card item END -->
+                            {% endfor %}
+
+
+                        </div>
+                        <!-- Course Grid END -->
+
+                        {% if page_obj.has_other_pages %}
+                            <!-- Pagination START -->
+                            <div class="col-12">
+                                <nav class="mt-4 d-flex justify-content-center" aria-label="navigation">
+                                    <ul class="pagination pagination-primary-soft d-inline-block d-md-flex rounded mb-0">
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item mb-0"><a class="page-link"
+                                                                          href="{% my_url page_obj.next_page_number 'page' request.GET.urlencode %}"
+                                                                          tabindex="-1"><i
+                                                    class="fas fa-angle-double-right"></i></a></li>
+                                        {% endif %}
+                                        {% for page_number in page_obj.paginator.page_range reversed %}
+                                            {% if page_obj.number == page_number %}
+                                                <li class="page-item mb-0 active" aria-current="page"><a
+                                                        class="page-link"
+                                                        href="{% my_url page_number 'page' request.GET.urlencode %}">{{ page_number }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item mb-0" aria-current="page"><a
+                                                        class="page-link"
+                                                        href="{% my_url page_number 'page' request.GET.urlencode %}">{{ page_number }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item mb-0"><a class="page-link"
+                                                                          href="{% my_url page_obj.previous_page_number 'page' request.GET.urlencode %}"><i
+                                                    class="fas fa-angle-double-left"></i></a></li>
+                                        {% endif %}
+
+                                    </ul>
+                                </nav>
+                            </div>
+                            <!-- Pagination END -->
+                        {% endif %}
+                    </div>
+                    <!-- Main content END -->
+
+                    <!-- Right sidebar START -->
+                    <div class="col-lg-4 col-xl-3">
+                        <!-- Responsive offcanvas body START -->
+                        <div class="offcanvas-lg offcanvas-end" tabindex="-1" id="offcanvasSidebar">
+                            <div class="offcanvas-header bg-light">
+                                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">جستجوی پیشرفته</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                        data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body p-3 p-lg-0">
+                                <form>
+                                    <!-- Category START -->
+                                    <div class="card card-body shadow p-4 mb-4">
+                                        <!-- Title -->
+                                        <h4 class="mb-3 fs-6">فیلتر دسته بندی</h4>
+                                        <!-- Category group -->
+                                        <div class="col-12">
+                                            <!-- Checkbox -->
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="form-check">
+                                                    {% existence_variable request 'categories' 'all' as flag %}
+
+                                                    <input class="form-check-input" type="checkbox" name="categories"
+                                                           value="all"
+                                                           id="flexCheckDefault9"
+                                                           {% if flag %}checked{% endif %}>
+                                                    <label class="form-check-label" for="flexCheckDefault9">همه</label>
+                                                </div>
+                                                <span class="small">({{ course_list.all.count }})</span>
+                                            </div>
+                                            {% for category in categories.all|first_half %}
+                                                {% existence_variable request 'categories' category.name as flag %}
+                                                <!-- Checkbox -->
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               value="{{ category.name }}"
+                                                               id="flexCheckDefault10" name="categories"
+                                                               {% if flag %}checked{% endif %}>
+                                                        <label class="form-check-label"
+                                                               for="flexCheckDefault10">{{ category.name }}</label>
+                                                    </div>
+                                                    <span class="small">({{ category.course.all.count }})</span>
+                                                </div>
+                                            {% endfor %}
+
+
+                                            <!-- Collapse body -->
+                                            <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                                <div class="card card-body p-0">
+                                                    {% for category in categories.all|second_half %}
+                                                        {% existence_variable request 'categories' category.name as flag %}
+                                                        <!-- Checkbox -->
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                       value="{{ category.name }}"
+                                                                       id="flexCheckDefault16" name="categories"
+                                                                       {% if flag %}checked{% endif %}>
+                                                                <label class="form-check-label"
+                                                                       for="flexCheckDefault16">{{ category.name }}</label>
+                                                            </div>
+                                                            <span class="small">({{ category.course.all.count }})</span>
+                                                        </div>
+                                                    {% endfor %}
+
+                                                </div>
+                                            </div>
+                                            {% if categories.all|second_half %}
+                                                <!-- Collapse button -->
+                                                <a class=" p-0 mb-0 mt-2 btn-more d-flex align-items-center"
+                                                   data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
+                                                   aria-expanded="false" aria-controls="multiCollapseExample1">
+                                                    مشاهده <span class="see-more ms-1">بیشتر</span><span
+                                                        class="see-less ms-1">کمتر</span><i
+                                                        class="fas fa-angle-down ms-2"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- Category END -->
+
+                                    <!-- Price START -->
+                                    <div class="card card-body shadow p-4 mb-4">
+                                        <!-- Title -->
+                                        <h4 class="mb-3 fs-6">فیلتر قیمت</h4>
+                                        <ul class="list-inline mb-0">
+                                            <!-- Rent -->
+                                            <li class="list-inline-item">
+                                                <input value="all" type="radio" class="btn-check" name="price"
+                                                       id="option1"
+                                                       {% if request.GET.price and request.GET.price == 'all' %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check"
+                                                       for="option1">همه</label>
+                                            </li>
+                                            <!-- Sale -->
+                                            <li class="list-inline-item">
+                                                <input type="radio" class="btn-check" name="price" id="option2"
+                                                       value="free"
+                                                       {% if request.GET.price and request.GET.price == 'free' %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check"
+                                                       for="option2">رایگان</label>
+                                            </li>
+                                            <!-- Buy -->
+                                            <li class="list-inline-item">
+                                                <input value="buyable" type="radio" class="btn-check"
+                                                       id="option3" name="price"
+                                                       {% if request.GET.price and request.GET.price == 'buyable' %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check"
+                                                       for="option3">خریدنی</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- Price END -->
+
+                                    <!-- Skill level START -->
+                                    <div class="card card-body shadow p-4 mb-4">
+                                        <!-- Title -->
+                                        <h4 class="mb-3 fs-6">فیلتر سطح مهارت</h4>
+                                        <ul class="list-inline mb-0">
+                                            <!-- Item -->
+                                            <li class="list-inline-item mb-2">
+                                                {% existence_variable request 'levels' 'All levels' as flag %}
+
+                                                <input type="checkbox" value="All levels" class="btn-check"
+                                                       id="btn-check-12"
+                                                       name="levels" {% if flag %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-12">همه
+                                                    سطح</label>
+                                            </li>
+                                            <!-- Item -->
+                                            <li class="list-inline-item mb-2">
+                                                {% existence_variable request 'levels' 'Beginner' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-9"
+                                                       value="Beginner" name="levels" {% if flag %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-9">مبتدی</label>
+                                            </li>
+                                            <!-- Item -->
+                                            <li class="list-inline-item mb-2">
+                                                {% existence_variable request 'levels' 'preliminary' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-10"
+                                                       value="preliminary" name="levels"
+                                                       {% if flag %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-10">مقدماتی</label>
+                                            </li>
+                                            <!-- Item -->
+                                            <li class="list-inline-item mb-2">
+                                                {% existence_variable request 'levels' 'advanced' as flag %}
+                                                <input type="checkbox" class="btn-check" id="btn-check-11"
+                                                       value="advanced" name="levels" {% if flag %}checked{% endif %}>
+                                                <label class="btn btn-light btn-primary-soft-check" for="btn-check-11">پیشرفته</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- Skill level END -->
+
+                                    <!-- Language START -->
+                                    <div class="card card-body shadow p-4 mb-4">
+                                        <!-- Title -->
+                                        <h4 class="mb-3 fs-6">فیلتر زبان</h4>
+                                        <ul class="list-inline mb-0 g-3">
+                                            {% for item in languages.all %}
+                                                <!-- Item -->
+                                                <li class="list-inline-item mb-2">
+                                                    {% existence_variable request 'languages' item.name as flag %}
+                                                    <input name="languages" value="{{ item.name }}" type="checkbox"
+                                                           class="btn-check" id="{{ item.name }}"
+                                                           {% if flag %}checked{% endif %}>
+                                                    <label class="btn btn-light btn-primary-soft-check"
+                                                           for="{{ item.name }}">{{ item.name }}</label>
+                                                </li>
+                                            {% endfor %}
+
+                                        </ul>
+                                    </div>
+                                    <!-- Language END -->
+
+                            </div>
+
+                            <!-- Button -->
+                            <div class="d-grid p-2 p-lg-0 text-center">
+                                <button type="submit" class="btn btn-primary mb-0">نتیجه فیلتر</button>
+                            </div>
+                            {% if request.GET.q %}
+                                <input type="hidden" value="{{ request.GET.q }}" name="q">
+                            {% endif %}
+                            {% if request.GET.sort %}
+                                <input type="hidden" value="{{ request.GET.sort }}" name="sort">
+                            {% endif %}
+                            </form><!-- Form End -->
+
+                        </div>
+                        <!-- Responsive offcanvas body END -->
+                    </div>
+                    <!-- Right sidebar END -->
+                </div><!-- Row END -->
+            </div>
+        </section>
+        <!-- =======================
+        Page content END -->
+
+        <!-- =======================
+        Newsletter START -->
+        <section class="pt-0">
+            <div class="container position-relative overflow-hidden">
+                <!-- SVG decoration -->
+                <figure class="position-absolute top-50 start-50 translate-middle ms-3">
+                    <svg>
+                        <path d="m496 22.999c0 10.493-8.506 18.999-18.999 18.999s-19-8.506-19-18.999 8.507-18.999 19-18.999 18.999 8.506 18.999 18.999z"
+                              fill="#fff" fill-rule="evenodd" opacity=".502"/>
+                        <path d="m775 102.5c0 5.799-4.701 10.5-10.5 10.5-5.798 0-10.499-4.701-10.499-10.5 0-5.798 4.701-10.499 10.499-10.499 5.799 0 10.5 4.701 10.5 10.499z"
+                              fill="#fff" fill-rule="evenodd" opacity=".102"/>
+                        <path d="m192 102c0 6.626-5.373 11.999-12 11.999s-11.999-5.373-11.999-11.999c0-6.628 5.372-12 11.999-12s12 5.372 12 12z"
+                              fill="#fff" fill-rule="evenodd" opacity=".2"/>
+                        <path d="m20.499 10.25c0 5.66-4.589 10.249-10.25 10.249-5.66 0-10.249-4.589-10.249-10.249-0-5.661 4.589-10.25 10.249-10.25 5.661-0 10.25 4.589 10.25 10.25z"
+                              fill="#fff" fill-rule="evenodd" opacity=".2"/>
+                    </svg>
+                </figure>
+                <!-- Svg decoration -->
+                <figure class="position-absolute bottom-0 end-0 mb-5 d-none d-sm-block">
+                    <svg class="rotate-130" width="258.7px" height="86.9px" viewBox="0 0 258.7 86.9">
+                        <path stroke="white" fill="none" stroke-width="2"
+                              d="M0,7.2c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5 c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5c16,0,16,25.5,31.9,25.5s16-25.5,31.9-25.5"/>
+                        <path stroke="white" fill="none" stroke-width="2"
+                              d="M0,57c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5 c16,0,16,25.5,31.9,25.5c16,0,16-25.5,31.9-25.5c16,0,16,25.5,31.9,25.5s16-25.5,31.9-25.5"/>
+                    </svg>
+                </figure>
+
+                <div class="bg-grad-pink p-3 p-sm-5 rounded-3">
+                    <div class="row justify-content-center position-relative">
+                        <!-- SVG decoration -->
+                        <figure class="fill-white opacity-1 position-absolute top-50 start-0 translate-middle-y">
+                            <svg width="141px" height="141px">
+                                <path d="M140.520,70.258 C140.520,109.064 109.062,140.519 70.258,140.519 C31.454,140.519 -0.004,109.064 -0.004,70.258 C-0.004,31.455 31.454,-0.003 70.258,-0.003 C109.062,-0.003 140.520,31.455 140.520,70.258 Z"/>
+                            </svg>
+                        </figure>
+                        <!-- Newsletter -->
+                        <div class="col-12 position-relative my-2 my-sm-3">
+                            <div class="row align-items-center">
+                                <!-- Title -->
+                                <div class="col-lg-6">
+                                    <h3 class="text-white mb-3 mb-lg-0 ff-vb">دریافت جدیدترین به‌روزرسانی‌های دوره، در
+                                        خبرنامه ما</h3>
+                                </div>
+                                <!-- Input item -->
+                                <div class="col-lg-6 text-lg-end">
+                                    <form class="bg-body rounded p-2">
+                                        <div class="input-group">
+                                            <input class="form-control border-0 me-1" type="email" placeholder="ایمیل">
+                                            <button type="button" class="btn btn-dark mb-0 rounded">عضویت</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Row END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Newsletter END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        function LikeCourse(id, name) {
+
+            var like = document.getElementById(name)
+            $.get(`/course/like/${id}/`).then(response => {
+                if (response['response'] === 'like') {
+
+                    like.className = 'fa fa-heart';
+
+                }
+                if (response['response'] === 'dislike') {
+                    like.className = 'far fa-heart';
+                }
+            })
+        }
+    </script>
+
+
+{% endblock %}

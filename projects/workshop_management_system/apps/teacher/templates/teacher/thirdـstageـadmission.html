@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Add Teacher {% endblock %}
+
+{% block content %}
+
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+        <!-- =======================
+        Main part START -->
+        <section>
+            <div class="container">
+                <div class="row g-5 justify-content-between">
+                    <!-- Admission form START -->
+                    <div class="col-md-8 mx-auto">
+                        <!-- Title -->
+                        <h2 class="mb-3 fs-4">اضافه کردن آدرس</h2>
+                        <!-- Form START -->
+                        {% for message in messages %}
+                            <h6 class="text-danger">{{ message }}</h6>
+                        {% endfor %}
+                        <form class="row g-3" method="post">
+                            {% csrf_token %}
+
+
+                            <div class="col-12" style="margin-top: 50px">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-2">
+                                        <h6 class="mb-lg-0">آدرس <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <select class="form-select js-choice z-index-9 rounded-3 border-0 bg-light"
+                                                aria-label=".form-select-sm" name="address">
+                                            {% for item in address.all %}
+                                                <option value="{{ item.full_address }}">{{ item.full_address }}</option>
+                                            {% endfor %}
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- Button -->
+                            <div class="col-12 text-sm-end">
+                                 <a href="{% url 'account_app:add_address' %}?next={% url 'teacher_app:third_stage_admission' %}" class="btn btn-primary mb-0">اضافه کردن آدرس</a>
+                                <button type="submit" class="btn btn-primary mb-0">مرحله بعد</button>
+                            </div>
+                        </form>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Admission form END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Main part END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+
+
+

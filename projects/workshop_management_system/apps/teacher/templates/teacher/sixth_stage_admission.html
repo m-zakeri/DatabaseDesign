@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Add Teacher {% endblock %}
+
+{% block content %}
+
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+        <!-- =======================
+        Main part START -->
+        <section>
+            <div class="container">
+                <div class="row g-5 justify-content-between">
+                    <!-- Admission form START -->
+                    <div class="col-md-8 mx-auto">
+                        <!-- Title -->
+                        <h2 class="mb-3 fs-4">میزان تحصیلات</h2>
+                        <!-- Form START -->
+                        {% for message in messages %}
+                            <h6 class="text-success">{{ message }}</h6>
+                        {% endfor %}
+                        <form class="row g-3" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+
+                            <!-- name university -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">نام دانشگاه <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.name_university|attr:'class:form-control' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Academic discipline -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> رشته تحصیلی <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.Academic_discipline | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- graduation -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> مدرک فارغ التحصیلی<span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.graduation | attr:'class:form-select' }}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- date of graduation -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> سال اخذ <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.date_of_graduation | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- graduation image -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> گواهی مدرک <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.graduation_image | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Button -->
+                            <div class="col-12 text-sm-end">
+                                <button type="submit" class="btn btn-primary mb-0">ثبت</button>
+                                <a href="{% url 'teacher_app:teacher_add' %}" class="btn btn-primary mb-0">مرحله بعد</a>
+                            </div>
+                        </form>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Admission form END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Main part END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+
+
+

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} Add Address {% endblock %}
+
+{% block content %}
+
+    <!-- **************** MAIN CONTENT START **************** -->
+    <main>
+
+        <!-- =======================
+        Main part START -->
+        <section>
+            <div class="container">
+                <div class="row g-5 justify-content-between">
+                    <!-- Admission form START -->
+                    <div class="col-md-8 mx-auto">
+                        <!-- Title -->
+                        <h2 class="mb-3 fs-4">اضافه کردن آدرس</h2>
+                        <!-- Form START -->
+                        {% for message in messages %}
+                            <h6 class="text-success">{{ message }}</h6>
+                        {% endfor %}
+                        <form class="row g-3" method="post">
+                            {% csrf_token %}
+
+                            <!-- country -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">کشور <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.country|attr:'class:form-select js-choice z-index-9 rounded-3 border-0 bg-light' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- city -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">شهر <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.city|attr:'class:form-select js-choice z-index-9 rounded-3 border-0 bg-light' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- state -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">وضعیت <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.state | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- postal code -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0">کد پستی <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.postal_code | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- full address -->
+                            <div class="col-12">
+                                <div class="row g-xl-0 align-items-center">
+                                    <div class="col-lg-4">
+                                        <h6 class="mb-lg-0"> آدرس <span class="text-danger">*</span></h6>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        {{ form.full_address | attr:'class:form-control' }}
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Button -->
+                            <div class="col-12 text-sm-end">
+                                <button type="submit" class="btn btn-primary mb-0">ثبت</button>
+                            </div>
+                        </form>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Admission form END -->
+                </div>
+            </div>
+        </section>
+        <!-- =======================
+        Main part END -->
+
+    </main>
+    <!-- **************** MAIN CONTENT END **************** -->
+
+{% endblock %}
+
+
+
