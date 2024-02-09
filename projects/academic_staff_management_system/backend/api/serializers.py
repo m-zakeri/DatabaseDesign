@@ -113,3 +113,8 @@ class LibrarySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Library
         fields = "__all__"
+
+class DepartmentResponibilitySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.DepartmentResponibility
+        fields = "__all__"

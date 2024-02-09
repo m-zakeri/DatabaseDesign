@@ -9,7 +9,7 @@ from . import filters
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = filters.UserFilter
 
 
@@ -99,7 +99,7 @@ class ResearcherViewSet(viewsets.ModelViewSet):
 
 class ResearchViewSet(viewsets.ModelViewSet):
     queryset = models.Research.objects.all()
-    serializer_class = serializers.ResearchSerializer
+    serializer_class = serializers.ResearcherSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = filters.ResearchFilter
 
@@ -130,3 +130,10 @@ class LibraryViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LibrarySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = filters.LibraryFilter
+
+
+class DepartmentResponibility(viewsets.ModelViewSet):
+    queryset = models.DepartmentResponibility.objects.all()
+    serializer_class = serializers.DepartmentResponibilitySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    

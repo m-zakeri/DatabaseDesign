@@ -1,13 +1,14 @@
 FROM node:lts-slim
 
-WORKDIR /app/
-
-ENV PNPM_HOME "/pnpm"
-ENV PATH "$PNPM_HOME:$PATH"
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-ENV PATH /app/node_modules/.bin:$PATH
+WORKDIR /code/
 
-COPY ./package.json ./
-COPY ./pnpm-lock.yaml ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
 RUN pnpm install
+
+ENV PATH /code/node_modules/.bin:$PATH
+

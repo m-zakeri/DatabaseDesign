@@ -9,25 +9,26 @@ services:
     command: pnpm dev
 
     ports:
-      - 5173:5173
+      - 3000:3000
+    
+    stop_grace_period: 1s
     
     volumes:
-      - ./frontend/:/app/
-      - node_modules:/app/node_modules
+      - ./frontend/:/code/
     
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
     
-    working_dir: /backend/
+    working_dir: /code/
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
     volumes:
-      - ./backend/:/backend/
-      - static:/backend/static/
-      - media:/backend/media/
+      - ./backend/:/code/
+      - static:/code/static/
+      - media:/code/media/
   
   nginx:
     build:
@@ -44,6 +45,5 @@ services:
     
 
 volumes:
-  node_modules:
   static:
   media:
